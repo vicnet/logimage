@@ -120,7 +120,7 @@ smalltalk.addClass('CellBox', globals.Cell, [], 'Logimage');
 smalltalk.addMethod(
 smalltalk.method({
 selector: "printOn:",
-protocol: 'as yet unclassified',
+protocol: 'printing',
 fn: function (stream){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
@@ -139,7 +139,7 @@ smalltalk.addClass('CellSpace', globals.Cell, [], 'Logimage');
 smalltalk.addMethod(
 smalltalk.method({
 selector: "printOn:",
-protocol: 'as yet unclassified',
+protocol: 'printing',
 fn: function (stream){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
@@ -158,7 +158,7 @@ smalltalk.addClass('CellUnknown', globals.Cell, [], 'Logimage');
 smalltalk.addMethod(
 smalltalk.method({
 selector: "printOn:",
-protocol: 'as yet unclassified',
+protocol: 'printing',
 fn: function (stream){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
@@ -193,7 +193,7 @@ globals.Cells);
 smalltalk.addMethod(
 smalltalk.method({
 selector: "printOn:",
-protocol: 'as yet unclassified',
+protocol: 'printing',
 fn: function (stream){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
@@ -236,6 +236,24 @@ smalltalk.addClass('Grid', globals.Object, ['cells', 'size'], 'Logimage');
 globals.Grid.comment="Image, with Cells";
 smalltalk.addMethod(
 smalltalk.method({
+selector: "at:",
+protocol: 'private',
+fn: function (point){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@cells"])._at_(self._indexOf_(point));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"at:",{point:point},globals.Grid)})},
+args: ["point"],
+source: "at: point\x0a\x09^ cells at: (self indexOf: point)",
+messageSends: ["at:", "indexOf:"],
+referencedClasses: []
+}),
+globals.Grid);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "at:put:",
 protocol: 'private',
 fn: function (point,cell){
@@ -269,6 +287,39 @@ globals.Grid);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "colAt:",
+protocol: 'accessing',
+fn: function (index){
+var self=this;
+var col;
+function $Array(){return globals.Array||(typeof Array=="undefined"?nil:Array)}
+function $Point(){return globals.Point||(typeof Point=="undefined"?nil:Point)}
+function $Cells(){return globals.Cells||(typeof Cells=="undefined"?nil:Cells)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(self["@size"])._y();
+$ctx1.sendIdx["y"]=1;
+col=_st($Array())._new_($1);
+$ctx1.sendIdx["new:"]=1;
+(1)._to_do_(_st(self["@size"])._y(),(function(y){
+var pt;
+return smalltalk.withContext(function($ctx2) {
+pt=_st($Point())._x_y_(index,y);
+pt;
+return _st(col)._at_put_(y,self._at_(pt));
+}, function($ctx2) {$ctx2.fillBlock({y:y,pt:pt},$ctx1,1)})}));
+$2=_st($Cells())._new_(col);
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"colAt:",{index:index,col:col},globals.Grid)})},
+args: ["index"],
+source: "colAt: index\x0a\x09| col |\x0a\x09col := Array new: size y.\x0a\x091 to: size y do: [ :y | | pt |\x0a\x09\x09pt := Point x: index y: y.\x0a\x09\x09col at: y put: (self at: pt) ].\x0a\x09^ Cells new: col",
+messageSends: ["new:", "y", "to:do:", "x:y:", "at:put:", "at:"],
+referencedClasses: ["Array", "Point", "Cells"]
+}),
+globals.Grid);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "indexOf:",
 protocol: 'private',
 fn: function (point){
@@ -290,8 +341,28 @@ globals.Grid);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "printOn:",
+protocol: 'printing',
+fn: function (stream){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+(1)._to_do_(_st(self["@size"])._y(),(function(y){
+return smalltalk.withContext(function($ctx2) {
+_st(stream)._cr();
+return _st(self._rowAt_(y))._printOn_(stream);
+}, function($ctx2) {$ctx2.fillBlock({y:y},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"printOn:",{stream:stream},globals.Grid)})},
+args: ["stream"],
+source: "printOn: stream\x0a\x091 to: size y do: [ :y |\x0a\x09\x09stream cr.\x0a\x09\x09(self rowAt: y) printOn: stream ]",
+messageSends: ["to:do:", "y", "cr", "printOn:", "rowAt:"],
+referencedClasses: []
+}),
+globals.Grid);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "rowAt:",
-protocol: 'as yet unclassified',
+protocol: 'accessing',
 fn: function (index){
 var self=this;
 var start;
@@ -370,7 +441,7 @@ globals.Hint);
 smalltalk.addMethod(
 smalltalk.method({
 selector: "printOn:",
-protocol: 'as yet unclassified',
+protocol: 'printing',
 fn: function (stream){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
@@ -471,6 +542,112 @@ globals.Hints);
 
 
 
+smalltalk.addClass('Line', globals.Object, ['hint', 'cells'], 'Logimage');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "cells",
+protocol: 'accessing',
+fn: function (){
+var self=this;
+var $1;
+$1=self["@cells"];
+return $1;
+},
+args: [],
+source: "cells\x0a\x09^ cells",
+messageSends: [],
+referencedClasses: []
+}),
+globals.Line);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "cells:",
+protocol: 'accessing',
+fn: function (anObject){
+var self=this;
+self["@cells"]=anObject;
+return self},
+args: ["anObject"],
+source: "cells: anObject\x0a\x09cells := anObject",
+messageSends: [],
+referencedClasses: []
+}),
+globals.Line);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "hint",
+protocol: 'accessing',
+fn: function (){
+var self=this;
+var $1;
+$1=self["@hint"];
+return $1;
+},
+args: [],
+source: "hint\x0a\x09^ hint",
+messageSends: [],
+referencedClasses: []
+}),
+globals.Line);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "hint:",
+protocol: 'accessing',
+fn: function (anObject){
+var self=this;
+self["@hint"]=anObject;
+return self},
+args: ["anObject"],
+source: "hint: anObject\x0a\x09hint := anObject",
+messageSends: [],
+referencedClasses: []
+}),
+globals.Line);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "printOn:",
+protocol: 'printing',
+fn: function (stream){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self["@hint"])._printOn_(stream);
+$ctx1.sendIdx["printOn:"]=1;
+_st(self["@cells"])._printOn_(stream);
+return self}, function($ctx1) {$ctx1.fill(self,"printOn:",{stream:stream},globals.Line)})},
+args: ["stream"],
+source: "printOn: stream\x0a\x09hint printOn: stream.\x0a\x09cells printOn: stream",
+messageSends: ["printOn:"],
+referencedClasses: []
+}),
+globals.Line);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "new:cells:",
+protocol: 'as yet unclassified',
+fn: function (hint,cells){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=self._new();
+_st($2)._hint_(hint);
+$3=_st($2)._cells_(cells);
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"new:cells:",{hint:hint,cells:cells},globals.Line.klass)})},
+args: ["hint", "cells"],
+source: "new: hint cells: cells\x0a\x09^ self new hint: hint; cells: cells",
+messageSends: ["hint:", "new", "cells:"],
+referencedClasses: []
+}),
+globals.Line.klass);
+
+
 smalltalk.addClass('Logimage', globals.Object, ['row', 'col', 'grid'], 'Logimage');
 smalltalk.addMethod(
 smalltalk.method({
@@ -525,7 +702,7 @@ globals.Logimage);
 smalltalk.addMethod(
 smalltalk.method({
 selector: "colCellsAt:",
-protocol: 'as yet unclassified',
+protocol: 'accessing',
 fn: function (index){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
@@ -543,7 +720,7 @@ globals.Logimage);
 smalltalk.addMethod(
 smalltalk.method({
 selector: "colHintAt:",
-protocol: 'as yet unclassified',
+protocol: 'accessing',
 fn: function (index){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
@@ -554,6 +731,42 @@ return $1;
 args: ["index"],
 source: "colHintAt: index\x0a\x09^ col at: index",
 messageSends: ["at:"],
+referencedClasses: []
+}),
+globals.Logimage);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "colLineAt:",
+protocol: 'accessing',
+fn: function (index){
+var self=this;
+function $Line(){return globals.Line||(typeof Line=="undefined"?nil:Line)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($Line())._new_cells_(self._colHintAt_(index),self._colCellsAt_(index));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"colLineAt:",{index:index},globals.Logimage)})},
+args: ["index"],
+source: "colLineAt: index\x0a\x09^ Line new: (self colHintAt: index)\x0a\x09\x09 cells: (self colCellsAt: index)",
+messageSends: ["new:cells:", "colHintAt:", "colCellsAt:"],
+referencedClasses: ["Line"]
+}),
+globals.Logimage);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "grid",
+protocol: 'accessing',
+fn: function (){
+var self=this;
+var $1;
+$1=self["@grid"];
+return $1;
+},
+args: [],
+source: "grid\x0a\x09^ grid",
+messageSends: [],
 referencedClasses: []
 }),
 globals.Logimage);
@@ -605,7 +818,7 @@ globals.Logimage);
 smalltalk.addMethod(
 smalltalk.method({
 selector: "rowCellsAt:",
-protocol: 'as yet unclassified',
+protocol: 'accessing',
 fn: function (index){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
@@ -623,7 +836,7 @@ globals.Logimage);
 smalltalk.addMethod(
 smalltalk.method({
 selector: "rowHintAt:",
-protocol: 'as yet unclassified',
+protocol: 'accessing',
 fn: function (index){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
@@ -635,6 +848,25 @@ args: ["index"],
 source: "rowHintAt: index\x0a\x09^ row at: index",
 messageSends: ["at:"],
 referencedClasses: []
+}),
+globals.Logimage);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "rowLineAt:",
+protocol: 'accessing',
+fn: function (index){
+var self=this;
+function $Line(){return globals.Line||(typeof Line=="undefined"?nil:Line)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($Line())._new_cells_(self._rowHintAt_(index),self._rowCellsAt_(index));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"rowLineAt:",{index:index},globals.Logimage)})},
+args: ["index"],
+source: "rowLineAt: index\x0a\x09^ Line new: (self rowHintAt: index)\x0a\x09\x09 cells: (self rowCellsAt: index)",
+messageSends: ["new:cells:", "rowHintAt:", "rowCellsAt:"],
+referencedClasses: ["Line"]
 }),
 globals.Logimage);
 

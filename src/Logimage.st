@@ -43,7 +43,7 @@ Cell subclass: #CellBox
 	instanceVariableNames: ''
 	package: 'Logimage'!
 
-!CellBox methodsFor: 'as yet unclassified'!
+!CellBox methodsFor: 'printing'!
 
 printOn: stream
 	stream nextPutAll: '@'
@@ -53,7 +53,7 @@ Cell subclass: #CellSpace
 	instanceVariableNames: ''
 	package: 'Logimage'!
 
-!CellSpace methodsFor: 'as yet unclassified'!
+!CellSpace methodsFor: 'printing'!
 
 printOn: stream
 	stream nextPutAll: '-'
@@ -63,7 +63,7 @@ Cell subclass: #CellUnknown
 	instanceVariableNames: ''
 	package: 'Logimage'!
 
-!CellUnknown methodsFor: 'as yet unclassified'!
+!CellUnknown methodsFor: 'printing'!
 
 printOn: stream
 	stream nextPutAll: ' '
@@ -79,7 +79,9 @@ A line or a column of cells!
 
 cells: theCells
 	cells := theCells
-!
+! !
+
+!Cells methodsFor: 'printing'!
 
 printOn: stream
 	stream nextPutAll: '|'.
@@ -100,16 +102,27 @@ Object subclass: #Grid
 !Grid commentStamp!
 Image, with Cells!
 
-!Grid methodsFor: 'as yet unclassified'!
+!Grid methodsFor: 'accessing'!
 
-box: point
-	self at: point put: (Cell box)
+colAt: index
+	| col |
+	col := Array new: size y.
+	1 to: size y do: [ :y | | pt |
+		pt := Point x: index y: y.
+		col at: y put: (self at: pt) ].
+	^ Cells new: col
 !
 
 rowAt: index
 	| start |
 	start := self indexOf: (Point x: 1 y: index).
 	^ Cells new: (cells copyFrom: start to: (start + size x - 1))
+! !
+
+!Grid methodsFor: 'as yet unclassified'!
+
+box: point
+	self at: point put: (Cell box)
 !
 
 size: aSize
@@ -121,7 +134,19 @@ space: point
 	self at: point put: (Cell space)
 ! !
 
+!Grid methodsFor: 'printing'!
+
+printOn: stream
+	1 to: size y do: [ :y |
+		stream cr.
+		(self rowAt: y) printOn: stream ]
+! !
+
 !Grid methodsFor: 'private'!
+
+at: point
+	^ cells at: (self indexOf: point)
+!
 
 at: point put: cell
 	cells at: (self indexOf: point) put: cell
@@ -141,7 +166,9 @@ List of numbers!
 
 numbers: array
 	numbers := array
-!
+! !
+
+!Hint methodsFor: 'printing'!
 
 printOn: stream
 	stream nextPutAll: '| '.
@@ -176,9 +203,76 @@ size
 	^ hints size
 ! !
 
+Object subclass: #Line
+	instanceVariableNames: 'hint cells'
+	package: 'Logimage'!
+
+!Line methodsFor: 'accessing'!
+
+cells
+	^ cells
+!
+
+cells: anObject
+	cells := anObject
+!
+
+hint
+	^ hint
+!
+
+hint: anObject
+	hint := anObject
+! !
+
+!Line methodsFor: 'printing'!
+
+printOn: stream
+	hint printOn: stream.
+	cells printOn: stream
+! !
+
+!Line class methodsFor: 'as yet unclassified'!
+
+new: hint cells: cells
+	^ self new hint: hint; cells: cells
+! !
+
 Object subclass: #Logimage
 	instanceVariableNames: 'row col grid'
 	package: 'Logimage'!
+
+!Logimage methodsFor: 'accessing'!
+
+colCellsAt: index
+	^ grid colAt: index
+!
+
+colHintAt: index
+	^ col at: index
+!
+
+colLineAt: index
+	^ Line new: (self colHintAt: index)
+		 cells: (self colCellsAt: index)
+!
+
+grid
+	^ grid
+!
+
+rowCellsAt: index
+	^ grid rowAt: index
+!
+
+rowHintAt: index
+	^ row at: index
+!
+
+rowLineAt: index
+	^ Line new: (self rowHintAt: index)
+		 cells: (self rowCellsAt: index)
+! !
 
 !Logimage methodsFor: 'as yet unclassified'!
 
@@ -196,14 +290,6 @@ box: point
 	grid box: point
 !
 
-colCellsAt: index
-	^ grid colAt: index
-!
-
-colHintAt: index
-	^ col at: index
-!
-
 initialize
 	row := Hints new.
 	col := Hints new.
@@ -214,14 +300,6 @@ resize
 	| newsize |
 	newsize := Point x: (row size) y: (col size).
 	grid size: newsize
-!
-
-rowCellsAt: index
-	^ grid rowAt: index
-!
-
-rowHintAt: index
-	^ row at: index
 !
 
 space: point
