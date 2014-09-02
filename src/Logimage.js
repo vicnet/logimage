@@ -5,6 +5,51 @@ smalltalk.packages["Logimage"].transport = {"type":"amd","amdNamespace":"amber-l
 
 smalltalk.addClass('Cell', globals.Object, [], 'Logimage');
 globals.Cell.comment="A simple cell or pixel.";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "isBox",
+protocol: 'as yet unclassified',
+fn: function (){
+var self=this;
+return false;
+},
+args: [],
+source: "isBox\x0a\x09^ false",
+messageSends: [],
+referencedClasses: []
+}),
+globals.Cell);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "isSpace",
+protocol: 'as yet unclassified',
+fn: function (){
+var self=this;
+return false;
+},
+args: [],
+source: "isSpace\x0a\x09^ false",
+messageSends: [],
+referencedClasses: []
+}),
+globals.Cell);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "isUnknown",
+protocol: 'as yet unclassified',
+fn: function (){
+var self=this;
+return false;
+},
+args: [],
+source: "isUnknown\x0a\x09^ false",
+messageSends: [],
+referencedClasses: []
+}),
+globals.Cell);
+
 
 globals.Cell.klass.iVarNames = ['cells'];
 smalltalk.addMethod(
@@ -119,6 +164,21 @@ globals.Cell.klass);
 smalltalk.addClass('CellBox', globals.Cell, [], 'Logimage');
 smalltalk.addMethod(
 smalltalk.method({
+selector: "isBox",
+protocol: 'printing',
+fn: function (){
+var self=this;
+return true;
+},
+args: [],
+source: "isBox\x0a\x09^ true",
+messageSends: [],
+referencedClasses: []
+}),
+globals.CellBox);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "printOn:",
 protocol: 'printing',
 fn: function (stream){
@@ -138,6 +198,21 @@ globals.CellBox);
 smalltalk.addClass('CellSpace', globals.Cell, [], 'Logimage');
 smalltalk.addMethod(
 smalltalk.method({
+selector: "isSpace",
+protocol: 'printing',
+fn: function (){
+var self=this;
+return true;
+},
+args: [],
+source: "isSpace\x0a\x09^ true",
+messageSends: [],
+referencedClasses: []
+}),
+globals.CellSpace);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "printOn:",
 protocol: 'printing',
 fn: function (stream){
@@ -155,6 +230,21 @@ globals.CellSpace);
 
 
 smalltalk.addClass('CellUnknown', globals.Cell, [], 'Logimage');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "isUnknown",
+protocol: 'printing',
+fn: function (){
+var self=this;
+return true;
+},
+args: [],
+source: "isUnknown\x0a\x09^ true",
+messageSends: [],
+referencedClasses: []
+}),
+globals.CellUnknown);
+
 smalltalk.addMethod(
 smalltalk.method({
 selector: "printOn:",
@@ -181,11 +271,103 @@ selector: "cells:",
 protocol: 'as yet unclassified',
 fn: function (theCells){
 var self=this;
-self["@cells"]=theCells;
-return self},
+function $Cell(){return globals.Cell||(typeof Cell=="undefined"?nil:Cell)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+self["@cells"]=_st(theCells)._collect_((function(c){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(c)._isString();
+if(smalltalk.assert($1)){
+return _st($Cell())._at_(c);
+} else {
+return c;
+};
+}, function($ctx2) {$ctx2.fillBlock({c:c},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"cells:",{theCells:theCells},globals.Cells)})},
 args: ["theCells"],
-source: "cells: theCells\x0a\x09cells := theCells",
-messageSends: [],
+source: "cells: theCells\x0a\x09cells := theCells collect: [ :c |\x0a\x09\x09\x09c isString\x0a\x09\x09\x09\x09ifTrue: [ Cell at: c ]\x0a\x09\x09\x09\x09ifFalse: [ c ]\x0a\x09\x09]",
+messageSends: ["collect:", "ifTrue:ifFalse:", "isString", "at:"],
+referencedClasses: ["Cell"]
+}),
+globals.Cells);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "firstNumbers",
+protocol: 'as yet unclassified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self._numbersOf_(self["@cells"]);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"firstNumbers",{},globals.Cells)})},
+args: [],
+source: "firstNumbers\x0a\x09^ self numbersOf: cells",
+messageSends: ["numbersOf:"],
+referencedClasses: []
+}),
+globals.Cells);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "lastNumbers",
+protocol: 'as yet unclassified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self._numbersOf_(_st(self["@cells"])._reversed());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"lastNumbers",{},globals.Cells)})},
+args: [],
+source: "lastNumbers\x0a\x09^ self numbersOf: cells reversed",
+messageSends: ["numbersOf:", "reversed"],
+referencedClasses: []
+}),
+globals.Cells);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "numbersOf:",
+protocol: 'private',
+fn: function (theCells){
+var self=this;
+var numbers,current;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5;
+var $early={};
+try {
+numbers=[];
+current=(0);
+_st(theCells)._do_((function(c){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(c)._isBox();
+if(smalltalk.assert($1)){
+current=_st(current).__plus((1));
+current;
+} else {
+$2=_st(current).__gt((0));
+if(smalltalk.assert($2)){
+_st(numbers)._add_(current);
+};
+current=(0);
+current;
+};
+$3=_st(c)._isUnknown();
+if(smalltalk.assert($3)){
+$4=numbers;
+throw $early=[$4];
+};
+}, function($ctx2) {$ctx2.fillBlock({c:c},$ctx1,1)})}));
+$5=numbers;
+return $5;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+}, function($ctx1) {$ctx1.fill(self,"numbersOf:",{theCells:theCells,numbers:numbers,current:current},globals.Cells)})},
+args: ["theCells"],
+source: "numbersOf: theCells\x0a\x09| numbers current |\x0a\x09numbers := { }.\x0a\x09current := 0.\x0a\x09theCells do: [ :c |\x0a\x09\x09c isBox\x0a\x09\x09\x09ifTrue: [ current := current + 1 ]\x0a\x09\x09\x09ifFalse: [ current > 0 ifTrue: [ numbers add: current ].\x0a\x09\x09\x09\x09\x09   current := 0 ].\x0a\x09\x09c isUnknown ifTrue: [ ^ numbers ].\x0a\x09\x09].\x0a\x09^ numbers",
+messageSends: ["do:", "ifTrue:ifFalse:", "isBox", "+", "ifTrue:", ">", "add:", "isUnknown"],
 referencedClasses: []
 }),
 globals.Cells);
@@ -609,6 +791,22 @@ globals.Line);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "isDone",
+protocol: 'accessing',
+fn: function (){
+var self=this;
+function $False(){return globals.False||(typeof False=="undefined"?nil:False)}
+return $False();
+},
+args: [],
+source: "isDone\x0a\x09^ False",
+messageSends: [],
+referencedClasses: ["False"]
+}),
+globals.Line);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "printOn:",
 protocol: 'printing',
 fn: function (stream){
@@ -889,7 +1087,7 @@ globals.Logimage);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "example",
+selector: "simple",
 protocol: 'examples',
 fn: function (){
 var self=this;
@@ -904,9 +1102,9 @@ $ctx1.sendIdx["addColHints:"]=1;
 $3=_st($2)._addColHints_([(2)]);
 $1=$3;
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"example",{},globals.Logimage.klass)})},
+}, function($ctx1) {$ctx1.fill(self,"simple",{},globals.Logimage.klass)})},
 args: [],
-source: "example\x0a\x09^ self new\x0a\x09\x09addRowHints: #( 1 );\x0a\x09\x09addRowHints: #( 2 );\x0a\x09\x09addColHints: #( 1 );\x0a\x09\x09addColHints: #( 2 )",
+source: "simple\x0a\x09^ self new\x0a\x09\x09addRowHints: #( 1 );\x0a\x09\x09addRowHints: #( 2 );\x0a\x09\x09addColHints: #( 1 );\x0a\x09\x09addColHints: #( 2 )",
 messageSends: ["addRowHints:", "new", "addColHints:"],
 referencedClasses: []
 }),

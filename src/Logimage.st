@@ -5,6 +5,20 @@ Object subclass: #Cell
 !Cell commentStamp!
 A simple cell or pixel.!
 
+!Cell methodsFor: 'as yet unclassified'!
+
+isBox
+	^ false
+!
+
+isSpace
+	^ false
+!
+
+isUnknown
+	^ false
+! !
+
 Cell class instanceVariableNames: 'cells'!
 
 !Cell class methodsFor: 'instance creation'!
@@ -45,6 +59,10 @@ Cell subclass: #CellBox
 
 !CellBox methodsFor: 'printing'!
 
+isBox
+	^ true
+!
+
 printOn: stream
 	stream nextPutAll: '@'
 ! !
@@ -55,6 +73,10 @@ Cell subclass: #CellSpace
 
 !CellSpace methodsFor: 'printing'!
 
+isSpace
+	^ true
+!
+
 printOn: stream
 	stream nextPutAll: '-'
 ! !
@@ -64,6 +86,10 @@ Cell subclass: #CellUnknown
 	package: 'Logimage'!
 
 !CellUnknown methodsFor: 'printing'!
+
+isUnknown
+	^ true
+!
 
 printOn: stream
 	stream nextPutAll: ' '
@@ -78,7 +104,19 @@ A line or a column of cells!
 !Cells methodsFor: 'as yet unclassified'!
 
 cells: theCells
-	cells := theCells
+	cells := theCells collect: [ :c |
+			c isString
+				ifTrue: [ Cell at: c ]
+				ifFalse: [ c ]
+		]
+!
+
+firstNumbers
+	^ self numbersOf: cells
+!
+
+lastNumbers
+	^ self numbersOf: cells reversed
 ! !
 
 !Cells methodsFor: 'printing'!
@@ -88,6 +126,22 @@ printOn: stream
 	cells do: [ :c |
 			c printOn: stream.
 			stream nextPutAll: '|' ]
+! !
+
+!Cells methodsFor: 'private'!
+
+numbersOf: theCells
+	| numbers current |
+	numbers := { }.
+	current := 0.
+	theCells do: [ :c |
+		c isBox
+			ifTrue: [ current := current + 1 ]
+			ifFalse: [ current > 0 ifTrue: [ numbers add: current ].
+					   current := 0 ].
+		c isUnknown ifTrue: [ ^ numbers ].
+		].
+	^ numbers
 ! !
 
 !Cells class methodsFor: 'as yet unclassified'!
@@ -223,6 +277,10 @@ hint
 
 hint: anObject
 	hint := anObject
+!
+
+isDone
+	^ False
 ! !
 
 !Line methodsFor: 'printing'!
@@ -308,7 +366,7 @@ space: point
 
 !Logimage class methodsFor: 'examples'!
 
-example
+simple
 	^ self new
 		addRowHints: #( 1 );
 		addRowHints: #( 2 );
