@@ -1,6 +1,6 @@
 {
     "name": "logimage",
-    "description": "Jeux de rélflexion Logimage",
+    "description": "Jeux de réflexion Logimage",
     "version": "0.1.0",
     "ignore": [
         "**/.*",

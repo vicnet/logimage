@@ -126,6 +126,10 @@ printOn: stream
 	cells do: [ :c |
 			c printOn: stream.
 			stream nextPutAll: '|' ]
+!
+
+size
+	^ cells size
 ! !
 
 !Cells methodsFor: 'private'!
@@ -218,8 +222,16 @@ List of numbers!
 
 !Hint methodsFor: 'as yet unclassified'!
 
+numbers
+	^ numbers
+!
+
 numbers: array
 	numbers := array
+!
+
+size
+	^ numbers size
 ! !
 
 !Hint methodsFor: 'printing'!
@@ -356,7 +368,7 @@ initialize
 
 resize
 	| newsize |
-	newsize := Point x: (row size) y: (col size).
+	newsize := Point x: (col size) y: (row size).
 	grid size: newsize
 !
 
@@ -366,11 +378,70 @@ space: point
 
 !Logimage class methodsFor: 'examples'!
 
+question
+	^ self new
+		addRowHints: #( 3 );
+		addRowHints: #( 2 2 );
+		addRowHints: #( 1 1 );
+		addRowHints: #( 2 );
+		addRowHints: #( 2 );
+		addRowHints: #( 1 );
+		addRowHints: #( 1 );
+		addRowHints: #( 0 );
+		addRowHints: #( 1 );
+
+		addColHints: #( 2 );
+		addColHints: #( 2 );
+		addColHints: #( 1 3 1 );
+		addColHints: #( 2 2 );
+		addColHints: #( 3 )
+!
+
 simple
 	^ self new
 		addRowHints: #( 1 );
 		addRowHints: #( 2 );
 		addColHints: #( 1 );
 		addColHints: #( 2 )
+! !
+
+Object subclass: #Strategy
+	instanceVariableNames: ''
+	package: 'Logimage'!
+
+Strategy subclass: #StratRecover
+	instanceVariableNames: ''
+	package: 'Logimage'!
+
+!StratRecover methodsFor: 'as yet unclassified'!
+
+analyse: line
+	| free sol |
+	free := self free: line.
+	sol := {}.
+	line hint numbers do: [ :n |
+		(n min: free) timesRepeat: [ sol add: #u ].
+		free+1 to: n do: [ sol add: #b ].
+		sol add: #u
+		].
+	"remove last unknown if line full"
+	 sol := sol
+	 	removeFrom: (line cells size) + 1
+		to: sol size.
+	"add unknown if nedeed"
+	(sol size + 1) to: (line cells size) do: [ sol add: #u ].
+	^ sol
+!
+
+free: line
+	^ (line cells size) - (self occupation: line hint)
+!
+
+occupation: hint
+	^ (self sum: hint) + hint size - 1
+!
+
+sum: hint
+	^ hint numbers inject: 0 into: [ :s :n | s+n ]
 ! !
 
