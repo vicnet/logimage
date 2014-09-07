@@ -7,6 +7,25 @@ smalltalk.addClass('Cell', globals.Object, [], 'Logimage');
 globals.Cell.comment="A simple cell or pixel.";
 smalltalk.addMethod(
 smalltalk.method({
+selector: "*",
+protocol: 'as yet unclassified',
+fn: function (n){
+var self=this;
+function $Cells(){return globals.Cells||(typeof Cells=="undefined"?nil:Cells)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st($Cells())._new())._add_cell_(n,self);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"*",{n:n},globals.Cell)})},
+args: ["n"],
+source: "* n\x0a\x09^ Cells new add: n cell: self",
+messageSends: ["add:cell:", "new"],
+referencedClasses: ["Cells"]
+}),
+globals.Cell);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "isBox",
 protocol: 'as yet unclassified',
 fn: function (){
@@ -267,27 +286,96 @@ smalltalk.addClass('Cells', globals.Object, ['cells'], 'Logimage');
 globals.Cells.comment="A line or a column of cells";
 smalltalk.addMethod(
 smalltalk.method({
+selector: "add:",
+protocol: 'as yet unclassified',
+fn: function (aCell){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self["@cells"])._add_(self._cellFrom_(aCell));
+return self}, function($ctx1) {$ctx1.fill(self,"add:",{aCell:aCell},globals.Cells)})},
+args: ["aCell"],
+source: "add: aCell\x0a\x09cells add: (self cellFrom: aCell)",
+messageSends: ["add:", "cellFrom:"],
+referencedClasses: []
+}),
+globals.Cells);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "add:cell:",
+protocol: 'as yet unclassified',
+fn: function (n,aCell){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(n)._timesRepeat_((function(){
+return smalltalk.withContext(function($ctx2) {
+return self._add_(aCell);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"add:cell:",{n:n,aCell:aCell},globals.Cells)})},
+args: ["n", "aCell"],
+source: "add: n cell: aCell\x0a\x09n timesRepeat: [ self add: aCell ]",
+messageSends: ["timesRepeat:", "add:"],
+referencedClasses: []
+}),
+globals.Cells);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "at:",
+protocol: 'as yet unclassified',
+fn: function (index){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@cells"])._at_(index);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"at:",{index:index},globals.Cells)})},
+args: ["index"],
+source: "at: index\x0a\x09^ cells at: index",
+messageSends: ["at:"],
+referencedClasses: []
+}),
+globals.Cells);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "cellFrom:",
+protocol: 'as yet unclassified',
+fn: function (aCell){
+var self=this;
+function $Cell(){return globals.Cell||(typeof Cell=="undefined"?nil:Cell)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(aCell)._isString();
+if(smalltalk.assert($1)){
+$2=_st($Cell())._at_(aCell);
+return $2;
+};
+return aCell;
+}, function($ctx1) {$ctx1.fill(self,"cellFrom:",{aCell:aCell},globals.Cells)})},
+args: ["aCell"],
+source: "cellFrom: aCell\x0a\x09aCell isString\x0a\x09\x09ifTrue: [ ^ Cell at: aCell ].\x0a\x09^ aCell",
+messageSends: ["ifTrue:", "isString", "at:"],
+referencedClasses: ["Cell"]
+}),
+globals.Cells);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "cells:",
 protocol: 'as yet unclassified',
 fn: function (theCells){
 var self=this;
-function $Cell(){return globals.Cell||(typeof Cell=="undefined"?nil:Cell)}
 return smalltalk.withContext(function($ctx1) { 
-var $1;
 self["@cells"]=_st(theCells)._collect_((function(c){
 return smalltalk.withContext(function($ctx2) {
-$1=_st(c)._isString();
-if(smalltalk.assert($1)){
-return _st($Cell())._at_(c);
-} else {
-return c;
-};
+return self._cellFrom_(c);
 }, function($ctx2) {$ctx2.fillBlock({c:c},$ctx1,1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"cells:",{theCells:theCells},globals.Cells)})},
 args: ["theCells"],
-source: "cells: theCells\x0a\x09cells := theCells collect: [ :c |\x0a\x09\x09\x09c isString\x0a\x09\x09\x09\x09ifTrue: [ Cell at: c ]\x0a\x09\x09\x09\x09ifFalse: [ c ]\x0a\x09\x09]",
-messageSends: ["collect:", "ifTrue:ifFalse:", "isString", "at:"],
-referencedClasses: ["Cell"]
+source: "cells: theCells\x0a\x09cells := theCells collect: [ :c |\x0a\x09\x09\x09self cellFrom: c ]",
+messageSends: ["collect:", "cellFrom:"],
+referencedClasses: []
 }),
 globals.Cells);
 
@@ -412,6 +500,59 @@ referencedClasses: []
 }),
 globals.Cells);
 
+smalltalk.addMethod(
+smalltalk.method({
+selector: "size:",
+protocol: 'printing',
+fn: function (newSize){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$1,$4,$3,$5,$6,$7;
+$2=self._size();
+$ctx1.sendIdx["size"]=1;
+$1=_st($2).__eq(newSize);
+if(smalltalk.assert($1)){
+return self;
+};
+$4=self._size();
+$ctx1.sendIdx["size"]=2;
+$3=_st($4).__gt(newSize);
+if(smalltalk.assert($3)){
+$5=self["@cells"];
+$6=_st(newSize).__plus((1));
+$7=self._size();
+$ctx1.sendIdx["size"]=3;
+self["@cells"]=_st($5)._removeFrom_to_($6,$7);
+self["@cells"];
+} else {
+self._add_cell_(_st(newSize).__minus(self._size()),"unknown");
+};
+return self}, function($ctx1) {$ctx1.fill(self,"size:",{newSize:newSize},globals.Cells)})},
+args: ["newSize"],
+source: "size: newSize\x0a\x09(self size = newSize) ifTrue: [ ^ self ].\x0a\x09(self size > newSize)\x0a\x09\x09ifTrue: [ cells := cells\x0a\x09 \x09\x09\x09\x09removeFrom: newSize + 1\x0a\x09\x09\x09\x09\x09to: self size ]\x0a\x09\x09ifFalse: [ self\x0a\x09\x09\x09\x09\x09add: (newSize - self size)\x0a\x09\x09\x09\x09\x09cell: #unknown ]",
+messageSends: ["ifTrue:", "=", "size", "ifTrue:ifFalse:", ">", "removeFrom:to:", "+", "add:cell:", "-"],
+referencedClasses: []
+}),
+globals.Cells);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "new",
+protocol: 'as yet unclassified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self._new_([]);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"new",{},globals.Cells.klass)})},
+args: [],
+source: "new\x0a\x09^ self new: #( )",
+messageSends: ["new:"],
+referencedClasses: []
+}),
+globals.Cells.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -420,13 +561,51 @@ protocol: 'as yet unclassified',
 fn: function (cells){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st(self._new())._cells_(cells);
+var $2,$1;
+$2=($ctx1.supercall = true, globals.Cells.klass.superclass.fn.prototype._new.apply(_st(self), []));
+$ctx1.supercall = false;
+$1=_st($2)._cells_(cells);
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"new:",{cells:cells},globals.Cells.klass)})},
 args: ["cells"],
-source: "new: cells\x0a\x09^ self new cells: cells",
+source: "new: cells\x0a\x09^ super new cells: cells",
 messageSends: ["cells:", "new"],
+referencedClasses: []
+}),
+globals.Cells.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "spaces:",
+protocol: 'as yet unclassified',
+fn: function (n){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self._new())._add_cell_(n,"space");
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"spaces:",{n:n},globals.Cells.klass)})},
+args: ["n"],
+source: "spaces: n\x0a\x09^ self new add: n cell: #space",
+messageSends: ["add:cell:", "new"],
+referencedClasses: []
+}),
+globals.Cells.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "unknowns:",
+protocol: 'as yet unclassified',
+fn: function (n){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self._new())._add_cell_(n,"unknown");
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"unknowns:",{n:n},globals.Cells.klass)})},
+args: ["n"],
+source: "unknowns: n\x0a\x09^ self new add: n cell: #unknown",
+messageSends: ["add:cell:", "new"],
 referencedClasses: []
 }),
 globals.Cells.klass);
@@ -578,6 +757,23 @@ args: ["index"],
 source: "rowAt: index\x0a\x09| start |\x0a\x09start := self indexOf: (Point x: 1 y: index).\x0a\x09^ Cells new: (cells copyFrom: start to: (start + size x - 1))",
 messageSends: ["indexOf:", "x:y:", "new:", "copyFrom:to:", "-", "+", "x"],
 referencedClasses: ["Point", "Cells"]
+}),
+globals.Grid);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "size",
+protocol: 'as yet unclassified',
+fn: function (){
+var self=this;
+var $1;
+$1=self["@size"];
+return $1;
+},
+args: [],
+source: "size\x0a\x09^ size",
+messageSends: [],
+referencedClasses: []
 }),
 globals.Grid);
 
@@ -753,6 +949,26 @@ return self},
 args: [],
 source: "initialize\x0a\x09hints := {}",
 messageSends: [],
+referencedClasses: []
+}),
+globals.Hints);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "printOn:",
+protocol: 'as yet unclassified',
+fn: function (stream){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self["@hints"])._do_((function(hint){
+return smalltalk.withContext(function($ctx2) {
+_st(stream)._cr();
+return _st(hint)._printOn_(stream);
+}, function($ctx2) {$ctx2.fillBlock({hint:hint},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"printOn:",{stream:stream},globals.Hints)})},
+args: ["stream"],
+source: "printOn: stream\x0a\x09hints do: [ :hint |\x0a\x09\x09stream cr.\x0a\x09\x09hint printOn: stream ]",
+messageSends: ["do:", "cr", "printOn:"],
 referencedClasses: []
 }),
 globals.Hints);
@@ -988,6 +1204,23 @@ globals.Logimage);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "colHints",
+protocol: 'accessing',
+fn: function (){
+var self=this;
+var $1;
+$1=self["@col"];
+return $1;
+},
+args: [],
+source: "colHints\x0a\x09^ col",
+messageSends: [],
+referencedClasses: []
+}),
+globals.Logimage);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "colLineAt:",
 protocol: 'accessing',
 fn: function (index){
@@ -1002,6 +1235,27 @@ args: ["index"],
 source: "colLineAt: index\x0a\x09^ Line new: (self colHintAt: index)\x0a\x09\x09 cells: (self colCellsAt: index)",
 messageSends: ["new:cells:", "colHintAt:", "colCellsAt:"],
 referencedClasses: ["Line"]
+}),
+globals.Logimage);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "colLines",
+protocol: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st((1)._to_(_st(self["@col"])._size()))._collect_((function(index){
+return smalltalk.withContext(function($ctx2) {
+return self._colLineAt_(index);
+}, function($ctx2) {$ctx2.fillBlock({index:index},$ctx1,1)})}));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"colLines",{},globals.Logimage)})},
+args: [],
+source: "colLines\x0a\x09^ (1 to: col size) collect: [ :index |\x0a\x09\x09\x09self colLineAt: index ]",
+messageSends: ["collect:", "to:", "size", "colLineAt:"],
+referencedClasses: []
 }),
 globals.Logimage);
 
@@ -1104,6 +1358,23 @@ globals.Logimage);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "rowHints",
+protocol: 'accessing',
+fn: function (){
+var self=this;
+var $1;
+$1=self["@row"];
+return $1;
+},
+args: [],
+source: "rowHints\x0a\x09^ row",
+messageSends: [],
+referencedClasses: []
+}),
+globals.Logimage);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "rowLineAt:",
 protocol: 'accessing',
 fn: function (index){
@@ -1118,6 +1389,27 @@ args: ["index"],
 source: "rowLineAt: index\x0a\x09^ Line new: (self rowHintAt: index)\x0a\x09\x09 cells: (self rowCellsAt: index)",
 messageSends: ["new:cells:", "rowHintAt:", "rowCellsAt:"],
 referencedClasses: ["Line"]
+}),
+globals.Logimage);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "rowLines",
+protocol: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st((1)._to_(_st(self["@row"])._size()))._collect_((function(index){
+return smalltalk.withContext(function($ctx2) {
+return self._rowLineAt_(index);
+}, function($ctx2) {$ctx2.fillBlock({index:index},$ctx1,1)})}));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"rowLines",{},globals.Logimage)})},
+args: [],
+source: "rowLines\x0a\x09^ (1 to: row size) collect: [ :index |\x0a\x09\x09\x09self rowLineAt: index ]",
+messageSends: ["collect:", "to:", "size", "rowLineAt:"],
+referencedClasses: []
 }),
 globals.Logimage);
 
@@ -1161,7 +1453,7 @@ _st($2)._addRowHints_([(1)]);
 $ctx1.sendIdx["addRowHints:"]=6;
 _st($2)._addRowHints_([(1)]);
 $ctx1.sendIdx["addRowHints:"]=7;
-_st($2)._addRowHints_([(0)]);
+_st($2)._addRowHints_([]);
 $ctx1.sendIdx["addRowHints:"]=8;
 _st($2)._addRowHints_([(1)]);
 _st($2)._addColHints_([(2)]);
@@ -1177,7 +1469,7 @@ $1=$3;
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"question",{},globals.Logimage.klass)})},
 args: [],
-source: "question\x0a\x09^ self new\x0a\x09\x09addRowHints: #( 3 );\x0a\x09\x09addRowHints: #( 2 2 );\x0a\x09\x09addRowHints: #( 1 1 );\x0a\x09\x09addRowHints: #( 2 );\x0a\x09\x09addRowHints: #( 2 );\x0a\x09\x09addRowHints: #( 1 );\x0a\x09\x09addRowHints: #( 1 );\x0a\x09\x09addRowHints: #( 0 );\x0a\x09\x09addRowHints: #( 1 );\x0a\x0a\x09\x09addColHints: #( 2 );\x0a\x09\x09addColHints: #( 2 );\x0a\x09\x09addColHints: #( 1 3 1 );\x0a\x09\x09addColHints: #( 2 2 );\x0a\x09\x09addColHints: #( 3 )",
+source: "question\x0a\x09^ self new\x0a\x09\x09addRowHints: #( 3 );\x0a\x09\x09addRowHints: #( 2 2 );\x0a\x09\x09addRowHints: #( 1 1 );\x0a\x09\x09addRowHints: #( 2 );\x0a\x09\x09addRowHints: #( 2 );\x0a\x09\x09addRowHints: #( 1 );\x0a\x09\x09addRowHints: #( 1 );\x0a\x09\x09addRowHints: #( );\x0a\x09\x09addRowHints: #( 1 );\x0a\x0a\x09\x09addColHints: #( 2 );\x0a\x09\x09addColHints: #( 2 );\x0a\x09\x09addColHints: #( 1 3 1 );\x0a\x09\x09addColHints: #( 2 2 );\x0a\x09\x09addColHints: #( 3 )",
 messageSends: ["addRowHints:", "new", "addColHints:"],
 referencedClasses: []
 }),
@@ -1209,66 +1501,185 @@ referencedClasses: []
 globals.Logimage.klass);
 
 
+smalltalk.addClass('Strategist', globals.Object, [], 'Logimage');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "apply:on:",
+protocol: 'as yet unclassified',
+fn: function (strategy,logimage){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self._apply_onRowOf_(strategy,logimage);
+self._apply_onColOf_(strategy,logimage);
+return self}, function($ctx1) {$ctx1.fill(self,"apply:on:",{strategy:strategy,logimage:logimage},globals.Strategist)})},
+args: ["strategy", "logimage"],
+source: "apply: strategy on: logimage\x0a\x09self apply: strategy onRowOf: logimage.\x0a\x09self apply: strategy onColOf: logimage",
+messageSends: ["apply:onRowOf:", "apply:onColOf:"],
+referencedClasses: []
+}),
+globals.Strategist);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "apply:on:at:",
+protocol: 'as yet unclassified',
+fn: function (cell,logimage,point){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(cell)._isBox();
+if(smalltalk.assert($1)){
+_st(logimage)._box_(point);
+return self;
+};
+$2=_st(cell)._isSpace();
+if(smalltalk.assert($2)){
+_st(logimage)._space_(point);
+return self;
+};
+return self}, function($ctx1) {$ctx1.fill(self,"apply:on:at:",{cell:cell,logimage:logimage,point:point},globals.Strategist)})},
+args: ["cell", "logimage", "point"],
+source: "apply: cell on: logimage at: point\x0a\x09cell isBox ifTrue: [ logimage box: point. ^ self ].\x0a\x09cell isSpace ifTrue: [ logimage space: point. ^ self ]",
+messageSends: ["ifTrue:", "isBox", "box:", "isSpace", "space:"],
+referencedClasses: []
+}),
+globals.Strategist);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "apply:on:atCol:",
+protocol: 'as yet unclassified',
+fn: function (cells,logimage,x){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+(1)._to_do_(_st(cells)._size(),(function(y){
+return smalltalk.withContext(function($ctx2) {
+return self._apply_on_at_(_st(cells)._at_(y),logimage,_st(x).__at(y));
+}, function($ctx2) {$ctx2.fillBlock({y:y},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"apply:on:atCol:",{cells:cells,logimage:logimage,x:x},globals.Strategist)})},
+args: ["cells", "logimage", "x"],
+source: "apply: cells on: logimage atCol: x\x0a\x091 to: cells size do: [ :y |\x0a\x09\x09self apply: (cells at: y) on: logimage at: x@y ]",
+messageSends: ["to:do:", "size", "apply:on:at:", "at:", "@"],
+referencedClasses: []
+}),
+globals.Strategist);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "apply:on:atRow:",
+protocol: 'as yet unclassified',
+fn: function (cells,logimage,y){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+(1)._to_do_(_st(cells)._size(),(function(x){
+return smalltalk.withContext(function($ctx2) {
+return self._apply_on_at_(_st(cells)._at_(x),logimage,_st(x).__at(y));
+}, function($ctx2) {$ctx2.fillBlock({x:x},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"apply:on:atRow:",{cells:cells,logimage:logimage,y:y},globals.Strategist)})},
+args: ["cells", "logimage", "y"],
+source: "apply: cells on: logimage atRow: y\x0a\x091 to: cells size do: [ :x |\x0a\x09\x09self apply: (cells at: x) on: logimage at: x@y ]",
+messageSends: ["to:do:", "size", "apply:on:at:", "at:", "@"],
+referencedClasses: []
+}),
+globals.Strategist);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "apply:onColOf:",
+protocol: 'as yet unclassified',
+fn: function (strategy,logimage){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+(1)._to_do_(_st(_st(_st(logimage)._grid())._size())._x(),(function(x){
+var sol;
+return smalltalk.withContext(function($ctx2) {
+sol=_st(strategy)._analyse_(_st(logimage)._colLineAt_(x));
+sol;
+return self._apply_on_atCol_(sol,logimage,x);
+}, function($ctx2) {$ctx2.fillBlock({x:x,sol:sol},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"apply:onColOf:",{strategy:strategy,logimage:logimage},globals.Strategist)})},
+args: ["strategy", "logimage"],
+source: "apply: strategy onColOf: logimage\x0a\x091 to: logimage grid size x do: [ :x | | sol |\x0a\x09\x09sol := strategy analyse: (logimage colLineAt: x).\x0a\x09\x09self apply: sol on: logimage atCol: x ]",
+messageSends: ["to:do:", "x", "size", "grid", "analyse:", "colLineAt:", "apply:on:atCol:"],
+referencedClasses: []
+}),
+globals.Strategist);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "apply:onRowOf:",
+protocol: 'as yet unclassified',
+fn: function (strategy,logimage){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+(1)._to_do_(_st(_st(_st(logimage)._grid())._size())._y(),(function(y){
+var sol;
+return smalltalk.withContext(function($ctx2) {
+sol=_st(strategy)._analyse_(_st(logimage)._rowLineAt_(y));
+sol;
+return self._apply_on_atRow_(sol,logimage,y);
+}, function($ctx2) {$ctx2.fillBlock({y:y,sol:sol},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"apply:onRowOf:",{strategy:strategy,logimage:logimage},globals.Strategist)})},
+args: ["strategy", "logimage"],
+source: "apply: strategy onRowOf: logimage\x0a\x091 to: logimage grid size y do: [ :y | | sol |\x0a\x09\x09sol := strategy analyse: (logimage rowLineAt: y).\x0a\x09\x09self apply: sol on: logimage atRow: y ]",
+messageSends: ["to:do:", "y", "size", "grid", "analyse:", "rowLineAt:", "apply:on:atRow:"],
+referencedClasses: []
+}),
+globals.Strategist);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "solve:",
+protocol: 'as yet unclassified',
+fn: function (logimage){
+var self=this;
+function $StratSpaces(){return globals.StratSpaces||(typeof StratSpaces=="undefined"?nil:StratSpaces)}
+function $StratDone(){return globals.StratDone||(typeof StratDone=="undefined"?nil:StratDone)}
+function $StratRecover(){return globals.StratRecover||(typeof StratRecover=="undefined"?nil:StratRecover)}
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st($StratSpaces())._new();
+$ctx1.sendIdx["new"]=1;
+$3=_st($StratDone())._new();
+$ctx1.sendIdx["new"]=2;
+$1=[$2,$3,_st($StratRecover())._new()];
+_st($1)._do_((function(strategy){
+return smalltalk.withContext(function($ctx2) {
+return self._apply_on_(strategy,logimage);
+}, function($ctx2) {$ctx2.fillBlock({strategy:strategy},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"solve:",{logimage:logimage},globals.Strategist)})},
+args: ["logimage"],
+source: "solve: logimage\x0a\x09{ StratSpaces new. StratDone new. StratRecover new } do: [ :strategy |\x0a\x09\x09self apply: strategy on: logimage ]",
+messageSends: ["do:", "new", "apply:on:"],
+referencedClasses: ["StratSpaces", "StratDone", "StratRecover"]
+}),
+globals.Strategist);
+
+
+
 smalltalk.addClass('Strategy', globals.Object, [], 'Logimage');
-
-
-smalltalk.addClass('StratRecover', globals.Strategy, [], 'Logimage');
 smalltalk.addMethod(
 smalltalk.method({
 selector: "analyse:",
 protocol: 'as yet unclassified',
 fn: function (line){
 var self=this;
-var free,sol;
+function $Cells(){return globals.Cells||(typeof Cells=="undefined"?nil:Cells)}
 return smalltalk.withContext(function($ctx1) { 
-var $1,$2,$5,$4,$3,$6,$8,$7,$9;
-free=self._free_(line);
-sol=[];
-_st(_st(_st(line)._hint())._numbers())._do_((function(n){
-return smalltalk.withContext(function($ctx2) {
-_st(_st(n)._min_(free))._timesRepeat_((function(){
-return smalltalk.withContext(function($ctx3) {
-return _st(sol)._add_("u");
-$ctx3.sendIdx["add:"]=1;
-}, function($ctx3) {$ctx3.fillBlock({},$ctx2,2)})}));
-$1=_st(free).__plus((1));
-$ctx2.sendIdx["+"]=1;
-_st($1)._to_do_(n,(function(){
-return smalltalk.withContext(function($ctx3) {
-return _st(sol)._add_("b");
-$ctx3.sendIdx["add:"]=2;
-}, function($ctx3) {$ctx3.fillBlock({},$ctx2,3)})}));
-$ctx2.sendIdx["to:do:"]=1;
-return _st(sol)._add_("u");
-$ctx2.sendIdx["add:"]=3;
-}, function($ctx2) {$ctx2.fillBlock({n:n},$ctx1,1)})}));
-$2=sol;
-$5=_st(line)._cells();
-$ctx1.sendIdx["cells"]=1;
-$4=_st($5)._size();
-$ctx1.sendIdx["size"]=1;
-$3=_st($4).__plus((1));
-$ctx1.sendIdx["+"]=2;
-$6=_st(sol)._size();
-$ctx1.sendIdx["size"]=2;
-sol=_st($2)._removeFrom_to_($3,$6);
-$8=_st(sol)._size();
-$ctx1.sendIdx["size"]=3;
-$7=_st($8).__plus((1));
-_st($7)._to_do_(_st(_st(line)._cells())._size(),(function(){
-return smalltalk.withContext(function($ctx2) {
-return _st(sol)._add_("u");
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,4)})}));
-$9=sol;
-return $9;
-}, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line,free:free,sol:sol},globals.StratRecover)})},
+var $1;
+$1=_st($Cells())._new();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line},globals.Strategy)})},
 args: ["line"],
-source: "analyse: line\x0a\x09| free sol |\x0a\x09free := self free: line.\x0a\x09sol := {}.\x0a\x09line hint numbers do: [ :n |\x0a\x09\x09(n min: free) timesRepeat: [ sol add: #u ].\x0a\x09\x09free+1 to: n do: [ sol add: #b ].\x0a\x09\x09sol add: #u\x0a\x09\x09].\x0a\x09\x22remove last unknown if line full\x22\x0a\x09 sol := sol\x0a\x09 \x09removeFrom: (line cells size) + 1\x0a\x09\x09to: sol size.\x0a\x09\x22add unknown if nedeed\x22\x0a\x09(sol size + 1) to: (line cells size) do: [ sol add: #u ].\x0a\x09^ sol",
-messageSends: ["free:", "do:", "numbers", "hint", "timesRepeat:", "min:", "add:", "to:do:", "+", "removeFrom:to:", "size", "cells"],
-referencedClasses: []
+source: "analyse: line\x0a\x09^ Cells new",
+messageSends: ["new"],
+referencedClasses: ["Cells"]
 }),
-globals.StratRecover);
+globals.Strategy);
 
+
+
+smalltalk.addClass('StratCount', globals.Strategy, [], 'Logimage');
 smalltalk.addMethod(
 smalltalk.method({
 selector: "free:",
@@ -1279,13 +1690,13 @@ return smalltalk.withContext(function($ctx1) {
 var $1;
 $1=_st(_st(_st(line)._cells())._size()).__minus(self._occupation_(_st(line)._hint()));
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"free:",{line:line},globals.StratRecover)})},
+}, function($ctx1) {$ctx1.fill(self,"free:",{line:line},globals.StratCount)})},
 args: ["line"],
-source: "free: line\x0a\x09^ (line cells size) - (self occupation: line hint)",
+source: "free: line\x0a\x09\x22I return the number of cells that are free to move a number\x22\x0a\x09^ (line cells size) - (self occupation: line hint)",
 messageSends: ["-", "size", "cells", "occupation:", "hint"],
 referencedClasses: []
 }),
-globals.StratRecover);
+globals.StratCount);
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -1297,13 +1708,13 @@ return smalltalk.withContext(function($ctx1) {
 var $1;
 $1=_st(_st(self._sum_(hint)).__plus(_st(hint)._size())).__minus((1));
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"occupation:",{hint:hint},globals.StratRecover)})},
+}, function($ctx1) {$ctx1.fill(self,"occupation:",{hint:hint},globals.StratCount)})},
 args: ["hint"],
-source: "occupation: hint\x0a\x09^ (self sum: hint) + hint size - 1",
+source: "occupation: hint\x0a\x09\x22I return the number of cell all numbers fill, with one space between each\x22\x0a\x09^ (self sum: hint) + hint size - 1",
 messageSends: ["-", "+", "sum:", "size"],
 referencedClasses: []
 }),
-globals.StratRecover);
+globals.StratCount);
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -1318,13 +1729,114 @@ return smalltalk.withContext(function($ctx2) {
 return _st(s).__plus(n);
 }, function($ctx2) {$ctx2.fillBlock({s:s,n:n},$ctx1,1)})}));
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"sum:",{hint:hint},globals.StratRecover)})},
+}, function($ctx1) {$ctx1.fill(self,"sum:",{hint:hint},globals.StratCount)})},
 args: ["hint"],
-source: "sum: hint\x0a\x09^ hint numbers inject: 0 into: [ :s :n | s+n ]",
+source: "sum: hint\x0a\x09\x22I return the sum of all number, without spaces\x22\x0a\x09^ hint numbers inject: 0 into: [ :s :n | s+n ]",
 messageSends: ["inject:into:", "numbers", "+"],
 referencedClasses: []
 }),
+globals.StratCount);
+
+
+
+smalltalk.addClass('StratDone', globals.StratCount, [], 'Logimage');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "analyse:",
+protocol: 'as yet unclassified',
+fn: function (line){
+var self=this;
+var sol;
+function $Cells(){return globals.Cells||(typeof Cells=="undefined"?nil:Cells)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5;
+$1=_st(self._free_(line)).__eq((0));
+if(! smalltalk.assert($1)){
+$2=($ctx1.supercall = true, globals.StratDone.superclass.fn.prototype._analyse_.apply(_st(self), [line]));
+$ctx1.supercall = false;
+return $2;
+};
+sol=_st($Cells())._new();
+_st(_st(_st(line)._hint())._numbers())._do_((function(n){
+return smalltalk.withContext(function($ctx2) {
+$3=sol;
+_st($3)._add_cell_(n,"box");
+$4=_st($3)._add_("space");
+return $4;
+}, function($ctx2) {$ctx2.fillBlock({n:n},$ctx1,2)})}));
+$5=_st(sol)._size_(_st(_st(line)._cells())._size());
+return $5;
+}, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line,sol:sol},globals.StratDone)})},
+args: ["line"],
+source: "analyse: line\x0a\x09| sol |\x0a\x09(self free: line) = 0\x0a\x09\x09ifFalse: [ ^ super analyse: line ].\x0a\x09sol := Cells new.\x0a\x09line hint numbers do: [ :n |\x0a\x09\x09sol add: n cell: #box ;\x0a\x09\x09\x09add: #space ].\x0a\x09\x22remove last unknown if line full\x22\x0a\x09^ sol size: (line cells size)",
+messageSends: ["ifFalse:", "=", "free:", "analyse:", "new", "do:", "numbers", "hint", "add:cell:", "add:", "size:", "size", "cells"],
+referencedClasses: ["Cells"]
+}),
+globals.StratDone);
+
+
+
+smalltalk.addClass('StratRecover', globals.StratCount, [], 'Logimage');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "analyse:",
+protocol: 'as yet unclassified',
+fn: function (line){
+var self=this;
+var free,sol;
+function $Cells(){return globals.Cells||(typeof Cells=="undefined"?nil:Cells)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+free=self._free_(line);
+sol=_st($Cells())._new();
+_st(_st(_st(line)._hint())._numbers())._do_((function(n){
+return smalltalk.withContext(function($ctx2) {
+$1=sol;
+_st($1)._add_cell_(_st(n)._min_(free),"unknown");
+$ctx2.sendIdx["add:cell:"]=1;
+_st($1)._add_cell_(_st(n).__minus(free),"box");
+$2=_st($1)._add_("unknown");
+return $2;
+}, function($ctx2) {$ctx2.fillBlock({n:n},$ctx1,1)})}));
+$3=_st(sol)._size_(_st(_st(line)._cells())._size());
+return $3;
+}, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line,free:free,sol:sol},globals.StratRecover)})},
+args: ["line"],
+source: "analyse: line\x0a\x09| free sol |\x0a\x09free := self free: line.\x0a\x09sol := Cells new.\x0a\x09line hint numbers do: [ :n |\x0a\x09\x09sol add: (n min: free) cell: #unknown ;\x0a\x09\x09\x09add: (n - free) cell: #box ;\x0a\x09\x09\x09add: #unknown ].\x0a\x09\x22remove last unknown if line full\x22\x0a\x09^ sol size: (line cells size)",
+messageSends: ["free:", "new", "do:", "numbers", "hint", "add:cell:", "min:", "-", "add:", "size:", "size", "cells"],
+referencedClasses: ["Cells"]
+}),
 globals.StratRecover);
+
+
+
+smalltalk.addClass('StratSpaces', globals.StratCount, [], 'Logimage');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "analyse:",
+protocol: 'as yet unclassified',
+fn: function (line){
+var self=this;
+function $Cells(){return globals.Cells||(typeof Cells=="undefined"?nil:Cells)}
+return smalltalk.withContext(function($ctx1) { 
+var $2,$1,$3,$4;
+$2=_st(_st(line)._hint())._size();
+$ctx1.sendIdx["size"]=1;
+$1=_st($2).__eq((0));
+if(smalltalk.assert($1)){
+$3=_st($Cells())._spaces_(_st(_st(line)._cells())._size());
+return $3;
+};
+$4=($ctx1.supercall = true, globals.StratSpaces.superclass.fn.prototype._analyse_.apply(_st(self), [line]));
+$ctx1.supercall = false;
+return $4;
+}, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line},globals.StratSpaces)})},
+args: ["line"],
+source: "analyse: line\x0a\x09(line hint size = 0)\x0a\x09\x09ifTrue: [ ^ Cells spaces: line cells size ].\x0a\x09^ super analyse: line",
+messageSends: ["ifTrue:", "=", "size", "hint", "spaces:", "cells", "analyse:"],
+referencedClasses: ["Cells"]
+}),
+globals.StratSpaces);
 
 
 });

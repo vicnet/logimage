@@ -7,6 +7,10 @@ A simple cell or pixel.!
 
 !Cell methodsFor: 'as yet unclassified'!
 
+* n
+	^ Cells new add: n cell: self
+!
+
 isBox
 	^ false
 !
@@ -103,12 +107,27 @@ A line or a column of cells!
 
 !Cells methodsFor: 'as yet unclassified'!
 
+add: aCell
+	cells add: (self cellFrom: aCell)
+!
+
+add: n cell: aCell
+	n timesRepeat: [ self add: aCell ]
+!
+
+at: index
+	^ cells at: index
+!
+
+cellFrom: aCell
+	aCell isString
+		ifTrue: [ ^ Cell at: aCell ].
+	^ aCell
+!
+
 cells: theCells
 	cells := theCells collect: [ :c |
-			c isString
-				ifTrue: [ Cell at: c ]
-				ifFalse: [ c ]
-		]
+			self cellFrom: c ]
 !
 
 firstNumbers
@@ -130,6 +149,17 @@ printOn: stream
 
 size
 	^ cells size
+!
+
+size: newSize
+	(self size = newSize) ifTrue: [ ^ self ].
+	(self size > newSize)
+		ifTrue: [ cells := cells
+	 				removeFrom: newSize + 1
+					to: self size ]
+		ifFalse: [ self
+					add: (newSize - self size)
+					cell: #unknown ]
 ! !
 
 !Cells methodsFor: 'private'!
@@ -150,8 +180,20 @@ numbersOf: theCells
 
 !Cells class methodsFor: 'as yet unclassified'!
 
+new
+	^ self new: #( )
+!
+
 new: cells
-	^ self new cells: cells
+	^ super new cells: cells
+!
+
+spaces: n
+	^ self new add: n cell: #space
+!
+
+unknowns: n
+	^ self new add: n cell: #unknown
 ! !
 
 Object subclass: #Grid
@@ -181,6 +223,10 @@ rowAt: index
 
 box: point
 	self at: point put: (Cell box)
+!
+
+size
+	^ size
 !
 
 size: aSize
@@ -265,6 +311,12 @@ initialize
 	hints := {}
 !
 
+printOn: stream
+	hints do: [ :hint |
+		stream cr.
+		hint printOn: stream ]
+!
+
 size
 	^ hints size
 ! !
@@ -322,9 +374,18 @@ colHintAt: index
 	^ col at: index
 !
 
+colHints
+	^ col
+!
+
 colLineAt: index
 	^ Line new: (self colHintAt: index)
 		 cells: (self colCellsAt: index)
+!
+
+colLines
+	^ (1 to: col size) collect: [ :index |
+			self colLineAt: index ]
 !
 
 grid
@@ -339,9 +400,18 @@ rowHintAt: index
 	^ row at: index
 !
 
+rowHints
+	^ row
+!
+
 rowLineAt: index
 	^ Line new: (self rowHintAt: index)
 		 cells: (self rowCellsAt: index)
+!
+
+rowLines
+	^ (1 to: row size) collect: [ :index |
+			self rowLineAt: index ]
 ! !
 
 !Logimage methodsFor: 'as yet unclassified'!
@@ -387,7 +457,7 @@ question
 		addRowHints: #( 2 );
 		addRowHints: #( 1 );
 		addRowHints: #( 1 );
-		addRowHints: #( 0 );
+		addRowHints: #( );
 		addRowHints: #( 1 );
 
 		addColHints: #( 2 );
@@ -405,11 +475,99 @@ simple
 		addColHints: #( 2 )
 ! !
 
+Object subclass: #Strategist
+	instanceVariableNames: ''
+	package: 'Logimage'!
+
+!Strategist methodsFor: 'as yet unclassified'!
+
+apply: strategy on: logimage
+	self apply: strategy onRowOf: logimage.
+	self apply: strategy onColOf: logimage
+!
+
+apply: cell on: logimage at: point
+	cell isBox ifTrue: [ logimage box: point. ^ self ].
+	cell isSpace ifTrue: [ logimage space: point. ^ self ]
+!
+
+apply: cells on: logimage atCol: x
+	1 to: cells size do: [ :y |
+		self apply: (cells at: y) on: logimage at: x@y ]
+!
+
+apply: cells on: logimage atRow: y
+	1 to: cells size do: [ :x |
+		self apply: (cells at: x) on: logimage at: x@y ]
+!
+
+apply: strategy onColOf: logimage
+	1 to: logimage grid size x do: [ :x | | sol |
+		sol := strategy analyse: (logimage colLineAt: x).
+		self apply: sol on: logimage atCol: x ]
+!
+
+apply: strategy onRowOf: logimage
+	1 to: logimage grid size y do: [ :y | | sol |
+		sol := strategy analyse: (logimage rowLineAt: y).
+		self apply: sol on: logimage atRow: y ]
+!
+
+solve: logimage
+	{ StratSpaces new. StratDone new. StratRecover new } do: [ :strategy |
+		self apply: strategy on: logimage ]
+! !
+
 Object subclass: #Strategy
 	instanceVariableNames: ''
 	package: 'Logimage'!
 
-Strategy subclass: #StratRecover
+!Strategy methodsFor: 'as yet unclassified'!
+
+analyse: line
+	^ Cells new
+! !
+
+Strategy subclass: #StratCount
+	instanceVariableNames: ''
+	package: 'Logimage'!
+
+!StratCount methodsFor: 'as yet unclassified'!
+
+free: line
+	"I return the number of cells that are free to move a number"
+	^ (line cells size) - (self occupation: line hint)
+!
+
+occupation: hint
+	"I return the number of cell all numbers fill, with one space between each"
+	^ (self sum: hint) + hint size - 1
+!
+
+sum: hint
+	"I return the sum of all number, without spaces"
+	^ hint numbers inject: 0 into: [ :s :n | s+n ]
+! !
+
+StratCount subclass: #StratDone
+	instanceVariableNames: ''
+	package: 'Logimage'!
+
+!StratDone methodsFor: 'as yet unclassified'!
+
+analyse: line
+	| sol |
+	(self free: line) = 0
+		ifFalse: [ ^ super analyse: line ].
+	sol := Cells new.
+	line hint numbers do: [ :n |
+		sol add: n cell: #box ;
+			add: #space ].
+	"remove last unknown if line full"
+	^ sol size: (line cells size)
+! !
+
+StratCount subclass: #StratRecover
 	instanceVariableNames: ''
 	package: 'Logimage'!
 
@@ -418,30 +576,24 @@ Strategy subclass: #StratRecover
 analyse: line
 	| free sol |
 	free := self free: line.
-	sol := {}.
+	sol := Cells new.
 	line hint numbers do: [ :n |
-		(n min: free) timesRepeat: [ sol add: #u ].
-		free+1 to: n do: [ sol add: #b ].
-		sol add: #u
-		].
+		sol add: (n min: free) cell: #unknown ;
+			add: (n - free) cell: #box ;
+			add: #unknown ].
 	"remove last unknown if line full"
-	 sol := sol
-	 	removeFrom: (line cells size) + 1
-		to: sol size.
-	"add unknown if nedeed"
-	(sol size + 1) to: (line cells size) do: [ sol add: #u ].
-	^ sol
-!
+	^ sol size: (line cells size)
+! !
 
-free: line
-	^ (line cells size) - (self occupation: line hint)
-!
+StratCount subclass: #StratSpaces
+	instanceVariableNames: ''
+	package: 'Logimage'!
 
-occupation: hint
-	^ (self sum: hint) + hint size - 1
-!
+!StratSpaces methodsFor: 'as yet unclassified'!
 
-sum: hint
-	^ hint numbers inject: 0 into: [ :s :n | s+n ]
+analyse: line
+	(line hint size = 0)
+		ifTrue: [ ^ Cells spaces: line cells size ].
+	^ super analyse: line
 ! !
 
