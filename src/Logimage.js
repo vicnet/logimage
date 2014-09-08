@@ -362,6 +362,23 @@ globals.Cells);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "cells",
+protocol: 'as yet unclassified',
+fn: function (){
+var self=this;
+var $1;
+$1=self["@cells"];
+return $1;
+},
+args: [],
+source: "cells\x0a\x09^ cells",
+messageSends: [],
+referencedClasses: []
+}),
+globals.Cells);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "cells:",
 protocol: 'as yet unclassified',
 fn: function (theCells){
@@ -375,6 +392,40 @@ return self}, function($ctx1) {$ctx1.fill(self,"cells:",{theCells:theCells},glob
 args: ["theCells"],
 source: "cells: theCells\x0a\x09cells := theCells collect: [ :c |\x0a\x09\x09\x09self cellFrom: c ]",
 messageSends: ["collect:", "cellFrom:"],
+referencedClasses: []
+}),
+globals.Cells);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "doneOf:",
+protocol: 'private',
+fn: function (theCells){
+var self=this;
+var nb;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+var $early={};
+try {
+nb=(0);
+_st(_st(theCells)._cells())._do_((function(c){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(c)._isUnknown();
+if(smalltalk.assert($1)){
+$2=nb;
+throw $early=[$2];
+};
+nb=_st(nb).__plus((1));
+return nb;
+}, function($ctx2) {$ctx2.fillBlock({c:c},$ctx1,1)})}));
+$3=nb;
+return $3;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+}, function($ctx1) {$ctx1.fill(self,"doneOf:",{theCells:theCells,nb:nb},globals.Cells)})},
+args: ["theCells"],
+source: "doneOf: theCells\x0a\x09\x22I returns a list of cells done in a block of Cells at begining\x22\x0a\x09\x22TODO should be in Class (static)\x22\x0a\x09| nb |\x0a\x09nb := 0.\x0a\x09theCells cells do: [ :c |\x0a\x09\x09\x22if found a unknow, stop reading cells\x22\x0a\x09\x09c isUnknown ifTrue: [ ^ nb ].\x0a\x09\x09nb := nb + 1 ].\x0a\x09^ nb",
+messageSends: ["do:", "cells", "ifTrue:", "isUnknown", "+"],
 referencedClasses: []
 }),
 globals.Cells);
@@ -405,12 +456,13 @@ fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=self._numbersOf_(_st(self["@cells"])._reversed());
+$1=_st(self._numbersOf_(_st(self["@cells"])._reversed()))._reversed();
+$ctx1.sendIdx["reversed"]=1;
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"lastNumbers",{},globals.Cells)})},
 args: [],
-source: "lastNumbers\x0a\x09^ self numbersOf: cells reversed",
-messageSends: ["numbersOf:", "reversed"],
+source: "lastNumbers\x0a\x09^ (self numbersOf: cells reversed) reversed",
+messageSends: ["reversed", "numbersOf:"],
 referencedClasses: []
 }),
 globals.Cells);
@@ -428,7 +480,7 @@ var $early={};
 try {
 numbers=[];
 current=(0);
-_st(theCells)._do_((function(c){
+_st(_st(theCells)._cells())._do_((function(c){
 return smalltalk.withContext(function($ctx2) {
 $1=_st(c)._isBox();
 if(smalltalk.assert($1)){
@@ -454,8 +506,8 @@ return $5;
 catch(e) {if(e===$early)return e[0]; throw e}
 }, function($ctx1) {$ctx1.fill(self,"numbersOf:",{theCells:theCells,numbers:numbers,current:current},globals.Cells)})},
 args: ["theCells"],
-source: "numbersOf: theCells\x0a\x09| numbers current |\x0a\x09numbers := { }.\x0a\x09current := 0.\x0a\x09theCells do: [ :c |\x0a\x09\x09c isBox\x0a\x09\x09\x09ifTrue: [ current := current + 1 ]\x0a\x09\x09\x09ifFalse: [ current > 0 ifTrue: [ numbers add: current ].\x0a\x09\x09\x09\x09\x09   current := 0 ].\x0a\x09\x09c isUnknown ifTrue: [ ^ numbers ].\x0a\x09\x09].\x0a\x09^ numbers",
-messageSends: ["do:", "ifTrue:ifFalse:", "isBox", "+", "ifTrue:", ">", "add:", "isUnknown"],
+source: "numbersOf: theCells\x0a\x09\x22I returns a list of number done in a block of Cells\x22\x0a\x09\x22TODO should be in Class (static)\x22\x0a\x09| numbers current |\x0a\x09numbers := { }.\x0a\x09current := 0.\x0a\x09theCells cells do: [ :c |\x0a\x09\x09c isBox\x0a\x09\x09\x09ifTrue: [ current := current + 1 ]\x0a\x09\x09\x09ifFalse: [ current > 0 ifTrue: [ numbers add: current ].\x0a\x09\x09\x09\x09\x09   current := 0 ].\x0a\x09\x09\x22if found a unknow, stop reading cells\x22\x0a\x09\x09c isUnknown ifTrue: [ ^ numbers ].\x0a\x09\x09].\x0a\x09^ numbers",
+messageSends: ["do:", "cells", "ifTrue:ifFalse:", "isBox", "+", "ifTrue:", ">", "add:", "isUnknown"],
 referencedClasses: []
 }),
 globals.Cells);
@@ -479,6 +531,25 @@ args: ["stream"],
 source: "printOn: stream\x0a\x09stream nextPutAll: '|'.\x0a\x09cells do: [ :c |\x0a\x09\x09\x09c printOn: stream.\x0a\x09\x09\x09stream nextPutAll: '|' ]",
 messageSends: ["nextPutAll:", "do:", "printOn:"],
 referencedClasses: []
+}),
+globals.Cells);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "reversed",
+protocol: 'as yet unclassified',
+fn: function (){
+var self=this;
+function $Cells(){return globals.Cells||(typeof Cells=="undefined"?nil:Cells)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($Cells())._new_(_st(self["@cells"])._reversed());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"reversed",{},globals.Cells)})},
+args: [],
+source: "reversed\x0a\x09^ Cells new: cells reversed",
+messageSends: ["new:", "reversed"],
+referencedClasses: ["Cells"]
 }),
 globals.Cells);
 
@@ -1552,14 +1623,14 @@ protocol: 'as yet unclassified',
 fn: function (cells,logimage,x){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-(1)._to_do_(_st(cells)._size(),(function(y){
+_st(_st(cells)._cells())._withIndexDo_((function(cell,y){
 return smalltalk.withContext(function($ctx2) {
-return self._apply_on_at_(_st(cells)._at_(y),logimage,_st(x).__at(y));
-}, function($ctx2) {$ctx2.fillBlock({y:y},$ctx1,1)})}));
+return self._apply_on_at_(cell,logimage,_st(x).__at(y));
+}, function($ctx2) {$ctx2.fillBlock({cell:cell,y:y},$ctx1,1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"apply:on:atCol:",{cells:cells,logimage:logimage,x:x},globals.Strategist)})},
 args: ["cells", "logimage", "x"],
-source: "apply: cells on: logimage atCol: x\x0a\x091 to: cells size do: [ :y |\x0a\x09\x09self apply: (cells at: y) on: logimage at: x@y ]",
-messageSends: ["to:do:", "size", "apply:on:at:", "at:", "@"],
+source: "apply: cells on: logimage atCol: x\x0a\x09cells cells withIndexDo: [ :cell :y |\x0a\x09\x09self apply: cell on: logimage at: x@y ]",
+messageSends: ["withIndexDo:", "cells", "apply:on:at:", "@"],
 referencedClasses: []
 }),
 globals.Strategist);
@@ -1571,14 +1642,14 @@ protocol: 'as yet unclassified',
 fn: function (cells,logimage,y){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-(1)._to_do_(_st(cells)._size(),(function(x){
+_st(_st(cells)._cells())._withIndexDo_((function(cell,x){
 return smalltalk.withContext(function($ctx2) {
-return self._apply_on_at_(_st(cells)._at_(x),logimage,_st(x).__at(y));
-}, function($ctx2) {$ctx2.fillBlock({x:x},$ctx1,1)})}));
+return self._apply_on_at_(cell,logimage,_st(x).__at(y));
+}, function($ctx2) {$ctx2.fillBlock({cell:cell,x:x},$ctx1,1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"apply:on:atRow:",{cells:cells,logimage:logimage,y:y},globals.Strategist)})},
 args: ["cells", "logimage", "y"],
-source: "apply: cells on: logimage atRow: y\x0a\x091 to: cells size do: [ :x |\x0a\x09\x09self apply: (cells at: x) on: logimage at: x@y ]",
-messageSends: ["to:do:", "size", "apply:on:at:", "at:", "@"],
+source: "apply: cells on: logimage atRow: y\x0a\x09cells cells withIndexDo: [ :cell :x |\x0a\x09\x09self apply: cell on: logimage at: x@y ]",
+messageSends: ["withIndexDo:", "cells", "apply:on:at:", "@"],
 referencedClasses: []
 }),
 globals.Strategist);

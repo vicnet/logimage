@@ -125,6 +125,10 @@ cellFrom: aCell
 	^ aCell
 !
 
+cells
+	^ cells
+!
+
 cells: theCells
 	cells := theCells collect: [ :c |
 			self cellFrom: c ]
@@ -135,7 +139,11 @@ firstNumbers
 !
 
 lastNumbers
-	^ self numbersOf: cells reversed
+	^ (self numbersOf: cells reversed) reversed
+!
+
+reversed
+	^ Cells new: cells reversed
 ! !
 
 !Cells methodsFor: 'printing'!
@@ -164,15 +172,30 @@ size: newSize
 
 !Cells methodsFor: 'private'!
 
+doneOf: theCells
+	"I returns a list of cells done in a block of Cells at begining"
+	"TODO should be in Class (static)"
+	| nb |
+	nb := 0.
+	theCells cells do: [ :c |
+		"if found a unknow, stop reading cells"
+		c isUnknown ifTrue: [ ^ nb ].
+		nb := nb + 1 ].
+	^ nb
+!
+
 numbersOf: theCells
+	"I returns a list of number done in a block of Cells"
+	"TODO should be in Class (static)"
 	| numbers current |
 	numbers := { }.
 	current := 0.
-	theCells do: [ :c |
+	theCells cells do: [ :c |
 		c isBox
 			ifTrue: [ current := current + 1 ]
 			ifFalse: [ current > 0 ifTrue: [ numbers add: current ].
 					   current := 0 ].
+		"if found a unknow, stop reading cells"
 		c isUnknown ifTrue: [ ^ numbers ].
 		].
 	^ numbers
@@ -492,13 +515,13 @@ apply: cell on: logimage at: point
 !
 
 apply: cells on: logimage atCol: x
-	1 to: cells size do: [ :y |
-		self apply: (cells at: y) on: logimage at: x@y ]
+	cells cells withIndexDo: [ :cell :y |
+		self apply: cell on: logimage at: x@y ]
 !
 
 apply: cells on: logimage atRow: y
-	1 to: cells size do: [ :x |
-		self apply: (cells at: x) on: logimage at: x@y ]
+	cells cells withIndexDo: [ :cell :x |
+		self apply: cell on: logimage at: x@y ]
 !
 
 apply: strategy onColOf: logimage
