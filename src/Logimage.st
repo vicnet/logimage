@@ -135,11 +135,11 @@ cells: theCells
 !
 
 firstNumbers
-	^ self numbersOf: cells
+	^ self numbersOf: self
 !
 
 lastNumbers
-	^ (self numbersOf: cells reversed) reversed
+	^ (self numbersOf: self reversed) reversed
 !
 
 reversed
@@ -153,6 +153,12 @@ printOn: stream
 	cells do: [ :c |
 			c printOn: stream.
 			stream nextPutAll: '|' ]
+!
+
+reduced
+	^ Cells new:
+		(cells copyFrom: self firstDone size + 1
+				to: self size - self lastDone size)
 !
 
 size
@@ -175,13 +181,21 @@ size: newSize
 doneOf: theCells
 	"I returns a list of cells done in a block of Cells at begining"
 	"TODO should be in Class (static)"
-	| nb |
-	nb := 0.
+	| done |
+	done := Cells new.
 	theCells cells do: [ :c |
 		"if found a unknow, stop reading cells"
-		c isUnknown ifTrue: [ ^ nb ].
-		nb := nb + 1 ].
-	^ nb
+		c isUnknown ifTrue: [ ^ done ].
+		done add: c ].
+	^ done
+!
+
+firstDone
+	^ self doneOf: self
+!
+
+lastDone
+	^ (self doneOf: self reversed) reversed
 !
 
 numbersOf: theCells
@@ -198,6 +212,7 @@ numbersOf: theCells
 		"if found a unknow, stop reading cells"
 		c isUnknown ifTrue: [ ^ numbers ].
 		].
+	current > 0 ifTrue: [ numbers add: current ].
 	^ numbers
 ! !
 
@@ -291,6 +306,16 @@ List of numbers!
 
 !Hint methodsFor: 'as yet unclassified'!
 
+firstRemoved: n
+	^ Hint new
+		numbers: (numbers removeFrom: 1 to: n)
+!
+
+lastRemoved: n
+	^ Hint new
+		numbers: (numbers copyFrom: 1 to: numbers size - n)
+!
+
 numbers
 	^ numbers
 !
@@ -368,6 +393,13 @@ hint: anObject
 
 isDone
 	^ False
+!
+
+reduced
+	| numbers |
+	numbers := hint firstRemoved: (cells firstNumbers size).
+	numbers := numbers lastRemoved: (cells lastNumbers size).
+	^ Line new: numbers cells: (cells reduced)
 ! !
 
 !Line methodsFor: 'printing'!
@@ -526,13 +558,13 @@ apply: cells on: logimage atRow: y
 
 apply: strategy onColOf: logimage
 	1 to: logimage grid size x do: [ :x | | sol |
-		sol := strategy analyse: (logimage colLineAt: x).
+		sol := strategy analyse: (logimage colLineAt: x) reduced.
 		self apply: sol on: logimage atCol: x ]
 !
 
 apply: strategy onRowOf: logimage
 	1 to: logimage grid size y do: [ :y | | sol |
-		sol := strategy analyse: (logimage rowLineAt: y).
+		sol := strategy analyse: (logimage rowLineAt: y) reduced.
 		self apply: sol on: logimage atRow: y ]
 !
 

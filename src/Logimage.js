@@ -402,30 +402,48 @@ selector: "doneOf:",
 protocol: 'private',
 fn: function (theCells){
 var self=this;
-var nb;
+var done;
+function $Cells(){return globals.Cells||(typeof Cells=="undefined"?nil:Cells)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2,$3;
 var $early={};
 try {
-nb=(0);
+done=_st($Cells())._new();
 _st(_st(theCells)._cells())._do_((function(c){
 return smalltalk.withContext(function($ctx2) {
 $1=_st(c)._isUnknown();
 if(smalltalk.assert($1)){
-$2=nb;
+$2=done;
 throw $early=[$2];
 };
-nb=_st(nb).__plus((1));
-return nb;
+return _st(done)._add_(c);
 }, function($ctx2) {$ctx2.fillBlock({c:c},$ctx1,1)})}));
-$3=nb;
+$3=done;
 return $3;
 }
 catch(e) {if(e===$early)return e[0]; throw e}
-}, function($ctx1) {$ctx1.fill(self,"doneOf:",{theCells:theCells,nb:nb},globals.Cells)})},
+}, function($ctx1) {$ctx1.fill(self,"doneOf:",{theCells:theCells,done:done},globals.Cells)})},
 args: ["theCells"],
-source: "doneOf: theCells\x0a\x09\x22I returns a list of cells done in a block of Cells at begining\x22\x0a\x09\x22TODO should be in Class (static)\x22\x0a\x09| nb |\x0a\x09nb := 0.\x0a\x09theCells cells do: [ :c |\x0a\x09\x09\x22if found a unknow, stop reading cells\x22\x0a\x09\x09c isUnknown ifTrue: [ ^ nb ].\x0a\x09\x09nb := nb + 1 ].\x0a\x09^ nb",
-messageSends: ["do:", "cells", "ifTrue:", "isUnknown", "+"],
+source: "doneOf: theCells\x0a\x09\x22I returns a list of cells done in a block of Cells at begining\x22\x0a\x09\x22TODO should be in Class (static)\x22\x0a\x09| done |\x0a\x09done := Cells new.\x0a\x09theCells cells do: [ :c |\x0a\x09\x09\x22if found a unknow, stop reading cells\x22\x0a\x09\x09c isUnknown ifTrue: [ ^ done ].\x0a\x09\x09done add: c ].\x0a\x09^ done",
+messageSends: ["new", "do:", "cells", "ifTrue:", "isUnknown", "add:"],
+referencedClasses: ["Cells"]
+}),
+globals.Cells);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "firstDone",
+protocol: 'private',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self._doneOf_(self);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"firstDone",{},globals.Cells)})},
+args: [],
+source: "firstDone\x0a\x09^ self doneOf: self",
+messageSends: ["doneOf:"],
 referencedClasses: []
 }),
 globals.Cells);
@@ -438,12 +456,31 @@ fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=self._numbersOf_(self["@cells"]);
+$1=self._numbersOf_(self);
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"firstNumbers",{},globals.Cells)})},
 args: [],
-source: "firstNumbers\x0a\x09^ self numbersOf: cells",
+source: "firstNumbers\x0a\x09^ self numbersOf: self",
 messageSends: ["numbersOf:"],
+referencedClasses: []
+}),
+globals.Cells);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "lastDone",
+protocol: 'private',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self._doneOf_(self._reversed()))._reversed();
+$ctx1.sendIdx["reversed"]=1;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"lastDone",{},globals.Cells)})},
+args: [],
+source: "lastDone\x0a\x09^ (self doneOf: self reversed) reversed",
+messageSends: ["reversed", "doneOf:"],
 referencedClasses: []
 }),
 globals.Cells);
@@ -456,12 +493,12 @@ fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st(self._numbersOf_(_st(self["@cells"])._reversed()))._reversed();
+$1=_st(self._numbersOf_(self._reversed()))._reversed();
 $ctx1.sendIdx["reversed"]=1;
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"lastNumbers",{},globals.Cells)})},
 args: [],
-source: "lastNumbers\x0a\x09^ (self numbersOf: cells reversed) reversed",
+source: "lastNumbers\x0a\x09^ (self numbersOf: self reversed) reversed",
 messageSends: ["reversed", "numbersOf:"],
 referencedClasses: []
 }),
@@ -475,7 +512,7 @@ fn: function (theCells){
 var self=this;
 var numbers,current;
 return smalltalk.withContext(function($ctx1) { 
-var $1,$2,$3,$4,$5;
+var $1,$2,$3,$4,$5,$6;
 var $early={};
 try {
 numbers=[];
@@ -488,8 +525,10 @@ current=_st(current).__plus((1));
 current;
 } else {
 $2=_st(current).__gt((0));
+$ctx2.sendIdx[">"]=1;
 if(smalltalk.assert($2)){
 _st(numbers)._add_(current);
+$ctx2.sendIdx["add:"]=1;
 };
 current=(0);
 current;
@@ -500,13 +539,17 @@ $4=numbers;
 throw $early=[$4];
 };
 }, function($ctx2) {$ctx2.fillBlock({c:c},$ctx1,1)})}));
-$5=numbers;
-return $5;
+$5=_st(current).__gt((0));
+if(smalltalk.assert($5)){
+_st(numbers)._add_(current);
+};
+$6=numbers;
+return $6;
 }
 catch(e) {if(e===$early)return e[0]; throw e}
 }, function($ctx1) {$ctx1.fill(self,"numbersOf:",{theCells:theCells,numbers:numbers,current:current},globals.Cells)})},
 args: ["theCells"],
-source: "numbersOf: theCells\x0a\x09\x22I returns a list of number done in a block of Cells\x22\x0a\x09\x22TODO should be in Class (static)\x22\x0a\x09| numbers current |\x0a\x09numbers := { }.\x0a\x09current := 0.\x0a\x09theCells cells do: [ :c |\x0a\x09\x09c isBox\x0a\x09\x09\x09ifTrue: [ current := current + 1 ]\x0a\x09\x09\x09ifFalse: [ current > 0 ifTrue: [ numbers add: current ].\x0a\x09\x09\x09\x09\x09   current := 0 ].\x0a\x09\x09\x22if found a unknow, stop reading cells\x22\x0a\x09\x09c isUnknown ifTrue: [ ^ numbers ].\x0a\x09\x09].\x0a\x09^ numbers",
+source: "numbersOf: theCells\x0a\x09\x22I returns a list of number done in a block of Cells\x22\x0a\x09\x22TODO should be in Class (static)\x22\x0a\x09| numbers current |\x0a\x09numbers := { }.\x0a\x09current := 0.\x0a\x09theCells cells do: [ :c |\x0a\x09\x09c isBox\x0a\x09\x09\x09ifTrue: [ current := current + 1 ]\x0a\x09\x09\x09ifFalse: [ current > 0 ifTrue: [ numbers add: current ].\x0a\x09\x09\x09\x09\x09   current := 0 ].\x0a\x09\x09\x22if found a unknow, stop reading cells\x22\x0a\x09\x09c isUnknown ifTrue: [ ^ numbers ].\x0a\x09\x09].\x0a\x09current > 0 ifTrue: [ numbers add: current ].\x0a\x09^ numbers",
 messageSends: ["do:", "cells", "ifTrue:ifFalse:", "isBox", "+", "ifTrue:", ">", "add:", "isUnknown"],
 referencedClasses: []
 }),
@@ -531,6 +574,33 @@ args: ["stream"],
 source: "printOn: stream\x0a\x09stream nextPutAll: '|'.\x0a\x09cells do: [ :c |\x0a\x09\x09\x09c printOn: stream.\x0a\x09\x09\x09stream nextPutAll: '|' ]",
 messageSends: ["nextPutAll:", "do:", "printOn:"],
 referencedClasses: []
+}),
+globals.Cells);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "reduced",
+protocol: 'printing',
+fn: function (){
+var self=this;
+function $Cells(){return globals.Cells||(typeof Cells=="undefined"?nil:Cells)}
+return smalltalk.withContext(function($ctx1) { 
+var $3,$5,$4,$7,$6,$2,$1;
+$3=self["@cells"];
+$5=_st(self._firstDone())._size();
+$ctx1.sendIdx["size"]=1;
+$4=_st($5).__plus((1));
+$7=self._size();
+$ctx1.sendIdx["size"]=2;
+$6=_st($7).__minus(_st(self._lastDone())._size());
+$2=_st($3)._copyFrom_to_($4,$6);
+$1=_st($Cells())._new_($2);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"reduced",{},globals.Cells)})},
+args: [],
+source: "reduced\x0a\x09^ Cells new:\x0a\x09\x09(cells copyFrom: self firstDone size + 1\x0a\x09\x09\x09\x09to: self size - self lastDone size)",
+messageSends: ["new:", "copyFrom:to:", "+", "size", "firstDone", "-", "lastDone"],
+referencedClasses: ["Cells"]
 }),
 globals.Cells);
 
@@ -892,6 +962,44 @@ smalltalk.addClass('Hint', globals.Object, ['numbers'], 'Logimage');
 globals.Hint.comment="List of numbers";
 smalltalk.addMethod(
 smalltalk.method({
+selector: "firstRemoved:",
+protocol: 'as yet unclassified',
+fn: function (n){
+var self=this;
+function $Hint(){return globals.Hint||(typeof Hint=="undefined"?nil:Hint)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st($Hint())._new())._numbers_(_st(self["@numbers"])._removeFrom_to_((1),n));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"firstRemoved:",{n:n},globals.Hint)})},
+args: ["n"],
+source: "firstRemoved: n\x0a\x09^ Hint new\x0a\x09\x09numbers: (numbers removeFrom: 1 to: n)",
+messageSends: ["numbers:", "new", "removeFrom:to:"],
+referencedClasses: ["Hint"]
+}),
+globals.Hint);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "lastRemoved:",
+protocol: 'as yet unclassified',
+fn: function (n){
+var self=this;
+function $Hint(){return globals.Hint||(typeof Hint=="undefined"?nil:Hint)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st($Hint())._new())._numbers_(_st(self["@numbers"])._copyFrom_to_((1),_st(_st(self["@numbers"])._size()).__minus(n)));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"lastRemoved:",{n:n},globals.Hint)})},
+args: ["n"],
+source: "lastRemoved: n\x0a\x09^ Hint new\x0a\x09\x09numbers: (numbers copyFrom: 1 to: numbers size - n)",
+messageSends: ["numbers:", "new", "copyFrom:to:", "-", "size"],
+referencedClasses: ["Hint"]
+}),
+globals.Hint);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "numbers",
 protocol: 'as yet unclassified',
 fn: function (){
@@ -1160,6 +1268,31 @@ args: ["stream"],
 source: "printOn: stream\x0a\x09hint printOn: stream.\x0a\x09cells printOn: stream",
 messageSends: ["printOn:"],
 referencedClasses: []
+}),
+globals.Line);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "reduced",
+protocol: 'accessing',
+fn: function (){
+var self=this;
+var numbers;
+function $Line(){return globals.Line||(typeof Line=="undefined"?nil:Line)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+$1=self["@hint"];
+$2=_st(_st(self["@cells"])._firstNumbers())._size();
+$ctx1.sendIdx["size"]=1;
+numbers=_st($1)._firstRemoved_($2);
+numbers=_st(numbers)._lastRemoved_(_st(_st(self["@cells"])._lastNumbers())._size());
+$3=_st($Line())._new_cells_(numbers,_st(self["@cells"])._reduced());
+return $3;
+}, function($ctx1) {$ctx1.fill(self,"reduced",{numbers:numbers},globals.Line)})},
+args: [],
+source: "reduced\x0a\x09| numbers |\x0a\x09numbers := hint firstRemoved: (cells firstNumbers size).\x0a\x09numbers := numbers lastRemoved: (cells lastNumbers size).\x0a\x09^ Line new: numbers cells: (cells reduced)",
+messageSends: ["firstRemoved:", "size", "firstNumbers", "lastRemoved:", "lastNumbers", "new:cells:", "reduced"],
+referencedClasses: ["Line"]
 }),
 globals.Line);
 
@@ -1664,14 +1797,14 @@ return smalltalk.withContext(function($ctx1) {
 (1)._to_do_(_st(_st(_st(logimage)._grid())._size())._x(),(function(x){
 var sol;
 return smalltalk.withContext(function($ctx2) {
-sol=_st(strategy)._analyse_(_st(logimage)._colLineAt_(x));
+sol=_st(strategy)._analyse_(_st(_st(logimage)._colLineAt_(x))._reduced());
 sol;
 return self._apply_on_atCol_(sol,logimage,x);
 }, function($ctx2) {$ctx2.fillBlock({x:x,sol:sol},$ctx1,1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"apply:onColOf:",{strategy:strategy,logimage:logimage},globals.Strategist)})},
 args: ["strategy", "logimage"],
-source: "apply: strategy onColOf: logimage\x0a\x091 to: logimage grid size x do: [ :x | | sol |\x0a\x09\x09sol := strategy analyse: (logimage colLineAt: x).\x0a\x09\x09self apply: sol on: logimage atCol: x ]",
-messageSends: ["to:do:", "x", "size", "grid", "analyse:", "colLineAt:", "apply:on:atCol:"],
+source: "apply: strategy onColOf: logimage\x0a\x091 to: logimage grid size x do: [ :x | | sol |\x0a\x09\x09sol := strategy analyse: (logimage colLineAt: x) reduced.\x0a\x09\x09self apply: sol on: logimage atCol: x ]",
+messageSends: ["to:do:", "x", "size", "grid", "analyse:", "reduced", "colLineAt:", "apply:on:atCol:"],
 referencedClasses: []
 }),
 globals.Strategist);
@@ -1686,14 +1819,14 @@ return smalltalk.withContext(function($ctx1) {
 (1)._to_do_(_st(_st(_st(logimage)._grid())._size())._y(),(function(y){
 var sol;
 return smalltalk.withContext(function($ctx2) {
-sol=_st(strategy)._analyse_(_st(logimage)._rowLineAt_(y));
+sol=_st(strategy)._analyse_(_st(_st(logimage)._rowLineAt_(y))._reduced());
 sol;
 return self._apply_on_atRow_(sol,logimage,y);
 }, function($ctx2) {$ctx2.fillBlock({y:y,sol:sol},$ctx1,1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"apply:onRowOf:",{strategy:strategy,logimage:logimage},globals.Strategist)})},
 args: ["strategy", "logimage"],
-source: "apply: strategy onRowOf: logimage\x0a\x091 to: logimage grid size y do: [ :y | | sol |\x0a\x09\x09sol := strategy analyse: (logimage rowLineAt: y).\x0a\x09\x09self apply: sol on: logimage atRow: y ]",
-messageSends: ["to:do:", "y", "size", "grid", "analyse:", "rowLineAt:", "apply:on:atRow:"],
+source: "apply: strategy onRowOf: logimage\x0a\x091 to: logimage grid size y do: [ :y | | sol |\x0a\x09\x09sol := strategy analyse: (logimage rowLineAt: y) reduced.\x0a\x09\x09self apply: sol on: logimage atRow: y ]",
+messageSends: ["to:do:", "y", "size", "grid", "analyse:", "reduced", "rowLineAt:", "apply:on:atRow:"],
 referencedClasses: []
 }),
 globals.Strategist);
