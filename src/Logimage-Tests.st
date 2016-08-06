@@ -2,7 +2,6 @@ Smalltalk createPackage: 'Logimage-Tests'!
 TestCase subclass: #LogimageTest
 	instanceVariableNames: 'logimage'
 	package: 'Logimage-Tests'!
-
 !LogimageTest methodsFor: 'running'!
 
 setUp

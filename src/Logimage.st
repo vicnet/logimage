@@ -1,4 +1,5 @@
 Smalltalk createPackage: 'Logimage'!
+(Smalltalk packageAt: 'Logimage') imports: {'silk/Silk'}!
 Object subclass: #Cell
 	instanceVariableNames: ''
 	package: 'Logimage'!
@@ -359,10 +360,14 @@ initialize
 	hints := {}
 !
 
+maxSize
+	^ hints inject: 0 into: [:a :c | (a > c  numbers size) ifTrue: [a] ifFalse: [c numbers size]]
+!
+
 printOn: stream
 	hints do: [ :hint |
-		stream cr.
-		hint printOn: stream ]
+		hint printOn: stream.
+		stream cr ]
 !
 
 size
@@ -528,6 +533,12 @@ simple
 		addRowHints: #( 2 );
 		addColHints: #( 1 );
 		addColHints: #( 2 )
+! !
+
+!Logimage class methodsFor: 'starting'!
+
+start
+	^ self
 ! !
 
 Object subclass: #Strategist
