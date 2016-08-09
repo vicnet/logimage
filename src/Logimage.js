@@ -13,6 +13,176 @@ $core.packages["Logimage"].innerEval = function (expr) { return eval(expr); };
 $core.packages["Logimage"].imports = ["silk/Silk"];
 $core.packages["Logimage"].transport = {"type":"amd","amdNamespace":"amber-logimage"};
 
+$core.addClass('Application', $globals.Object, ['rows', 'cols', 'grid'], 'Logimage');
+$core.addMethod(
+$core.method({
+selector: "initialize",
+protocol: 'as yet unclassified',
+fn: function (){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $2,$1,$4,$3;
+$2="class".__minus_gt("cols");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["->"]=1;
+//>>excludeEnd("ctx");
+$1=[$2];
+self["@cols"]=$recv($globals.Silk)._TD_($1);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["TD:"]=1;
+//>>excludeEnd("ctx");
+$4="class".__minus_gt("rows");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["->"]=2;
+//>>excludeEnd("ctx");
+$3=[$4];
+self["@rows"]=$recv($globals.Silk)._TD_($3);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["TD:"]=2;
+//>>excludeEnd("ctx");
+self["@grid"]=$recv($globals.Silk)._TD_(["class".__minus_gt("center")]);
+$recv($recv($globals.Silk)._new()).__lt_lt(self);
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"initialize",{},$globals.Application)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "initialize\x0a\x09\x22Create items\x22\x0a\x09cols := Silk TD: { #class -> 'cols' }.\x0a\x09rows := Silk TD: { #class -> 'rows' }.\x0a\x09grid := Silk TD: { #class -> 'center' }.\x0a\x09\x22Filling body\x22\x0a\x09Silk new << self",
+referencedClasses: ["Silk"],
+//>>excludeEnd("ide");
+messageSends: ["TD:", "->", "<<", "new"]
+}),
+$globals.Application);
+
+$core.addMethod(
+$core.method({
+selector: "renderOnSilk:",
+protocol: 'as yet unclassified',
+fn: function (silk){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $2,$5,$4,$3,$1,$6;
+$2=$recv($recv(silk)._resetContents())._TABLE();
+$5=$recv($globals.Silk)._TR();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["TR"]=1;
+//>>excludeEnd("ctx");
+$4=$recv($5).__lt_lt($recv($globals.Silk)._TD());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["<<"]=4;
+//>>excludeEnd("ctx");
+$3=$recv($4).__lt_lt(self["@cols"]);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["<<"]=3;
+//>>excludeEnd("ctx");
+$1=$recv($2).__lt_lt($3);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["<<"]=2;
+//>>excludeEnd("ctx");
+$6=$recv($recv($recv($globals.Silk)._TR()).__lt_lt(self["@rows"])).__lt_lt(self["@grid"]);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["<<"]=5;
+//>>excludeEnd("ctx");
+$recv($1).__lt_lt($6);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["<<"]=1;
+//>>excludeEnd("ctx");
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"renderOnSilk:",{silk:silk},$globals.Application)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["silk"],
+source: "renderOnSilk: silk\x0a\x09silk resetContents\x0a\x09\x09TABLE\x0a\x09\x09\x09<< (Silk TR << (Silk TD) << cols)\x0a\x09\x09\x09<< (Silk TR << rows << grid)",
+referencedClasses: ["Silk"],
+//>>excludeEnd("ide");
+messageSends: ["<<", "TABLE", "resetContents", "TR", "TD"]
+}),
+$globals.Application);
+
+$core.addMethod(
+$core.method({
+selector: "show:",
+protocol: 'as yet unclassified',
+fn: function (logimage){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $1,$3,$2,$4,$6,$5;
+$1=self["@cols"];
+$3=$recv($globals.WidgetHints)._new();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["new"]=1;
+//>>excludeEnd("ctx");
+$2=$recv($3)._show_($recv(logimage)._colHints());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["show:"]=1;
+//>>excludeEnd("ctx");
+$recv($1).__lt_lt($2);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["<<"]=1;
+//>>excludeEnd("ctx");
+$4=self["@rows"];
+$6=$recv($globals.WidgetHints)._new();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["new"]=2;
+//>>excludeEnd("ctx");
+$5=$recv($6)._show_($recv(logimage)._rowHints());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["show:"]=2;
+//>>excludeEnd("ctx");
+$recv($4).__lt_lt($5);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["<<"]=2;
+//>>excludeEnd("ctx");
+$recv(self["@grid"]).__lt_lt($recv($recv($globals.WidgetGrid)._new())._show_($recv(logimage)._grid()));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"show:",{logimage:logimage},$globals.Application)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["logimage"],
+source: "show: logimage\x0a\x09cols << (WidgetHints new show: logimage colHints).\x0a\x09rows << (WidgetHints new show: logimage rowHints).\x0a\x09grid << (WidgetGrid new show: logimage grid)",
+referencedClasses: ["WidgetHints", "WidgetGrid"],
+//>>excludeEnd("ide");
+messageSends: ["<<", "show:", "new", "colHints", "rowHints", "grid"]
+}),
+$globals.Application);
+
+
+$core.addMethod(
+$core.method({
+selector: "start",
+protocol: 'as yet unclassified',
+fn: function (){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+return $recv($recv($globals.Application)._new())._show_($recv($globals.Logimage)._question());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"start",{},$globals.Application.klass)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "start\x0a\x09^ Application new show: Logimage question",
+referencedClasses: ["Application", "Logimage"],
+//>>excludeEnd("ide");
+messageSends: ["show:", "new", "question"]
+}),
+$globals.Application.klass);
+
+
 $core.addClass('Cell', $globals.Object, [], 'Logimage');
 //>>excludeStart("ide", pragmas.excludeIdeData);
 $globals.Cell.comment="A simple cell or pixel.";
@@ -1261,20 +1431,18 @@ $core.method({
 selector: "printOn:",
 protocol: 'printing',
 fn: function (stream){
-"use strict";
-
 var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-(1)._to_do_($recv(self["@size"])._y(),(function(y){
+self._rowDo_((function(r){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
 $recv(stream)._cr();
-return $recv(self._rowAt_(y))._printOn_(stream);
+return $recv(r)._printOn_(stream);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({y:y},$ctx1,1)});
+}, function($ctx2) {$ctx2.fillBlock({r:r},$ctx1,1)});
 //>>excludeEnd("ctx");
 }));
 return self;
@@ -1284,10 +1452,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["stream"],
-source: "printOn: stream\x0a\x091 to: size y do: [ :y |\x0a\x09\x09stream cr.\x0a\x09\x09(self rowAt: y) printOn: stream ]",
+source: "printOn: stream\x0a\x09self rowDo: [ :r |\x0a\x09\x09stream cr.\x0a\x09\x09r printOn: stream ]",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["to:do:", "y", "cr", "printOn:", "rowAt:"]
+messageSends: ["rowDo:", "cr", "printOn:"]
 }),
 $globals.Grid);
 
@@ -1320,18 +1488,48 @@ $globals.Grid);
 
 $core.addMethod(
 $core.method({
+selector: "rowDo:",
+protocol: 'accessing',
+fn: function (aBlock){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+(1)._to_do_($recv(self["@size"])._y(),(function(row){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv(aBlock)._value_(self._rowAt_(row));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({row:row},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"rowDo:",{aBlock:aBlock},$globals.Grid)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["aBlock"],
+source: "rowDo: aBlock\x0a\x091 to: size y do: [ :row |\x0a\x09\x09aBlock value:  (self rowAt: row) ]",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["to:do:", "y", "value:", "rowAt:"]
+}),
+$globals.Grid);
+
+$core.addMethod(
+$core.method({
 selector: "size",
 protocol: 'as yet unclassified',
 fn: function (){
-"use strict";
-
 var self=this;
 return self["@size"];
 
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "size\x0a\x09^ size",
+source: "size\x0a\x09\x22I return a point with x and y sizes\x22\x0a\x09^ size",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: []
@@ -1407,26 +1605,48 @@ $globals.Hint.comment="List of numbers";
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
-selector: "firstRemoved:",
+selector: "do:",
 protocol: 'as yet unclassified',
-fn: function (n){
-"use strict";
-
+fn: function (aBlock){
 var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-return $recv($recv($globals.Hint)._new())._numbers_($recv(self["@numbers"])._removeFrom_to_((1),n));
+$recv(self["@numbers"])._do_(aBlock);
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"do:",{aBlock:aBlock},$globals.Hint)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["aBlock"],
+source: "do: aBlock\x0a\x09numbers do: aBlock",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["do:"]
+}),
+$globals.Hint);
+
+$core.addMethod(
+$core.method({
+selector: "firstRemoved:",
+protocol: 'as yet unclassified',
+fn: function (n){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+return $recv($recv($globals.Hint)._new())._numbers_($recv(self["@numbers"])._copyFrom_to_($recv(n).__plus((1)),$recv(self["@numbers"])._size()));
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"firstRemoved:",{n:n},$globals.Hint)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["n"],
-source: "firstRemoved: n\x0a\x09^ Hint new\x0a\x09\x09numbers: (numbers removeFrom: 1 to: n)",
+source: "firstRemoved: n\x0a\x09^ Hint new\x0a\x09\x09numbers: (numbers copyFrom: (n+1) to: numbers size)",
 referencedClasses: ["Hint"],
 //>>excludeEnd("ide");
-messageSends: ["numbers:", "new", "removeFrom:to:"]
+messageSends: ["numbers:", "new", "copyFrom:to:", "+", "size"]
 }),
 $globals.Hint);
 
@@ -1620,6 +1840,30 @@ source: "at: index\x0a\x09^ hints at: index",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["at:"]
+}),
+$globals.Hints);
+
+$core.addMethod(
+$core.method({
+selector: "do:",
+protocol: 'as yet unclassified',
+fn: function (aBlock){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$recv(self["@hints"])._do_(aBlock);
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"do:",{aBlock:aBlock},$globals.Hints)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["aBlock"],
+source: "do: aBlock\x0a\x09hints do: aBlock",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["do:"]
 }),
 $globals.Hints);
 
@@ -2513,26 +2757,6 @@ messageSends: ["addRowHints:", "new", "addColHints:"]
 }),
 $globals.Logimage.klass);
 
-$core.addMethod(
-$core.method({
-selector: "start",
-protocol: 'starting',
-fn: function (){
-"use strict";
-
-var self=this;
-return self;
-
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "start\x0a\x09^ self",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: []
-}),
-$globals.Logimage.klass);
-
 
 $core.addClass('Strategist', $globals.Object, [], 'Logimage');
 $core.addMethod(
@@ -2820,8 +3044,6 @@ $core.method({
 selector: "free:",
 protocol: 'as yet unclassified',
 fn: function (line){
-"use strict";
-
 var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
@@ -2833,7 +3055,7 @@ return $recv($recv($recv(line)._cells())._size()).__minus(self._occupation_($rec
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["line"],
-source: "free: line\x0a\x09\x22I return the number of cells that are free to move a number\x22\x0a\x09^ (line cells size) - (self occupation: line hint)",
+source: "free: line\x0a\x09\x22I return the number of cells that are free to move\x22\x0a\x09^ (line cells size) - (self occupation: line hint)",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["-", "size", "cells", "occupation:", "hint"]
@@ -2870,8 +3092,6 @@ $core.method({
 selector: "sum:",
 protocol: 'as yet unclassified',
 fn: function (hint){
-"use strict";
-
 var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
@@ -2891,7 +3111,7 @@ return $recv(s).__plus(n);
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["hint"],
-source: "sum: hint\x0a\x09\x22I return the sum of all number, without spaces\x22\x0a\x09^ hint numbers inject: 0 into: [ :s :n | s+n ]",
+source: "sum: hint\x0a\x09\x22I return the sum of all numbers, without spaces\x22\x0a\x09^ hint numbers inject: 0 into: [ :s :n | s+n ]",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["inject:into:", "numbers", "+"]
@@ -3043,6 +3263,362 @@ referencedClasses: ["Cells"],
 messageSends: ["ifTrue:", "=", "size", "hint", "spaces:", "cells", "analyse:"]
 }),
 $globals.StratSpaces);
+
+
+
+$core.addClass('WidgetCell', $globals.Object, ['div'], 'Logimage');
+$core.addMethod(
+$core.method({
+selector: "initialize",
+protocol: 'as yet unclassified',
+fn: function (){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+self["@div"]=$recv($globals.Silk)._DIV_(["class".__minus_gt("cell")]);
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"initialize",{},$globals.WidgetCell)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "initialize\x0a\x09div := Silk DIV: { #class -> 'cell' }",
+referencedClasses: ["Silk"],
+//>>excludeEnd("ide");
+messageSends: ["DIV:", "->"]
+}),
+$globals.WidgetCell);
+
+$core.addMethod(
+$core.method({
+selector: "renderOnSilk:",
+protocol: 'as yet unclassified',
+fn: function (silk){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$recv(silk).__lt_lt(self["@div"]);
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"renderOnSilk:",{silk:silk},$globals.WidgetCell)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["silk"],
+source: "renderOnSilk: silk\x0a\x09silk << div",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["<<"]
+}),
+$globals.WidgetCell);
+
+$core.addMethod(
+$core.method({
+selector: "show:",
+protocol: 'as yet unclassified',
+fn: function (cell){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $1,$2,$4,$3,$5;
+$recv(self["@div"])._resetContents();
+$1=$recv(cell)._isBox();
+if($core.assert($1)){
+$2=self["@div"];
+$4="class".__minus_gt("cell box");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["->"]=1;
+//>>excludeEnd("ctx");
+$3=[$4];
+$recv($2).__lt_lt($3);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["<<"]=1;
+//>>excludeEnd("ctx");
+};
+$5=$recv(cell)._isSpace();
+if($core.assert($5)){
+$recv(self["@div"]).__lt_lt(["class".__minus_gt("cell space")]);
+};
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"show:",{cell:cell},$globals.WidgetCell)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["cell"],
+source: "show: cell\x0a\x09div resetContents.\x0a\x09cell isBox ifTrue: [ div << { #class -> 'cell box' } ].\x0a\x09cell isSpace ifTrue: [ div << { #class -> 'cell space' } ]",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["resetContents", "ifTrue:", "isBox", "<<", "->", "isSpace"]
+}),
+$globals.WidgetCell);
+
+
+
+$core.addClass('WidgetGrid', $globals.Object, ['div'], 'Logimage');
+$core.addMethod(
+$core.method({
+selector: "initialize",
+protocol: 'as yet unclassified',
+fn: function (){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+self["@div"]=$recv($globals.Silk)._DIV_(["class".__minus_gt("grid")]);
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"initialize",{},$globals.WidgetGrid)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "initialize\x0a\x09div := Silk DIV: { #class -> 'grid' }",
+referencedClasses: ["Silk"],
+//>>excludeEnd("ide");
+messageSends: ["DIV:", "->"]
+}),
+$globals.WidgetGrid);
+
+$core.addMethod(
+$core.method({
+selector: "renderOnSilk:",
+protocol: 'as yet unclassified',
+fn: function (silk){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$recv(silk).__lt_lt(self["@div"]);
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"renderOnSilk:",{silk:silk},$globals.WidgetGrid)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["silk"],
+source: "renderOnSilk: silk\x0a\x09silk << div",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["<<"]
+}),
+$globals.WidgetGrid);
+
+$core.addMethod(
+$core.method({
+selector: "show:",
+protocol: 'as yet unclassified',
+fn: function (grid){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$recv(self["@div"])._resetContents();
+$recv(grid)._rowDo_((function(row){
+var line;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+line=$recv(self["@div"])._DIV_(["class".__minus_gt("line")]);
+line;
+return $recv($recv(row)._cells())._do_((function(cell){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx3) {
+//>>excludeEnd("ctx");
+return $recv(line).__lt_lt($recv($recv($globals.WidgetCell)._new())._show_(cell));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx3) {$ctx3.fillBlock({cell:cell},$ctx2,2)});
+//>>excludeEnd("ctx");
+}));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({row:row,line:line},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"show:",{grid:grid},$globals.WidgetGrid)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["grid"],
+source: "show: grid\x0a\x09div resetContents.\x0a\x09grid rowDo: [ :row | | line |\x0a\x09\x09line := div DIV: { #class -> 'line' }.\x0a\x09\x09row cells do: [ :cell |\x0a\x09\x09\x09line << (WidgetCell new show: cell)\x0a\x09\x09]\x0a\x09]",
+referencedClasses: ["WidgetCell"],
+//>>excludeEnd("ide");
+messageSends: ["resetContents", "rowDo:", "DIV:", "->", "do:", "cells", "<<", "show:", "new"]
+}),
+$globals.WidgetGrid);
+
+
+
+$core.addClass('WidgetHint', $globals.Object, ['div'], 'Logimage');
+$core.addMethod(
+$core.method({
+selector: "initialize",
+protocol: 'as yet unclassified',
+fn: function (){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+self["@div"]=$recv($globals.Silk)._DIV_(["class".__minus_gt("hint")]);
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"initialize",{},$globals.WidgetHint)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "initialize\x0a\x09div := Silk DIV: { #class -> 'hint' }",
+referencedClasses: ["Silk"],
+//>>excludeEnd("ide");
+messageSends: ["DIV:", "->"]
+}),
+$globals.WidgetHint);
+
+$core.addMethod(
+$core.method({
+selector: "renderOnSilk:",
+protocol: 'as yet unclassified',
+fn: function (silk){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$recv(silk).__lt_lt(self["@div"]);
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"renderOnSilk:",{silk:silk},$globals.WidgetHint)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["silk"],
+source: "renderOnSilk: silk\x0a\x09silk << div",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["<<"]
+}),
+$globals.WidgetHint);
+
+$core.addMethod(
+$core.method({
+selector: "show:",
+protocol: 'as yet unclassified',
+fn: function (hint){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$recv(self["@div"])._resetContents();
+$recv(hint)._do_((function(n){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv(self["@div"])._DIV_(["class".__minus_gt("number"),n]);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({n:n},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"show:",{hint:hint},$globals.WidgetHint)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["hint"],
+source: "show: hint\x0a\x09div resetContents.\x0a\x09hint do: [ :n |\x0a\x09\x09div DIV: { #class -> 'number'. n } ]",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["resetContents", "do:", "DIV:", "->"]
+}),
+$globals.WidgetHint);
+
+
+
+$core.addClass('WidgetHints', $globals.Object, ['div'], 'Logimage');
+$core.addMethod(
+$core.method({
+selector: "initialize",
+protocol: 'as yet unclassified',
+fn: function (){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+self["@div"]=$recv($globals.Silk)._DIV_(["class".__minus_gt("hints")]);
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"initialize",{},$globals.WidgetHints)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "initialize\x0a\x09div := Silk DIV: { #class -> 'hints' }",
+referencedClasses: ["Silk"],
+//>>excludeEnd("ide");
+messageSends: ["DIV:", "->"]
+}),
+$globals.WidgetHints);
+
+$core.addMethod(
+$core.method({
+selector: "renderOnSilk:",
+protocol: 'as yet unclassified',
+fn: function (silk){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$recv(silk).__lt_lt(self["@div"]);
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"renderOnSilk:",{silk:silk},$globals.WidgetHints)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["silk"],
+source: "renderOnSilk: silk\x0a\x09silk << div",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["<<"]
+}),
+$globals.WidgetHints);
+
+$core.addMethod(
+$core.method({
+selector: "show:",
+protocol: 'as yet unclassified',
+fn: function (hints){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$recv(self["@div"])._resetContents();
+$recv(hints)._do_((function(hint){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv(self["@div"]).__lt_lt($recv($recv($globals.WidgetHint)._new())._show_(hint));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({hint:hint},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"show:",{hints:hints},$globals.WidgetHints)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["hints"],
+source: "show: hints\x0a\x09div resetContents.\x0a\x09hints do: [ :hint |\x0a\x09\x09div << (WidgetHint new show: hint) ]",
+referencedClasses: ["WidgetHint"],
+//>>excludeEnd("ide");
+messageSends: ["resetContents", "do:", "<<", "show:", "new"]
+}),
+$globals.WidgetHints);
 
 
 });

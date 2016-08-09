@@ -1,0 +1,47 @@
+/* Style Sheet for logimage */
+.cols, .rows, .center {
+    padding: 0px;
+}
+.hints {
+}
+.hint {
+    border-color: black;
+    border: solid;
+    border-width: 1px;
+}
+.cols .hint {
+    display: inline-block;    
+    width: 18px;
+}
+.rows .hint {
+    text-align: right;
+    height: 18px;
+}
+.rows .number {
+    display: inline-block;
+}
+.number {
+    width: 18px;
+    text-align: center;
+    height: 18px;
+}
+.line {
+    margin-top: -4px;
+    margin-bottom:  -4px;
+}
+.cell {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-color: black;
+    border: solid;
+    border-width: 1px;
+    text-align: center;
+}
+.box {
+    background-color: black
+}
+.space {
+    /*background-color: lightgrey;*/
+    background: radial-gradient( circle at center, grey 25%, white 10% );
+}

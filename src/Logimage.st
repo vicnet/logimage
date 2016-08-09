@@ -1,5 +1,39 @@
 Smalltalk createPackage: 'Logimage'!
 (Smalltalk packageAt: 'Logimage') imports: {'silk/Silk'}!
+Object subclass: #Application
+	instanceVariableNames: 'rows cols grid'
+	package: 'Logimage'!
+
+!Application methodsFor: 'as yet unclassified'!
+
+initialize
+	"Create items"
+	cols := Silk TD: { #class -> 'cols' }.
+	rows := Silk TD: { #class -> 'rows' }.
+	grid := Silk TD: { #class -> 'center' }.
+	"Filling body"
+	Silk new << self
+!
+
+renderOnSilk: silk
+	silk resetContents
+		TABLE
+			<< (Silk TR << (Silk TD) << cols)
+			<< (Silk TR << rows << grid)
+!
+
+show: logimage
+	cols << (WidgetHints new show: logimage colHints).
+	rows << (WidgetHints new show: logimage rowHints).
+	grid << (WidgetGrid new show: logimage grid)
+! !
+
+!Application class methodsFor: 'as yet unclassified'!
+
+start
+	^ Application new show: Logimage question
+! !
+
 Object subclass: #Cell
 	instanceVariableNames: ''
 	package: 'Logimage'!
@@ -256,6 +290,11 @@ rowAt: index
 	| start |
 	start := self indexOf: (Point x: 1 y: index).
 	^ Cells new: (cells copyFrom: start to: (start + size x - 1))
+!
+
+rowDo: aBlock
+	1 to: size y do: [ :row |
+		aBlock value:  (self rowAt: row) ]
 ! !
 
 !Grid methodsFor: 'as yet unclassified'!
@@ -265,6 +304,7 @@ box: point
 !
 
 size
+	"I return a point with x and y sizes"
 	^ size
 !
 
@@ -280,9 +320,9 @@ space: point
 !Grid methodsFor: 'printing'!
 
 printOn: stream
-	1 to: size y do: [ :y |
+	self rowDo: [ :r |
 		stream cr.
-		(self rowAt: y) printOn: stream ]
+		r printOn: stream ]
 ! !
 
 !Grid methodsFor: 'private'!
@@ -307,9 +347,13 @@ List of numbers!
 
 !Hint methodsFor: 'as yet unclassified'!
 
+do: aBlock
+	numbers do: aBlock
+!
+
 firstRemoved: n
 	^ Hint new
-		numbers: (numbers removeFrom: 1 to: n)
+		numbers: (numbers copyFrom: (n+1) to: numbers size)
 !
 
 lastRemoved: n
@@ -354,6 +398,10 @@ add: hint
 
 at: index
 	^ hints at: index
+!
+
+do: aBlock
+	hints do: aBlock
 !
 
 initialize
@@ -535,12 +583,6 @@ simple
 		addColHints: #( 2 )
 ! !
 
-!Logimage class methodsFor: 'starting'!
-
-start
-	^ self
-! !
-
 Object subclass: #Strategist
 	instanceVariableNames: ''
 	package: 'Logimage'!
@@ -601,7 +643,7 @@ Strategy subclass: #StratCount
 !StratCount methodsFor: 'as yet unclassified'!
 
 free: line
-	"I return the number of cells that are free to move a number"
+	"I return the number of cells that are free to move"
 	^ (line cells size) - (self occupation: line hint)
 !
 
@@ -611,7 +653,7 @@ occupation: hint
 !
 
 sum: hint
-	"I return the sum of all number, without spaces"
+	"I return the sum of all numbers, without spaces"
 	^ hint numbers inject: 0 into: [ :s :n | s+n ]
 ! !
 
@@ -661,5 +703,89 @@ analyse: line
 	(line hint size = 0)
 		ifTrue: [ ^ Cells spaces: line cells size ].
 	^ super analyse: line
+! !
+
+Object subclass: #WidgetCell
+	instanceVariableNames: 'div'
+	package: 'Logimage'!
+
+!WidgetCell methodsFor: 'as yet unclassified'!
+
+initialize
+	div := Silk DIV: { #class -> 'cell' }
+!
+
+renderOnSilk: silk
+	silk << div
+!
+
+show: cell
+	div resetContents.
+	cell isBox ifTrue: [ div << { #class -> 'cell box' } ].
+	cell isSpace ifTrue: [ div << { #class -> 'cell space' } ]
+! !
+
+Object subclass: #WidgetGrid
+	instanceVariableNames: 'div'
+	package: 'Logimage'!
+
+!WidgetGrid methodsFor: 'as yet unclassified'!
+
+initialize
+	div := Silk DIV: { #class -> 'grid' }
+!
+
+renderOnSilk: silk
+	silk << div
+!
+
+show: grid
+	div resetContents.
+	grid rowDo: [ :row | | line |
+		line := div DIV: { #class -> 'line' }.
+		row cells do: [ :cell |
+			line << (WidgetCell new show: cell)
+		]
+	]
+! !
+
+Object subclass: #WidgetHint
+	instanceVariableNames: 'div'
+	package: 'Logimage'!
+
+!WidgetHint methodsFor: 'as yet unclassified'!
+
+initialize
+	div := Silk DIV: { #class -> 'hint' }
+!
+
+renderOnSilk: silk
+	silk << div
+!
+
+show: hint
+	div resetContents.
+	hint do: [ :n |
+		div DIV: { #class -> 'number'. n } ]
+! !
+
+Object subclass: #WidgetHints
+	instanceVariableNames: 'div'
+	package: 'Logimage'!
+
+!WidgetHints methodsFor: 'as yet unclassified'!
+
+initialize
+	div := Silk DIV: { #class -> 'hints' }
+!
+
+renderOnSilk: silk
+	silk << div
+!
+
+show: hints
+	div resetContents.
+	hints do: [ :hint |
+		div << (WidgetHint new show: hint) ]
 ! !
 

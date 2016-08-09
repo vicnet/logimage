@@ -6,6 +6,7 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="Vicnet" />
     <script type='text/javascript' src='the.js'></script>
+    <link href="css/logimage.css" rel="stylesheet" type="text/css"></link>
   </head>
 
   <body>
@@ -16,7 +17,7 @@
             'transport.defaultAmdNamespace': "amber-logimage"
           }).then(function () {
               require(["amber-ide-starter-dialog"], function (dlg) { dlg.start(); });
-              amber.globals.Logimage._start();
+              amber.globals.Application._start();
           });
       });
   </script>
