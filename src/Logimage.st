@@ -142,6 +142,10 @@ A line or a column of cells!
 
 !Cells methodsFor: 'as yet unclassified'!
 
+= theCells
+	^ cells = theCells cells
+!
+
 add: aCell
 	cells add: (self cellFrom: aCell)
 !
@@ -150,8 +154,28 @@ add: n cell: aCell
 	n timesRepeat: [ self add: aCell ]
 !
 
+addAll: theCells
+	cells addAll: theCells cells
+!
+
+addBoxes: n
+	self add: n cell: (Cell box)
+!
+
+addSpaces: n
+	self add: n cell: (Cell space)
+!
+
+addUnknowns: n
+	self add: n cell: (Cell unknown)
+!
+
 at: index
 	^ cells at: index
+!
+
+b
+	self add: 1 cell: (Cell box)
 !
 
 cellFrom: aCell
@@ -169,6 +193,27 @@ cells: theCells
 			self cellFrom: c ]
 !
 
+firstBox
+	"Return a tupple with index (starting at 1) of first box if exists, and size"
+	| pos size |
+	pos := 0.
+	size := 0.
+	cells do: [ :c |
+		(size>0)
+			ifTrue: [
+				c isBox
+					ifTrue: [ size := size+1 ]
+					ifFalse: [ ^ #{ #pos -> pos. #size -> size } ]
+				]
+			ifFalse: [
+				pos := pos+1.
+				c isBox
+					ifTrue: [ size := 1 ]
+				]
+		].
+	^ #{ #pos -> 0. #size -> 0 }
+!
+
 firstNumbers
 	^ self numbersOf: self
 !
@@ -179,6 +224,14 @@ lastNumbers
 
 reversed
 	^ Cells new: cells reversed
+!
+
+s
+	self add: 1 cell: (Cell space)
+!
+
+u
+	self add: 1 cell: (Cell unknown)
 ! !
 
 !Cells methodsFor: 'printing'!
@@ -192,8 +245,23 @@ printOn: stream
 
 reduced
 	^ Cells new:
-		(cells copyFrom: self firstDone size + 1
-				to: self size - self lastDone size)
+		(cells
+			copyFrom: self firstDone size + 1
+			to: self size - self lastDone size)
+!
+
+reducedFirst
+	^ Cells new:
+		(cells
+			copyFrom: self firstDone size + 1
+			to: self size)
+!
+
+reducedLast
+	^ Cells new:
+		(cells
+			copyFrom: 1
+			to: self size - self lastDone size)
 !
 
 size
@@ -234,24 +302,54 @@ lastDone
 !
 
 numbersOf: theCells
-	"I returns a list of number done in a block of Cells"
+	"I return a list of number done in a block of theCells"
+	"I stop after first unknown cell"
 	"TODO should be in Class (static)"
 	| numbers current |
 	numbers := { }.
 	current := 0.
 	theCells cells do: [ :c |
-		c isBox
-			ifTrue: [ current := current + 1 ]
-			ifFalse: [ current > 0 ifTrue: [ numbers add: current ].
-					   current := 0 ].
-		"if found a unknow, stop reading cells"
+		c isBox ifTrue: [ current := current + 1 ].
+		c isSpace ifTrue: [
+			current > 0 ifTrue: [ numbers add: current ].
+			current := 0 ].
+		"if found a unknown, stop reading cells"
 		c isUnknown ifTrue: [ ^ numbers ].
 		].
+	"here if no unknowns, all cells filled" 
 	current > 0 ifTrue: [ numbers add: current ].
 	^ numbers
+!
+
+trim
+	"I return a list of cells without begining and ending spaces"
+	^ self trimFirst trimLast
+!
+
+trimFirst
+	"I return a list of cells without begining spaces"
+	| res add |
+	res := Cells new.
+	add := false.
+	cells do: [ :c |
+		add ifTrue: [ res add: c ]
+			ifFalse: [
+				c isSpace ifFalse: [ add := true. res add: c ]
+			]
+		].
+	^ res
+!
+
+trimLast
+	"I return a list of cells without ending spaces"
+	^ (self reversed trimFirst) reversed
 ! !
 
 !Cells class methodsFor: 'as yet unclassified'!
+
+boxes: n
+	^ self new add: n cell: (Cell box)
+!
 
 new
 	^ self new: #( )
@@ -262,11 +360,11 @@ new: cells
 !
 
 spaces: n
-	^ self new add: n cell: #space
+	^ self new add: n cell: (Cell space)
 !
 
 unknowns: n
-	^ self new add: n cell: #unknown
+	^ self new add: n cell: (Cell unknown)
 ! !
 
 Object subclass: #Grid
@@ -351,6 +449,10 @@ do: aBlock
 	numbers do: aBlock
 !
 
+first
+	^ numbers first
+!
+
 firstRemoved: n
 	^ Hint new
 		numbers: (numbers copyFrom: (n+1) to: numbers size)
@@ -376,11 +478,17 @@ size
 !Hint methodsFor: 'printing'!
 
 printOn: stream
-	stream nextPutAll: '| '.
+	stream nextPutAll: '[ '.
 	numbers do: [ :n |
 		n printOn: stream.
 		stream space ].
-	stream nextPutAll: '|'
+	stream nextPutAll: ']'
+! !
+
+!Hint class methodsFor: 'as yet unclassified'!
+
+new: numbers
+	^ self new numbers: numbers
 ! !
 
 Object subclass: #Hints
@@ -449,10 +557,37 @@ isDone
 !
 
 reduced
-	| numbers |
-	numbers := hint firstRemoved: (cells firstNumbers size).
-	numbers := numbers lastRemoved: (cells lastNumbers size).
-	^ Line new: numbers cells: (cells reduced)
+	^ self reducedFirst reducedLast
+!
+
+reducedFirst
+	| first numbers |
+	first := cells firstNumbers.
+	first ifEmpty: [ ^ self trimFirst ].
+	((hint numbers) beginsWith: first) ifFalse: [ ^ self trimFirst ].
+	numbers := hint firstRemoved: (first size).
+	^ Line new: numbers cells: (cells reducedFirst)
+!
+
+reducedLast
+	| last numbers |
+	last := cells lastNumbers.
+	last ifEmpty: [ ^ self trimLast ].
+	((hint numbers) endsWith: last) ifFalse: [ ^ self trimLast ].
+	numbers := hint lastRemoved: (last size).
+	^ Line new: numbers cells: (cells reducedLast)
+!
+
+trim
+	^ Line new: self hint cells: self cells trim
+!
+
+trimFirst
+	^ Line new: self hint cells: self cells trimFirst
+!
+
+trimLast
+	^ Line new: self hint cells: self cells trimLast
 ! !
 
 !Line methodsFor: 'printing'!
@@ -594,36 +729,44 @@ apply: strategy on: logimage
 	self apply: strategy onColOf: logimage
 !
 
-apply: cell on: logimage at: point
+apply: strategy onColOf: logimage
+	1 to: logimage grid size x do: [ :x | | sol line reduced start |
+		line := logimage colLineAt: x.
+		reduced := line reducedFirst.
+		start := line cells size - reduced cells size.
+		sol := strategy analyse: reduced reducedLast.
+		self setSol: sol on: logimage atCol: x after: start ]
+!
+
+apply: strategy onRowOf: logimage
+	1 to: logimage grid size y do: [ :y | | sol line reduced start |
+		line := logimage rowLineAt: y.
+		reduced := line reducedFirst.
+		start := line cells size - reduced cells size.
+		sol := strategy analyse: reduced reducedLast.
+		self setSol: sol on: logimage atRow: y after: start ]
+!
+
+setSol: cell on: logimage at: point
 	cell isBox ifTrue: [ logimage box: point. ^ self ].
 	cell isSpace ifTrue: [ logimage space: point. ^ self ]
 !
 
-apply: cells on: logimage atCol: x
+setSol: cells on: logimage atCol: x after: start
 	cells cells withIndexDo: [ :cell :y |
-		self apply: cell on: logimage at: x@y ]
+		self setSol: cell on: logimage at: x@(y+start) ]
 !
 
-apply: cells on: logimage atRow: y
+setSol: cells on: logimage atRow: y after: start
 	cells cells withIndexDo: [ :cell :x |
-		self apply: cell on: logimage at: x@y ]
-!
-
-apply: strategy onColOf: logimage
-	1 to: logimage grid size x do: [ :x | | sol |
-		sol := strategy analyse: (logimage colLineAt: x) reduced.
-		self apply: sol on: logimage atCol: x ]
-!
-
-apply: strategy onRowOf: logimage
-	1 to: logimage grid size y do: [ :y | | sol |
-		sol := strategy analyse: (logimage rowLineAt: y) reduced.
-		self apply: sol on: logimage atRow: y ]
+		self setSol: cell on: logimage at: (x+start)@y ]
 !
 
 solve: logimage
-	{ StratSpaces new. StratDone new. StratRecover new } do: [ :strategy |
-		self apply: strategy on: logimage ]
+10 timesRepeat: [
+	{ StratSpacesOnly. StratDone. StratRecover. StratNotReached } do: [ :strategy |
+		self apply: strategy new on: logimage ]
+	]
 ! !
 
 Object subclass: #Strategy
@@ -634,21 +777,29 @@ Object subclass: #Strategy
 
 analyse: line
 	^ Cells new
+!
+
+none
+	^ Cells new
 ! !
 
 Strategy subclass: #StratCount
 	instanceVariableNames: ''
 	package: 'Logimage'!
+!StratCount commentStamp!
+Helper to implement strategy!
 
 !StratCount methodsFor: 'as yet unclassified'!
 
 free: line
 	"I return the number of cells that are free to move"
+	(line hint size = 0) ifTrue: [ ^ 0 ].
 	^ (line cells size) - (self occupation: line hint)
 !
 
 occupation: hint
 	"I return the number of cell all numbers fill, with one space between each"
+	(hint size = 0) ifTrue: [ ^ 0 ].
 	^ (self sum: hint) + hint size - 1
 !
 
@@ -660,17 +811,19 @@ sum: hint
 StratCount subclass: #StratDone
 	instanceVariableNames: ''
 	package: 'Logimage'!
+!StratDone commentStamp!
+Fill with boxes and spaces if no more rooms!
 
 !StratDone methodsFor: 'as yet unclassified'!
 
 analyse: line
 	| sol |
 	(self free: line) = 0
-		ifFalse: [ ^ super analyse: line ].
+		ifFalse: [ ^ self none ].
 	sol := Cells new.
 	line hint numbers do: [ :n |
-		sol add: n cell: #box ;
-			add: #space ].
+		sol addBoxes: n;
+			addSpaces: 1 ].
 	"remove last unknown if line full"
 	^ sol size: (line cells size)
 ! !
@@ -686,23 +839,51 @@ analyse: line
 	free := self free: line.
 	sol := Cells new.
 	line hint numbers do: [ :n |
-		sol add: (n min: free) cell: #unknown ;
-			add: (n - free) cell: #box ;
-			add: #unknown ].
+		sol addUnknowns: (n min: free);
+			addBoxes: (n - free);
+			addUnknowns: 1 ].
 	"remove last unknown if line full"
 	^ sol size: (line cells size)
 ! !
 
-StratCount subclass: #StratSpaces
+Strategy subclass: #StratNotReached
 	instanceVariableNames: ''
 	package: 'Logimage'!
+!StratNotReached commentStamp!
+Fill spaces cells that cannot be reached by boxes!
 
-!StratSpaces methodsFor: 'as yet unclassified'!
+!StratNotReached methodsFor: 'as yet unclassified'!
 
 analyse: line
+	| n box sol |
+	"If only one hint and at least one box,returns other empty spaces"
+	(line hint size == 1)
+		ifFalse: [ ^ self none ].
+	"get informations"
+	box := line cells firstBox.
+	(box at: #pos) = 0 ifTrue: [ ^ self none ].
+	n := line hint first.
+	"create solution"
+	sol := Cells new
+		addSpaces: (0 max: ((box at: #pos)+(box at: #size)-1-n));
+		addUnknowns: (2*n-(box at: #size));
+		addSpaces: (0 max: (line cells size - (box at: #pos)-n+1)).
+	^ sol
+! !
+
+Strategy subclass: #StratSpacesOnly
+	instanceVariableNames: ''
+	package: 'Logimage'!
+!StratSpacesOnly commentStamp!
+Fill spaces if no hints!
+
+!StratSpacesOnly methodsFor: 'as yet unclassified'!
+
+analyse: line
+	"If no hint, returns a line with empty spaces"
 	(line hint size = 0)
 		ifTrue: [ ^ Cells spaces: line cells size ].
-	^ super analyse: line
+	^ self none
 ! !
 
 Object subclass: #WidgetCell

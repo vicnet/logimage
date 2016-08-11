@@ -2,6 +2,7 @@ Smalltalk createPackage: 'Logimage-Tests'!
 TestCase subclass: #LogimageTest
 	instanceVariableNames: 'logimage'
 	package: 'Logimage-Tests'!
+
 !LogimageTest methodsFor: 'running'!
 
 setUp
@@ -11,27 +12,35 @@ setUp
 !LogimageTest methodsFor: 'tests'!
 
 testCellsAccesses
-	| u s b c |
-	u := Cell unknown.
-	s := Cell space.
-	b := Cell box.
-	c := Cells new: { s. b. b. s. u. b. s }.
+	| c |
+	c := Cells new s; b; b; s; u; b; s.
 	self assert: c firstNumbers = { 2 }.
-	self assert: c lastNumbers = { 1 }
+	self assert: c lastNumbers = { }.
+	self assert: (Cells new s; b; b; s; s; b; s) lastNumbers = { 2. 1 }.
+	self assert: c firstBox = #{ #pos -> 2. #size -> 2 }.
+	self assert: c trimFirst = (Cells new b; b; s; u; b; s).
+	self assert: c trimLast = (Cells new s; b; b; s; u; b).
+	self assert: c trim = (Cells new b; b; s; u; b).
 !
 
 testLineAccesses
-	| u s b l |
-	u := Cell unknown.
-	s := Cell space.
-	b := Cell box.
+	| l |
 	l := Line
 		new:   ( Hint new numbers: { 2 . 1 } )
-		cells: ( Cells new: { s. b. b. s. u. b. s } ).
+		cells: ( Cells new s; b; b; s; u; b; s).
 	"self assert: l isDone not"
 !
 
 testLogimageAccesses
 	self assert: (logimage colCellsAt: 1) notNil
+!
+
+testStratNotReached
+	| l sol |
+	l := Line new
+		hint: (Hint new numbers: { 2 });
+		cells: (Cells new u; u; u; b; u; u; u).
+	sol := StratNotReached new analyse: l.
+	self assert: sol = (Cells new s; s; u; u; u; s; s)
 ! !
 
