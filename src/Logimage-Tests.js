@@ -258,13 +258,16 @@ var l;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-var $2,$1,$4,$3;
+var $2,$1,$4,$5,$3,$7,$9,$11,$10,$8,$6;
 $2=$recv($globals.Hint)._new();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["new"]=1;
 //>>excludeEnd("ctx");
 $1=$recv($2)._numbers_([(2),(1)]);
 $4=$recv($globals.Cells)._new();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["new"]=2;
+//>>excludeEnd("ctx");
 $recv($4)._s();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["s"]=1;
@@ -282,9 +285,48 @@ $recv($4)._s();
 $ctx1.sendIdx["s"]=2;
 //>>excludeEnd("ctx");
 $recv($4)._u();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["u"]=1;
+//>>excludeEnd("ctx");
 $recv($4)._b();
-$3=$recv($4)._s();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["b"]=3;
+//>>excludeEnd("ctx");
+$5=$recv($4)._s();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["s"]=3;
+//>>excludeEnd("ctx");
+$3=$5;
 l=$recv($globals.Line)._new_cells_($1,$3);
+$7=$recv(l)._reversed();
+$9=$recv($globals.Line)._new();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["new"]=3;
+//>>excludeEnd("ctx");
+$recv($9)._hint_($recv($globals.Hint)._new_([(1),(2)]));
+$11=$recv($globals.Cells)._new();
+$recv($11)._s();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["s"]=4;
+//>>excludeEnd("ctx");
+$recv($11)._b();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["b"]=4;
+//>>excludeEnd("ctx");
+$recv($11)._u();
+$recv($11)._s();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["s"]=5;
+//>>excludeEnd("ctx");
+$recv($11)._b();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["b"]=5;
+//>>excludeEnd("ctx");
+$recv($11)._b();
+$10=$recv($11)._s();
+$8=$recv($9)._cells_($10);
+$6=$recv($7).__eq($8);
+self._assert_($6);
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"testLineAccesses",{l:l},$globals.LogimageTest)});
@@ -292,10 +334,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "testLineAccesses\x0a\x09| l |\x0a\x09l := Line\x0a\x09\x09new:   ( Hint new numbers: { 2 . 1 } )\x0a\x09\x09cells: ( Cells new s; b; b; s; u; b; s).\x0a\x09\x22self assert: l isDone not\x22",
+source: "testLineAccesses\x0a\x09| l |\x0a\x09l := Line\x0a\x09\x09new:   ( Hint new numbers: { 2 . 1 } )\x0a\x09\x09cells: ( Cells new s; b; b; s; u; b; s).\x0a\x09\x22self assert: l isDone not\x22\x0a\x09self assert: l reversed =\x0a\x09\x09(Line new hint: (Hint new: { 1. 2}); cells: (Cells new s; b; u; s; b; b; s))",
 referencedClasses: ["Line", "Hint", "Cells"],
 //>>excludeEnd("ide");
-messageSends: ["new:cells:", "numbers:", "new", "s", "b", "u"]
+messageSends: ["new:cells:", "numbers:", "new", "s", "b", "u", "assert:", "=", "reversed", "hint:", "new:", "cells:"]
 }),
 $globals.LogimageTest);
 

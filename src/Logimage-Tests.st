@@ -29,6 +29,8 @@ testLineAccesses
 		new:   ( Hint new numbers: { 2 . 1 } )
 		cells: ( Cells new s; b; b; s; u; b; s).
 	"self assert: l isDone not"
+	self assert: l reversed =
+		(Line new hint: (Hint new: { 1. 2}); cells: (Cells new s; b; u; s; b; b; s))
 !
 
 testLogimageAccesses

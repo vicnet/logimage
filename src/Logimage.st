@@ -214,6 +214,30 @@ firstBox
 	^ #{ #pos -> 0. #size -> 0 }
 !
 
+firstFreeSpace
+	"Return a tupple with index (starting at 1) of first spaces if exists, and size"
+	| space pos size |
+	pos := 0.
+	size := 0.
+	space := true.
+	cells do: [ :c |
+		pos := pos + 1.
+		c isSpace ifTrue: [
+			space := true.
+			size > 0 ifTrue: [ ^ #{ #pos -> (pos-size). #size -> size } ]
+			].
+		c isBox ifTrue: [
+			space := false.
+			size := 0
+			].
+		c isUnknown ifTrue: [
+			space ifTrue: [ size := size + 1 ]
+			]
+		].
+	(space and: size>0) ifTrue: [ ^ #{ #pos -> (pos-size+1). #size -> size } ].
+	^ #{ #pos -> 0. #size -> 0 }
+!
+
 firstNumbers
 	^ self numbersOf: self
 !
@@ -445,6 +469,10 @@ List of numbers!
 
 !Hint methodsFor: 'as yet unclassified'!
 
+= hint
+	^ numbers = hint numbers
+!
+
 do: aBlock
 	numbers do: aBlock
 !
@@ -463,12 +491,20 @@ lastRemoved: n
 		numbers: (numbers copyFrom: 1 to: numbers size - n)
 !
 
+min
+	^ numbers inject: 1000 into: [ :r :e | e < r ifTrue: [e] ifFalse: [r] ]
+!
+
 numbers
 	^ numbers
 !
 
 numbers: array
 	numbers := array
+!
+
+reversed
+	^ Hint new: numbers reversed
 !
 
 size
@@ -536,6 +572,10 @@ Object subclass: #Line
 
 !Line methodsFor: 'accessing'!
 
+= line
+	^ (hint = line hint) and: (cells = line cells)
+!
+
 cells
 	^ cells
 !
@@ -576,6 +616,10 @@ reducedLast
 	((hint numbers) endsWith: last) ifFalse: [ ^ self trimLast ].
 	numbers := hint lastRemoved: (last size).
 	^ Line new: numbers cells: (cells reducedLast)
+!
+
+reversed
+	^ Line new hint: hint reversed; cells: cells reversed
 !
 
 trim
@@ -764,7 +808,7 @@ setSol: cells on: logimage atRow: y after: start
 
 solve: logimage
 10 timesRepeat: [
-	{ StratSpacesOnly. StratDone. StratRecover. StratNotReached } do: [ :strategy |
+	{ StratSpacesOnly. StratAllDone. StratRecover. StratNotReached. StratFirstCover. StratLastCover.StratMinSpace } do: [ :strategy |
 		self apply: strategy new on: logimage ]
 	]
 ! !
@@ -808,16 +852,17 @@ sum: hint
 	^ hint numbers inject: 0 into: [ :s :n | s+n ]
 ! !
 
-StratCount subclass: #StratDone
+StratCount subclass: #StratAllDone
 	instanceVariableNames: ''
 	package: 'Logimage'!
-!StratDone commentStamp!
+!StratAllDone commentStamp!
 Fill with boxes and spaces if no more rooms!
 
-!StratDone methodsFor: 'as yet unclassified'!
+!StratAllDone methodsFor: 'as yet unclassified'!
 
 analyse: line
 	| sol |
+	"If no space remaining, all cell are filled"
 	(self free: line) = 0
 		ifFalse: [ ^ self none ].
 	sol := Cells new.
@@ -846,6 +891,59 @@ analyse: line
 	^ sol size: (line cells size)
 ! !
 
+Strategy subclass: #StratFirstCover
+	instanceVariableNames: ''
+	package: 'Logimage'!
+
+!StratFirstCover methodsFor: 'as yet unclassified'!
+
+analyse: line
+	| pos |
+	"test if boxe at start"
+	pos := (line cells firstBox) at: #pos.
+	pos > 0 ifFalse: [ ^ self none ].
+	"test if hint"
+	line hint size > 0 ifFalse: [ ^ self none ].
+	"test hint over boxes"
+	line hint first > pos ifFalse: [ ^ self none ].
+	^ Cells new addUnknowns: pos-1; addBoxes: line hint first-pos+1
+! !
+
+StratFirstCover subclass: #StratLastCover
+	instanceVariableNames: ''
+	package: 'Logimage'!
+
+!StratLastCover methodsFor: 'as yet unclassified'!
+
+analyse: line
+	| sol |
+	"Use first cells strategy on reversed line, then reversed result"
+	sol := (super analyse: line reversed) reversed.
+	^ Cells new
+		addUnknowns: line cells size - sol size;
+		addAll: sol
+! !
+
+Strategy subclass: #StratMinSpace
+	instanceVariableNames: ''
+	package: 'Logimage'!
+!StratMinSpace commentStamp!
+I fille cells with spaces when hint are bigger than holes!
+
+!StratMinSpace methodsFor: 'as yet unclassified'!
+
+analyse: line
+	| min free |
+	min := line hint min.
+	min > 1 ifFalse: [ ^ self none ].
+	free := line cells firstFreeSpace.
+	(free at: #pos) > 0 ifFalse: [ ^ self none ].
+	min > (free at: #size) ifFalse: [ ^ self none ].
+	^ Cells new
+		addUnknowns: (free at: #pos)-1;
+		addSpaces: (free at: #size)
+! !
+
 Strategy subclass: #StratNotReached
 	instanceVariableNames: ''
 	package: 'Logimage'!
@@ -855,6 +953,7 @@ Fill spaces cells that cannot be reached by boxes!
 !StratNotReached methodsFor: 'as yet unclassified'!
 
 analyse: line
+	"only one hint is tested yet"
 	| n box sol |
 	"If only one hint and at least one box,returns other empty spaces"
 	(line hint size == 1)
