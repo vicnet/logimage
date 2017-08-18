@@ -46,6 +46,11 @@ A simple cell or pixel.!
 	^ Cells new add: n cell: self
 !
 
+alternative
+	"I return list of alternative names or nothing"
+	^ #()
+!
+
 isBox
 	^ false
 !
@@ -63,7 +68,9 @@ Cell class instanceVariableNames: 'cells'!
 !Cell class methodsFor: 'instance creation'!
 
 at: symbol
-	^ cells at: symbol
+	symbol isString ifTrue: [
+		^ cells at: symbol ].
+	^ symbol
 !
 
 box
@@ -76,11 +83,14 @@ initialize
 	cells := #{}.
 	basesize := self name size + 1.
 	self allSubclassesDo: [ :cls |
-		| name |
+		| name inst |
 		name := cls name.
 		name := name copyFrom: basesize to: (name size).
 		name := name asLowercase.
-		cells at: name put: cls new
+		inst := cls new.
+		cells at: name put: inst.
+		cells at: inst asString put: inst.
+		inst alternative do: [ :alt | cells at: alt put: inst ]
 		]
 !
 
@@ -98,6 +108,10 @@ Cell subclass: #CellBox
 
 !CellBox methodsFor: 'printing'!
 
+alternative
+	^ #('X')
+!
+
 isBox
 	^ true
 !
@@ -111,6 +125,10 @@ Cell subclass: #CellSpace
 	package: 'Logimage'!
 
 !CellSpace methodsFor: 'printing'!
+
+alternative
+	^ #('.')
+!
 
 isSpace
 	^ true
@@ -126,6 +144,10 @@ Cell subclass: #CellUnknown
 
 !CellUnknown methodsFor: 'printing'!
 
+alternative
+	^ #('?')
+!
+
 isUnknown
 	^ true
 !
@@ -135,7 +157,7 @@ printOn: stream
 ! !
 
 Object subclass: #Cells
-	instanceVariableNames: 'cells'
+	instanceVariableNames: 'cells pos'
 	package: 'Logimage'!
 !Cells commentStamp!
 A line or a column of cells!
@@ -143,11 +165,11 @@ A line or a column of cells!
 !Cells methodsFor: 'as yet unclassified'!
 
 = theCells
-	^ cells = theCells cells
+	^ (cells = theCells cells) and: (pos = theCells pos)
 !
 
 add: aCell
-	cells add: (self cellFrom: aCell)
+	cells add: (Cell at: aCell)
 !
 
 add: n cell: aCell
@@ -174,14 +196,12 @@ at: index
 	^ cells at: index
 !
 
-b
-	self add: 1 cell: (Cell box)
+at: index put: aCell
+	^ cells at: index put: (Cell at: aCell)
 !
 
-cellFrom: aCell
-	aCell isString
-		ifTrue: [ ^ Cell at: aCell ].
-	^ aCell
+b
+	self add: 1 cell: (Cell box)
 !
 
 cells
@@ -189,8 +209,11 @@ cells
 !
 
 cells: theCells
-	cells := theCells collect: [ :c |
-			self cellFrom: c ]
+	cells := theCells asArray collect: [ :c | Cell at: c ]
+!
+
+do: aBlock
+	cells do: aBlock
 !
 
 firstBox
@@ -215,13 +238,11 @@ firstBox
 !
 
 firstFreeSpace
-	"Return a tupple with index (starting at 1) of first spaces if exists, and size"
-	| space pos size |
-	pos := 0.
+	"Return a tupple with index (starting at 1) of first free (without box) spaces if exists, and size"
+	| space size |
 	size := 0.
 	space := true.
-	cells do: [ :c |
-		pos := pos + 1.
+	cells withIndexDo: [ :c :pos |
 		c isSpace ifTrue: [
 			space := true.
 			size > 0 ifTrue: [ ^ #{ #pos -> (pos-size). #size -> size } ]
@@ -234,20 +255,44 @@ firstFreeSpace
 			space ifTrue: [ size := size + 1 ]
 			]
 		].
-	(space and: size>0) ifTrue: [ ^ #{ #pos -> (pos-size+1). #size -> size } ].
+	(space and: size>0) ifTrue: [ ^ #{ #pos -> (cells size-size+1). #size -> size } ].
 	^ #{ #pos -> 0. #size -> 0 }
 !
 
-firstNumbers
-	^ self numbersOf: self
+firstNotSpace
+	"Return a tupple with index (starting at 1) and size of cells without spaces"
+	| size |
+	size := 0.
+	cells withIndexDo: [ :c :i |
+		c isSpace
+			ifTrue: [
+				size > 0 ifTrue: [ ^ self copyFrom: i-size to: i-1 ]
+				]
+			ifFalse: [
+				size := size + 1
+				]
+		].
+	size>0 ifTrue: [ ^ self copyFrom: cells size-size+1 ].
+	^ Cells new
 !
 
-lastNumbers
-	^ (self numbersOf: self reversed) reversed
+initialize
+	pos := 1.
+	cells := { }
+!
+
+pos
+	^ pos
+!
+
+pos: aPos
+	pos := aPos
 !
 
 reversed
-	^ Cells new: cells reversed
+	^ Cells new
+		pos: pos;
+		cells: cells reversed
 !
 
 s
@@ -256,36 +301,44 @@ s
 
 u
 	self add: 1 cell: (Cell unknown)
+!
+
+withIndexDo: aBlock
+	cells withIndexDo: aBlock
 ! !
 
 !Cells methodsFor: 'printing'!
 
+copyFrom: ref
+	| p1 p2 res |
+	ref isNumber
+		ifTrue: [
+			p1 := ref.
+			p2 := cells size ]
+		ifFalse: [
+			p1 := ref at: #pos.
+			p2 := (ref at: #pos) + (ref at: #size) - 1 ].
+	^ Cells new
+		cells: (cells copyFrom: p1 to: p2);
+		pos: pos + p1 - 1
+!
+
+copyFrom: p1 to: p2
+	^ Cells new
+		cells: (cells copyFrom: p1 to: p2);
+		pos: pos + p1 - 1
+!
+
+isEmpty
+	^ cells isEmpty
+!
+
 printOn: stream
 	stream nextPutAll: '|'.
+	pos-1 timesRepeat: [ stream nextPutAll: '.|' ].
 	cells do: [ :c |
 			c printOn: stream.
 			stream nextPutAll: '|' ]
-!
-
-reduced
-	^ Cells new:
-		(cells
-			copyFrom: self firstDone size + 1
-			to: self size - self lastDone size)
-!
-
-reducedFirst
-	^ Cells new:
-		(cells
-			copyFrom: self firstDone size + 1
-			to: self size)
-!
-
-reducedLast
-	^ Cells new:
-		(cells
-			copyFrom: 1
-			to: self size - self lastDone size)
 !
 
 size
@@ -298,49 +351,50 @@ size: newSize
 		ifTrue: [ cells := cells
 	 				removeFrom: newSize + 1
 					to: self size ]
-		ifFalse: [ self
-					add: (newSize - self size)
-					cell: #unknown ]
+		ifFalse: [ self addUnknowns: (newSize - self size) ]
 ! !
 
 !Cells methodsFor: 'private'!
 
-doneOf: theCells
-	"I returns a list of cells done in a block of Cells at begining"
-	"TODO should be in Class (static)"
+firstDones
+	"I returns cells really dones (box separate by spaces)"
 	| done |
-	done := Cells new.
-	theCells cells do: [ :c |
-		"if found a unknow, stop reading cells"
-		c isUnknown ifTrue: [ ^ done ].
+	done := Cells new pos: pos.
+	cells do: [ :c |
+		"if found a unknown cell, stop reading cells, remove last boxes"
+		c isUnknown ifTrue: [ ^ done trimLast: Cell box ].
 		done add: c ].
 	^ done
 !
 
-firstDone
-	^ self doneOf: self
+isBetter: sol
+	"I return true if sol bring something new in my cells"
+	sol withIndexDo: [ :c :i |
+		(c isUnknown not and: (cells at: i) isUnknown) ifTrue: [ ^ true ]
+		].
+	^ false
 !
 
-lastDone
-	^ (self doneOf: self reversed) reversed
+lastDones
+	"I returns cells really dones (box separate by spaces) at end"
+	| done |
+	done := (self reversed firstDones) reversed.
+	^ done pos: pos + cells size - done size
 !
 
-numbersOf: theCells
-	"I return a list of number done in a block of theCells"
-	"I stop after first unknown cell"
-	"TODO should be in Class (static)"
+numbers
+	"I return a list of number of group of box"
 	| numbers current |
 	numbers := { }.
 	current := 0.
-	theCells cells do: [ :c |
-		c isBox ifTrue: [ current := current + 1 ].
-		c isSpace ifTrue: [
-			current > 0 ifTrue: [ numbers add: current ].
-			current := 0 ].
-		"if found a unknown, stop reading cells"
-		c isUnknown ifTrue: [ ^ numbers ].
+	cells do: [ :c |
+		c isBox
+			ifTrue: [ current := current + 1 ]
+			ifFalse: [
+				current > 0 ifTrue: [ numbers add: current ].
+				current := 0 ]
 		].
-	"here if no unknowns, all cells filled" 
+	"add the last one if exist" 
 	current > 0 ifTrue: [ numbers add: current ].
 	^ numbers
 !
@@ -352,21 +406,29 @@ trim
 
 trimFirst
 	"I return a list of cells without begining spaces"
-	| res add |
-	res := Cells new.
+	^ self trimFirst: Cell space
+!
+
+trimFirst: cell
+	"I return a list of cells without begining spaces"
+	| add trimed |
 	add := false.
-	cells do: [ :c |
-		add ifTrue: [ res add: c ]
-			ifFalse: [
-				c isSpace ifFalse: [ add := true. res add: c ]
-			]
-		].
-	^ res
+	trimed := cells select: [ :c |
+		c = cell ifFalse: [ add := true ].
+		add	].
+	^ Cells new
+		pos: pos + cells size - trimed size;
+		cells: trimed
 !
 
 trimLast
 	"I return a list of cells without ending spaces"
-	^ (self reversed trimFirst) reversed
+	^ self trimLast: Cell space
+!
+
+trimLast: cell
+	"I return a list of cells without ending sort of cell, keep pos"
+	^ ((self reversed trimFirst: cell) reversed) pos: pos
 ! !
 
 !Cells class methodsFor: 'as yet unclassified'!
@@ -473,6 +535,10 @@ List of numbers!
 	^ numbers = hint numbers
 !
 
+at: index
+	^ numbers at: index
+!
+
 do: aBlock
 	numbers do: aBlock
 !
@@ -491,6 +557,10 @@ lastRemoved: n
 		numbers: (numbers copyFrom: 1 to: numbers size - n)
 !
 
+max
+	^ numbers inject: 0 into: [ :r :e | e > r ifTrue: [e] ifFalse: [r] ]
+!
+
 min
 	^ numbers inject: 1000 into: [ :r :e | e < r ifTrue: [e] ifFalse: [r] ]
 !
@@ -500,6 +570,9 @@ numbers
 !
 
 numbers: array
+	array isString ifTrue: [
+		numbers := (array tokenize: ' ') collect: [ :e | e asNumber].
+		^ self].
 	numbers := array
 !
 
@@ -581,7 +654,7 @@ cells
 !
 
 cells: anObject
-	cells := anObject
+	cells := Cells new: anObject
 !
 
 hint
@@ -589,33 +662,42 @@ hint
 !
 
 hint: anObject
-	hint := anObject
+	hint := Hint new: anObject
 !
 
 isDone
 	^ False
 !
 
-reduced
-	^ self reducedFirst reducedLast
+line: aLine
+	aLine isString ifTrue: [ | parts |
+		parts := aLine tokenize: '|'.
+		self hint:  (parts at: 1);
+	    	 cells: (parts at: 2).
+		^ self ].
+	self hint:  aLine hint;
+	     cells: aLine cells
 !
 
 reducedFirst
-	| first numbers |
-	first := cells firstNumbers.
+	| dones first |
+	dones := cells firstDones.
+	first :=  dones numbers.
 	first ifEmpty: [ ^ self trimFirst ].
-	((hint numbers) beginsWith: first) ifFalse: [ ^ self trimFirst ].
-	numbers := hint firstRemoved: (first size).
-	^ Line new: numbers cells: (cells reducedFirst)
+	^ Line
+		hint: (hint firstRemoved: first size)
+		cells: (cells copyFrom: (dones size)+1) "copy after dones"
 !
 
 reducedLast
-	| last numbers |
-	last := cells lastNumbers.
+	| dones last |
+	dones := cells lastDones.
+	last :=  dones numbers.
 	last ifEmpty: [ ^ self trimLast ].
-	((hint numbers) endsWith: last) ifFalse: [ ^ self trimLast ].
-	numbers := hint lastRemoved: (last size).
-	^ Line new: numbers cells: (cells reducedLast)
+	"self assert: ((hint numbers) endsWith: last)."
+	^ Line
+		hint: (hint lastRemoved: last size)
+		cells: (cells copyFrom: 1 to: cells size - dones size)
 !
 
 reversed
@@ -623,15 +705,15 @@ reversed
 !
 
 trim
-	^ Line new: self hint cells: self cells trim
+	^ Line hint: self hint cells: self cells trim
 !
 
 trimFirst
-	^ Line new: self hint cells: self cells trimFirst
+	^ Line hint: self hint cells: self cells trimFirst
 !
 
 trimLast
-	^ Line new: self hint cells: self cells trimLast
+	^ Line hint: self hint cells: self cells trimLast
 ! !
 
 !Line methodsFor: 'printing'!
@@ -643,8 +725,12 @@ printOn: stream
 
 !Line class methodsFor: 'as yet unclassified'!
 
-new: hint cells: cells
+hint: hint cells: cells
 	^ self new hint: hint; cells: cells
+!
+
+new: line
+	^ self new line: line
 ! !
 
 Object subclass: #Logimage
@@ -666,8 +752,9 @@ colHints
 !
 
 colLineAt: index
-	^ Line new: (self colHintAt: index)
-		 cells: (self colCellsAt: index)
+	^ Line
+		hint: (self colHintAt: index)
+		cells: (self colCellsAt: index)
 !
 
 colLines
@@ -692,8 +779,9 @@ rowHints
 !
 
 rowLineAt: index
-	^ Line new: (self rowHintAt: index)
-		 cells: (self rowCellsAt: index)
+	^ Line
+		hint: (self rowHintAt: index)
+		cells: (self rowCellsAt: index)
 !
 
 rowLines
@@ -735,31 +823,222 @@ space: point
 
 !Logimage class methodsFor: 'examples'!
 
-question
-	^ self new
-		addRowHints: #( 3 );
-		addRowHints: #( 2 2 );
-		addRowHints: #( 1 1 );
-		addRowHints: #( 2 );
-		addRowHints: #( 2 );
-		addRowHints: #( 1 );
-		addRowHints: #( 1 );
-		addRowHints: #( );
-		addRowHints: #( 1 );
+joconde
+	^ self
+		rows: #(
+			#( 4 )
+			#( 1 2 )
+			#( 1 2 )
+			#( 1 2 )
+			#( 1 2 )
 
-		addColHints: #( 2 );
-		addColHints: #( 2 );
-		addColHints: #( 1 3 1 );
-		addColHints: #( 2 2 );
-		addColHints: #( 3 )
+			#( 2 2 )
+			#( 1 1 )
+			#( 2 2 )
+			#( 3 3 )
+			#( 9 )
+
+			#( 9 )
+			#( 10 )
+			#( 1 1 1 2 )
+			#( 2 4 )
+			#( 3 4 ) )
+		cols: #(
+			#( 4 )
+			#( 3 2 )
+			#( 6 1 )
+			#( 11 )
+			#( 1 1 4 )
+
+			#( 1 4 )
+			#( 1 3 2 )
+			#( 6 4 2 )
+			#( 14 )
+			#( 8 )
+		)
+!
+
+question
+	^ self
+		rows: #(
+			#( 3 )
+			#( 2 2 )
+			#( 1 1 )
+			#( 2 )
+			#( 2 )
+			#( 1 )
+			#( 1 )
+			#( )
+			#( 1 )
+		)
+		cols: #(
+			#( 2 )
+			#( 2 )
+			#( 1 3 1 )
+			#( 2 2 )
+			#( 3 )
+		)
+!
+
+rows: rows cols: cols
+	| l |
+	l := self new.
+	rows do: [ :hint | l addRowHints: hint ].
+	cols do: [ :hint | l addColHints: hint ].
+	^ l
 !
 
 simple
-	^ self new
-		addRowHints: #( 1 );
-		addRowHints: #( 2 );
-		addColHints: #( 1 );
-		addColHints: #( 2 )
+	^ self
+		rows: #(
+			#( 1 )
+			#( 2 )
+		)
+		cols: #(
+			#( 1 )
+			#( 2 )
+		)
+!
+
+vainqueur
+	^ self
+		rows: #(
+			#( 5 )
+			#( 4 7 )
+			#( 2 1 9 2 )
+			#( 1 1 9 1 2)
+			#( 2 1 2 3 1 1 )
+
+			#( 2 1 1 1 1 1 2 1 )
+			#( 2 1 1 1 2 3 )
+			#( 6 1 1 1 2 2 )
+			#( 5 4 4 2 )
+			#( 6 1 5 )
+
+			#( 4 5 5 )
+			#( 4 6 5 )
+			#( 7 13 2 2 )
+			#( 2 12 2 4 )
+			#( 5 2 14 3 3 )
+			
+			#( 2 13 3 )
+			#( 3 3 )
+			#( 5 4 )
+			#( 17 )
+			#( 11 )
+
+			#( 7 2 )
+			#( 2 2 1 )
+			#( 7 1 )
+			#( 10 1 1 1 1 11 )
+			#( 5 2 1 1 1 1 2 2 2 5 )
+
+			#( 4 3 1 1 1 2 1 1 2 3 4 )
+			#( 3 4 1 1 1 2 1 2 4 3 )
+			#( 2 4 2 5 1 1 4 4 2 )
+			#( 1 5 2 1 1 4 4 5 1 )
+			#( 5 3 1 1 1 5 6 )
+
+			#( 6 3 1 1 5 5 6 )
+			#( 5 3 3 1 5 5 6 )
+			#( 5 3 6 5 5 6 )
+			#( 4 5 4 6 6 5 )
+			#( 4 6 8 6 5 )
+		)
+		cols: #(
+			#( 1 1 6 5 )
+			#( 1 1 5 6 )
+			#( 1 1 4 7 )
+			#( 3 1 1 3 8 )
+			#( 2 2 1 2 2 7 )
+
+			#( 1 2 1 2 1 6 2 )
+			#( 1 2 2 2 6 4 )
+			#( 3 3 2 3 4 6 )
+			#( 2 4 1 2 1 8 )
+			#( 6 1 2 8 2 )
+			
+			#( 6 1 2 2 1 )
+			#( 14 16 )
+			#( 4 1 5 5 1 3 )
+			#( 4 1 1 1 4 3 1 1 2 )
+			#( 4 1 1 4 3 1 1 3 )
+
+			#( 4 1 1 4 3 11 1 )
+			#( 4 1 1 1 4 3 1 2)
+			#( 5 2 1 4 3 4 6 )
+			#( 4 1 5 2 1 4 5 )
+			#( 7 6 2 1 1 1 5 )
+			
+			#( 8 4 1 1 5 )
+			#( 9 8 2 5 )
+			#( 9 2 3 1 )
+			#( 2 3 1 3 8 )
+			#( 2 2 1 1 12 )
+			
+			#( 1 2 1 2 12 )
+			#( 1 2 1 1 1 8 )
+			#( 2 1 1 2 4 5 )
+			#( 4 1 1 7 2 )
+			#( 1 2 1 8 )
+			
+			#( 1 1 2 9 )
+			#( 1 1 3 8 )
+			#( 1 2 4 7 )
+			#( 2 1 5 6 )
+			#( 1 1 6 5 )
+		)
+! !
+
+Object subclass: #Strategies
+	instanceVariableNames: 'list'
+	package: 'Logimage'!
+!Strategies commentStamp!
+List of strategy!
+
+!Strategies methodsFor: 'as yet unclassified'!
+
+at: name
+	^ list at: name
+!
+
+do: aBlock
+	list valuesDo: aBlock
+!
+
+initialize
+	"TODO should be autodeclared by each instance !!"
+	list := #{
+		#spaceonly -> StratSpacesOnly.
+		#alldone -> StratAllDone.
+		#recover -> StratRecover.
+		#notreached -> StratNotReached.
+		#firstcover -> StratFirstCover.
+		#lastcover -> StratLastCover.
+		#minspace -> StratMinSpace.
+		#firstdone -> StratFirstDone.
+		#lastdone -> StratLastDone.
+		#testbox -> StratTestBox.
+		#firstcutspace -> StratFirstCutSpace.
+		#lastcutspace -> StratLastCutSpace.
+		}
+		collect: [ :strat | strat new ]
+! !
+
+Strategies class instanceVariableNames: 'instance'!
+
+!Strategies class methodsFor: 'as yet unclassified'!
+
+instance
+	^ instance ifNil: [ instance := super new ]
+!
+
+new
+	self shouldNotImplement
+!
+
+reset
+	instance := nil
 ! !
 
 Object subclass: #Strategist
@@ -808,8 +1087,8 @@ setSol: cells on: logimage atRow: y after: start
 
 solve: logimage
 10 timesRepeat: [
-	{ StratSpacesOnly. StratAllDone. StratRecover. StratNotReached. StratFirstCover. StratLastCover.StratMinSpace } do: [ :strategy |
-		self apply: strategy new on: logimage ]
+	Strategies reset instance do: [ :strategy |
+		self apply: strategy on: logimage ]
 	]
 ! !
 
@@ -883,12 +1162,14 @@ analyse: line
 	| free sol |
 	free := self free: line.
 	sol := Cells new.
-	line hint numbers do: [ :n |
+	line hint do: [ :n |
 		sol addUnknowns: (n min: free);
 			addBoxes: (n - free);
 			addUnknowns: 1 ].
 	"remove last unknown if line full"
-	^ sol size: (line cells size)
+	sol := sol size: (line cells size).
+	(line cells isBetter: sol) ifFalse: [ ^ self none ].
+	^ sol
 ! !
 
 Strategy subclass: #StratFirstCover
@@ -898,7 +1179,7 @@ Strategy subclass: #StratFirstCover
 !StratFirstCover methodsFor: 'as yet unclassified'!
 
 analyse: line
-	| pos |
+	| pos sol |
 	"test if boxe at start"
 	pos := (line cells firstBox) at: #pos.
 	pos > 0 ifFalse: [ ^ self none ].
@@ -906,22 +1187,53 @@ analyse: line
 	line hint size > 0 ifFalse: [ ^ self none ].
 	"test hint over boxes"
 	line hint first > pos ifFalse: [ ^ self none ].
-	^ Cells new addUnknowns: pos-1; addBoxes: line hint first-pos+1
+	sol := Cells new addUnknowns: pos-1; addBoxes: line hint first-pos+1.
+	(line cells isBetter: sol) ifFalse: [ ^ self none ].
+	^ sol
 ! !
 
-StratFirstCover subclass: #StratLastCover
+Strategy subclass: #StratFirstCutSpace
 	instanceVariableNames: ''
 	package: 'Logimage'!
 
-!StratLastCover methodsFor: 'as yet unclassified'!
+!StratFirstCutSpace methodsFor: 'as yet unclassified'!
 
 analyse: line
-	| sol |
-	"Use first cells strategy on reversed line, then reversed result"
-	sol := (super analyse: line reversed) reversed.
+	| first firstline |
+	"check if 2 or more hints"
+	line hint size >= 2 ifFalse: [ ^ self none ].
+	first := line cells firstNotSpace.
+	"check if one box min in first cells"
+	first numbers size > 0 ifFalse: [ ^ self none ].
+	"check if only first number forced to be inside first cells"
+	(line hint at: 1) + (line hint at: 2) + 1 > first size ifFalse: [ ^ self none ].
+	"analyse first cells"
+	firstline := Line
+		hint: (Hint new: { line hint first })
+		cells: first.
+	Strategies instance do: [ :strategy | | res |
+		res := strategy analyse: firstline.
+		res isEmpty ifFalse: [ ^ res] ].
+	^ self none
+! !
+
+Strategy subclass: #StratFirstDone
+	instanceVariableNames: ''
+	package: 'Logimage'!
+
+!StratFirstDone methodsFor: 'as yet unclassified'!
+
+analyse: line
+	| first |
+	"check if first box is at begining, begining spaces should be removed yet"
+	first := line cells firstBox.
+	(first at: #pos) = 1 ifFalse: [ ^ self none ].
+	"test if strategy apply, ie first hint is same as box"
+	line hint first = (first at: #size) ifFalse: [ ^ self none ].
+	"get solution, without space"
 	^ Cells new
-		addUnknowns: line cells size - sol size;
-		addAll: sol
+		addBoxes: (first at: #size);
+		addSpaces: 1
 ! !
 
 Strategy subclass: #StratMinSpace
@@ -934,8 +1246,10 @@ I fille cells with spaces when hint are bigger than holes!
 
 analyse: line
 	| min free |
+	"Get min hint, and check if more than only 1"
 	min := line hint min.
 	min > 1 ifFalse: [ ^ self none ].
+	"Get first cells that are free of boxes before space or end"
 	free := line cells firstFreeSpace.
 	(free at: #pos) > 0 ifFalse: [ ^ self none ].
 	min > (free at: #size) ifFalse: [ ^ self none ].
@@ -970,6 +1284,53 @@ analyse: line
 	^ sol
 ! !
 
+Strategy subclass: #StratReverted
+	instanceVariableNames: 'strategy'
+	package: 'Logimage'!
+
+!StratReverted methodsFor: 'as yet unclassified'!
+
+analyse: line
+	| sol |
+	"Use strategy on reversed line, then reversed result"
+	sol := (strategy analyse: line reversed) reversed.
+	sol size = 0 ifTrue: [ ^ self none ].
+	^ Cells new
+		"and add first unknown cells before"
+		addUnknowns: line cells size - sol size;
+		addAll: sol
+! !
+
+StratReverted subclass: #StratLastCover
+	instanceVariableNames: ''
+	package: 'Logimage'!
+
+!StratLastCover methodsFor: 'as yet unclassified'!
+
+initialize
+	strategy := StratFirstCover new
+! !
+
+StratReverted subclass: #StratLastCutSpace
+	instanceVariableNames: ''
+	package: 'Logimage'!
+
+!StratLastCutSpace methodsFor: 'as yet unclassified'!
+
+initialize
+	strategy := StratFirstCutSpace new
+! !
+
+StratReverted subclass: #StratLastDone
+	instanceVariableNames: 'strategy'
+	package: 'Logimage'!
+
+!StratLastDone methodsFor: 'as yet unclassified'!
+
+initialize
+	strategy := StratFirstDone new
+! !
+
 Strategy subclass: #StratSpacesOnly
 	instanceVariableNames: ''
 	package: 'Logimage'!
@@ -983,6 +1344,24 @@ analyse: line
 	(line hint size = 0)
 		ifTrue: [ ^ Cells spaces: line cells size ].
 	^ self none
+! !
+
+Strategy subclass: #StratTestBox
+	instanceVariableNames: ''
+	package: 'Logimage'!
+
+!StratTestBox methodsFor: 'as yet unclassified'!
+
+analyse: line
+	| sol |
+	sol := Cells new.
+	1 to: line cells size do: [ :i | |l|
+		l := line cells deepCopy at: i put: Cell box; yourself.
+		(Hint new: l numbers) max > line hint max
+			ifTrue: [ sol addSpaces: 1 ]
+			ifFalse: [ sol addUnknowns: 1 ]
+		].
+	^ sol trimLast: Cell unknown
 ! !
 
 Object subclass: #WidgetCell
@@ -1020,10 +1399,15 @@ renderOnSilk: silk
 !
 
 show: grid
+	| y |
+	y := 0.
 	div resetContents.
-	grid rowDo: [ :row | | line |
-		line := div DIV: { #class -> 'line' }.
-		row cells do: [ :cell |
+	grid rowDo: [ :row | | line x |
+		x := 0.
+		y := y+1.
+		line := div DIV: { #class -> ('line',(y\\5=0 ifTrue: [' gras'] ifFalse: [''])) }.
+		row do: [ :cell |
+			x := x + 1.
 			line << (WidgetCell new show: cell)
 		]
 	]

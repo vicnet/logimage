@@ -8,6 +8,10 @@
     border-color: black;
     border: solid;
     border-width: 1px;
+    display: flex;
+    box-sizing: border-box;
+    margin-bottom: -1px;
+    margin-left: -1px;
 }
 .cols .hint {
     display: inline-block;    
@@ -26,8 +30,8 @@
     height: 18px;
 }
 .line {
-    margin-top: -4px;
-    margin-bottom:  -4px;
+    margin-bottom:  -1px;
+    display:  flex;
 }
 .cell {
     display: inline-block;
@@ -37,6 +41,11 @@
     border: solid;
     border-width: 1px;
     text-align: center;
+    margin-left: -1px;
+    box-sizing: border-box;
+}
+.line.gras .cell {
+    border-bottom-width: 2px;    
 }
 .box {
     background-color: black

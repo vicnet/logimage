@@ -13,24 +13,53 @@ setUp
 
 testCellsAccesses
 	| c |
+	"test firstDones"
+	self assert: (Cells new s; b; b; s; u) firstDones = (Cells new s; b; b; s).
+	self assert: (Cells new s; b; s; b; u) firstDones = (Cells new s; b; s).
+	self assert: (Cells new s; b; u) firstDones = (Cells new s).
+	self assert: (Cells new s; b; b) firstDones = (Cells new s; b; b).
+	"test last dones"
+	self assert: (Cells new s; b; u; b; s) lastDones = (Cells new s; pos: 5).
+	self assert: (Cells new s; u; s; b; b; s) lastDones = (Cells new s; b; b; s; pos: 3).
+	"test copyFrom: with number"
+	self assert: ((Cells new s; b; b) copyFrom: 1) = (Cells new s; b; b).
+	self assert: ((Cells new s; b; b) copyFrom: 2) = (Cells new pos: 2; b; b).
+	"test trim functions"
+	c := Cells new s; s; b; s; u; b; s.
+	self assert: c trimFirst = (Cells new b; s; u; b; s; pos: 3).
+	self assert: c trimLast = (Cells new s; s; b; s; u; b).
+	self assert: c trim = (Cells new b; s; u; b; pos: 3).
+	self assert: c trim trimFirst = (Cells new b; s; u; b; pos: 3).
+	self assert: c trim trimLast = (Cells new b; s; u; b; pos: 3).
+	self assert: c trim trim = (Cells new b; s; u; b; pos: 3).
+	"test firstNotSpace"
+	self assert: (Cells new u; b; b; u) firstNotSpace = (Cells new u; b; b; u).
+	self assert: (Cells new u; b; b; s) firstNotSpace = (Cells new u; b; b).
+	self assert: (Cells new u; s; b; u) firstNotSpace = (Cells new u).
+	self assert: (Cells new s; s; u; b; s; u) firstNotSpace = (Cells new u; b; pos: 3).
+	"
 	c := Cells new s; b; b; s; u; b; s.
-	self assert: c firstNumbers = { 2 }.
 	self assert: c lastNumbers = { }.
 	self assert: (Cells new s; b; b; s; s; b; s) lastNumbers = { 2. 1 }.
 	self assert: c firstBox = #{ #pos -> 2. #size -> 2 }.
-	self assert: c trimFirst = (Cells new b; b; s; u; b; s).
-	self assert: c trimLast = (Cells new s; b; b; s; u; b).
-	self assert: c trim = (Cells new b; b; s; u; b).
+	self assert: c numbers = { 2. 1 }.
+	self assert: ((Cells new u;s;u;b) firstFreeSpace) = #{ #pos -> 1. #size -> 1 }.
+	self assert: ((Cells new b;s;u;u) firstFreeSpace) = #{ #pos -> 3. #size -> 2 }.
+	self assert: ((Cells new s;u;s;u;b) firstNotSpace) = #{ #pos -> 2. #size -> 1 }.
+	self assert: ((Cells new s;b;u;s;u;u) firstNotSpace) = #{ #pos -> 2. #size -> 2 }."
 !
 
 testLineAccesses
 	| l |
 	l := Line
-		new:   ( Hint new numbers: { 2 . 1 } )
+		hint:  ( Hint new: { 2 . 1 } )
 		cells: ( Cells new s; b; b; s; u; b; s).
-	"self assert: l isDone not"
 	self assert: l reversed =
-		(Line new hint: (Hint new: { 1. 2}); cells: (Cells new s; b; u; s; b; b; s))
+		(Line new hint: (Hint new: { 1. 2}); cells: (Cells new s; b; u; s; b; b; s)).
+	self assert: (Line new: (Hint new: {2. 1}) cells: (Cells new s; b; b; u; s; b; s)) reducedLast =
+		(Line new: (Hint new: {2}) cells: (Cells new s; b; b; u)).
+	self assert: (Line new: (Hint new: {2. 1}) cells: (Cells new s; b; b; s; u; b; s)) reducedFirst =
+		(Line new: (Hint new: {1}) cells: (Cells new u; b; s; pos: 5)).
 !
 
 testLogimageAccesses
@@ -44,5 +73,16 @@ testStratNotReached
 		cells: (Cells new u; u; u; b; u; u; u).
 	sol := StratNotReached new analyse: l.
 	self assert: sol = (Cells new s; s; u; u; u; s; s)
+!
+
+testStratXDone
+	| l sol res |
+	l := Line new
+		hint: (Hint new: {1. 2});
+		cells: (Cells new b;u;b;b).
+	sol := StratFirstDone new analyse: l.
+	self assert: sol = (Cells new b;s).
+	sol := StratLastDone new analyse: l.
+	self assert: sol = (Cells new u;s;b;b)
 ! !
 
