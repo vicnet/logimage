@@ -145,7 +145,7 @@ Cell subclass: #CellUnknown
 !CellUnknown methodsFor: 'printing'!
 
 alternative
-	^ #('?')
+	^ #('?' '_')
 !
 
 isUnknown
@@ -190,6 +190,10 @@ addSpaces: n
 
 addUnknowns: n
 	self add: n cell: (Cell unknown)
+!
+
+asArray
+	^ cells
 !
 
 at: index
@@ -548,13 +552,11 @@ first
 !
 
 firstRemoved: n
-	^ Hint new
-		numbers: (numbers copyFrom: (n+1) to: numbers size)
+	^ Hint new: (numbers copyFrom: (n+1) to: numbers size)
 !
 
 lastRemoved: n
-	^ Hint new
-		numbers: (numbers copyFrom: 1 to: numbers size - n)
+	^ Hint new: (numbers copyFrom: 1 to: numbers size - n)
 !
 
 max
@@ -571,7 +573,7 @@ numbers
 
 numbers: array
 	array isString ifTrue: [
-		numbers := (array tokenize: ' ') collect: [ :e | e asNumber].
+		numbers := (array tokenize: ' ') asArray collect: [ :e | e asNumber].
 		^ self].
 	numbers := array
 !
@@ -654,7 +656,10 @@ cells
 !
 
 cells: anObject
-	cells := Cells new: anObject
+	anObject isString ifTrue: [
+		cells := Cells new: anObject.
+		^ self].
+	cells := anObject
 !
 
 hint
@@ -662,7 +667,10 @@ hint
 !
 
 hint: anObject
-	hint := Hint new: anObject
+	anObject isString ifTrue: [
+		hint := Hint new: anObject.
+		^ self ].
+	hint := anObject
 !
 
 isDone
@@ -1104,6 +1112,14 @@ analyse: line
 
 none
 	^ Cells new
+! !
+
+!Strategy class methodsFor: 'as yet unclassified'!
+
+analyse: line
+	line isString ifTrue: [
+		^ self new analyse: (Line new: line) ].
+	^ self new analyse: line
 ! !
 
 Strategy subclass: #StratCount

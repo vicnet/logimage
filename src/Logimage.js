@@ -614,12 +614,12 @@ selector: "alternative",
 protocol: 'printing',
 fn: function(){
 var self=this;
-return ["?"];
+return ["?", "_"];
 
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "alternative\x0a\x09^ #('?')",
+source: "alternative\x0a\x09^ #('?' '_')",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: []
@@ -857,6 +857,24 @@ source: "addUnknowns: n\x0a\x09self add: n cell: (Cell unknown)",
 referencedClasses: ["Cell"],
 //>>excludeEnd("ide");
 messageSends: ["add:cell:", "unknown"]
+}),
+$globals.Cells);
+
+$core.addMethod(
+$core.method({
+selector: "asArray",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+return self["@cells"];
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "asArray\x0a\x09^ cells",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
 }),
 $globals.Cells);
 
@@ -2485,22 +2503,22 @@ $core.addMethod(
 $core.method({
 selector: "firstRemoved:",
 protocol: 'as yet unclassified',
-fn: function (n){
+fn: function(n){
 var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-return $recv($recv($globals.Hint)._new())._numbers_($recv(self["@numbers"])._copyFrom_to_($recv(n).__plus((1)),$recv(self["@numbers"])._size()));
+return $recv($globals.Hint)._new_($recv(self["@numbers"])._copyFrom_to_($recv(n).__plus((1)),$recv(self["@numbers"])._size()));
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"firstRemoved:",{n:n},$globals.Hint)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["n"],
-source: "firstRemoved: n\x0a\x09^ Hint new\x0a\x09\x09numbers: (numbers copyFrom: (n+1) to: numbers size)",
+source: "firstRemoved: n\x0a\x09^ Hint new: (numbers copyFrom: (n+1) to: numbers size)",
 referencedClasses: ["Hint"],
 //>>excludeEnd("ide");
-messageSends: ["numbers:", "new", "copyFrom:to:", "+", "size"]
+messageSends: ["new:", "copyFrom:to:", "+", "size"]
 }),
 $globals.Hint);
 
@@ -2508,24 +2526,22 @@ $core.addMethod(
 $core.method({
 selector: "lastRemoved:",
 protocol: 'as yet unclassified',
-fn: function (n){
-"use strict";
-
+fn: function(n){
 var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-return $recv($recv($globals.Hint)._new())._numbers_($recv(self["@numbers"])._copyFrom_to_((1),$recv($recv(self["@numbers"])._size()).__minus(n)));
+return $recv($globals.Hint)._new_($recv(self["@numbers"])._copyFrom_to_((1),$recv($recv(self["@numbers"])._size()).__minus(n)));
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"lastRemoved:",{n:n},$globals.Hint)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["n"],
-source: "lastRemoved: n\x0a\x09^ Hint new\x0a\x09\x09numbers: (numbers copyFrom: 1 to: numbers size - n)",
+source: "lastRemoved: n\x0a\x09^ Hint new: (numbers copyFrom: 1 to: numbers size - n)",
 referencedClasses: ["Hint"],
 //>>excludeEnd("ide");
-messageSends: ["numbers:", "new", "copyFrom:to:", "-", "size"]
+messageSends: ["new:", "copyFrom:to:", "-", "size"]
 }),
 $globals.Hint);
 
@@ -2635,7 +2651,7 @@ return $core.withContext(function($ctx1) {
 var $1;
 $1=$recv(array)._isString();
 if($core.assert($1)){
-self["@numbers"]=$recv($recv(array)._tokenize_(" "))._collect_((function(e){
+self["@numbers"]=$recv($recv($recv(array)._tokenize_(" "))._asArray())._collect_((function(e){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
@@ -2655,10 +2671,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["array"],
-source: "numbers: array\x0a\x09array isString ifTrue: [\x0a\x09\x09numbers := (array tokenize: ' ') collect: [ :e | e asNumber].\x0a\x09\x09^ self].\x0a\x09numbers := array",
+source: "numbers: array\x0a\x09array isString ifTrue: [\x0a\x09\x09numbers := (array tokenize: ' ') asArray collect: [ :e | e asNumber].\x0a\x09\x09^ self].\x0a\x09numbers := array",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["ifTrue:", "isString", "collect:", "tokenize:", "asNumber"]
+messageSends: ["ifTrue:", "isString", "collect:", "asArray", "tokenize:", "asNumber"]
 }),
 $globals.Hint);
 
@@ -3045,7 +3061,14 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
+var $1;
+$1=$recv(anObject)._isString();
+if($core.assert($1)){
 self["@cells"]=$recv($globals.Cells)._new_(anObject);
+self["@cells"];
+return self;
+};
+self["@cells"]=anObject;
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"cells:",{anObject:anObject},$globals.Line)});
@@ -3053,10 +3076,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["anObject"],
-source: "cells: anObject\x0a\x09cells := Cells new: anObject",
+source: "cells: anObject\x0a\x09anObject isString ifTrue: [\x0a\x09\x09cells := Cells new: anObject.\x0a\x09\x09^ self].\x0a\x09cells := anObject",
 referencedClasses: ["Cells"],
 //>>excludeEnd("ide");
-messageSends: ["new:"]
+messageSends: ["ifTrue:", "isString", "new:"]
 }),
 $globals.Line);
 
@@ -3089,7 +3112,14 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
+var $1;
+$1=$recv(anObject)._isString();
+if($core.assert($1)){
 self["@hint"]=$recv($globals.Hint)._new_(anObject);
+self["@hint"];
+return self;
+};
+self["@hint"]=anObject;
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"hint:",{anObject:anObject},$globals.Line)});
@@ -3097,10 +3127,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["anObject"],
-source: "hint: anObject\x0a\x09hint := Hint new: anObject",
+source: "hint: anObject\x0a\x09anObject isString ifTrue: [\x0a\x09\x09hint := Hint new: anObject.\x0a\x09\x09^ self ].\x0a\x09hint := anObject",
 referencedClasses: ["Hint"],
 //>>excludeEnd("ide");
-messageSends: ["new:"]
+messageSends: ["ifTrue:", "isString", "new:"]
 }),
 $globals.Line);
 
@@ -4526,6 +4556,42 @@ messageSends: ["new"]
 }),
 $globals.Strategy);
 
+
+$core.addMethod(
+$core.method({
+selector: "analyse:",
+protocol: 'as yet unclassified',
+fn: function(line){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $1,$3,$2;
+$1=$recv(line)._isString();
+if($core.assert($1)){
+$3=self._new();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["new"]=1;
+//>>excludeEnd("ctx");
+$2=$recv($3)._analyse_($recv($globals.Line)._new_(line));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["analyse:"]=1;
+//>>excludeEnd("ctx");
+return $2;
+};
+return $recv(self._new())._analyse_(line);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line},$globals.Strategy.klass)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["line"],
+source: "analyse: line\x0a\x09line isString ifTrue: [\x0a\x09\x09^ self new analyse: (Line new: line) ].\x0a\x09^ self new analyse: line",
+referencedClasses: ["Line"],
+//>>excludeEnd("ide");
+messageSends: ["ifTrue:", "isString", "analyse:", "new", "new:"]
+}),
+$globals.Strategy.klass);
 
 
 $core.addClass('StratCount', $globals.Strategy, [], 'Logimage');
