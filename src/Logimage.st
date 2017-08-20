@@ -31,7 +31,7 @@ show: logimage
 !Application class methodsFor: 'as yet unclassified'!
 
 start
-	^ Application new show: Logimage question
+	^ Application new show: Logimage chat
 ! !
 
 Object subclass: #Cell
@@ -264,7 +264,7 @@ firstFreeSpace
 !
 
 firstNotSpace
-	"Return a tupple with index (starting at 1) and size of cells without spaces"
+	"Return first cells stopping at first space (not box, not unknown)"
 	| size |
 	size := 0.
 	cells withIndexDo: [ :c :i |
@@ -555,16 +555,28 @@ firstRemoved: n
 	^ Hint new: (numbers copyFrom: (n+1) to: numbers size)
 !
 
+initialize
+	numbers = #()
+!
+
+isEmpty
+	^ numbers isEmpty
+!
+
 lastRemoved: n
 	^ Hint new: (numbers copyFrom: 1 to: numbers size - n)
 !
 
 max
-	^ numbers inject: 0 into: [ :r :e | e > r ifTrue: [e] ifFalse: [r] ]
+	^ numbers
+		inject: 0
+		into: [ :r :e | e > r ifTrue: [e] ifFalse: [r] ]
 !
 
 min
-	^ numbers inject: 1000 into: [ :r :e | e < r ifTrue: [e] ifFalse: [r] ]
+	^ numbers
+		inject: 1000
+		into: [ :r :e | e < r ifTrue: [e] ifFalse: [r] ]
 !
 
 numbers
@@ -831,6 +843,110 @@ space: point
 
 !Logimage class methodsFor: 'examples'!
 
+chat
+	^ self
+		rows: #(
+			#(       7 2 1 2 1 )
+			#(   1 1 2 2 3 2 3 )
+			#(   1 1 3 3 3 3 3 )
+			#(   7 1 1 3 1 1 3 )
+			#( 1 1 1 3 3 1 2 2 )
+		"--------------------------------"
+			#( 1 1 1 3 3 3 1 1 )
+			#( 1 1 1 3 3 3 3 3 )
+			#( 1 1 1 3 3 3 3 3 )
+			#(     7 3 3 3 3 3 )
+			#(         9 3 3 3 )
+		"--------------------------------"
+			#(        7 2 10 7 )
+			#(          7  1 14 )
+			#(       1 1 1 1 3 )
+			#(     1 1 1 3 2 1 )
+			#(   1 1 5 3 1 3 1 )
+		"--------------------------------"
+			#(     1 1 9 5 3 1 )
+			#(          11 7 6 )
+			#(               29 )
+			#(             1 24 )
+			#(             3 26 )
+		"--------------------------------"
+			#(          4 19 1 )
+			#(        1 5  7 2 )
+			#(        2 1 12 3 )
+			#(        1 1  3 12 )
+			#(      1 1 2  2 2 )
+		"--------------------------------"
+			#(           4 1 4 2 2 1 )
+			#(       2 2 4 2 4 3 4 3 )
+			#( 1 3 1 4 1 2 1 5 1 1 1 )
+			#(   1 5 1 1 6 1 3 1 1 2 )
+			#(       2 3 1 3 1 3 1 1 )
+		"--------------------------------"
+			#(     6 2 5 2 3 2 )
+			#(         6 6 3 4 )
+			#(   1 4 1 6 1 1 3 )
+			#( 1 4 1 7 1 1 3 1 )
+			#( 2 3 2 1 5 1 5 1 )
+		"--------------------------------"
+			#( 1 4 2 1 3 2 5 2 )
+			#(   1 3 1 2 4 6 1 )
+			#(   7 1 1 1 1 7 1 )
+			#(   6 1 2 2 2 9 1 )
+			#(         5 2 9 1 )
+		"--------------------------------"
+			#( 6 1 2 4 8 )
+			#(   6 2 4 9 )
+			#(     8 5 4 )
+			#(   2 2 3 2 )
+			#(   3 4 3 4 )
+		"--------------------------------"
+		)
+		cols: #(
+			#( 2 4 3 )
+			#( 9 6 4 3 2 5 )
+			#( 1 1 1 2 2 2 8 1 )
+			#( 1 1 1 2 3 1 2 1 11 1 )
+			#( 1 6 2 1 4 4 13 )
+		"--------------------------------"
+			#( 1 1 1 6 1 2 14 8 )
+			#( 1 1 1 2 1 2 6 4 3 )
+			#( 9 2 12 2 1 )
+			#( 5 2 1 1 5 3 1 )
+			#( 1 2 6 2 1 1 1 6 )
+		"--------------------------------"
+			#( 3 1 8 2 2 1 )
+			#( 2 6 7 1 1 2 4 1 )
+			#( 8 7 1 3 2 3 )
+			#( 1 7 6 1 2 3 )
+			#( 2 2 7 1 5 )
+		"--------------------------------"
+			#( 2 7 8 1 3 9 )
+			#( 9 8 2 2 1 7 1 )
+			#( 1 7 6 13 1 1 )
+			#( 2 2 4 10 4 2 )
+			#( 3 2 5 1 1 8 1 1 )
+		"--------------------------------"
+			#( 3 7 7 2 1 1 2 )
+			#( 10 6 1 3 2 )
+			#( 7 8 1 2 3 2 )
+			#( 1 1 8 1 4 3 3 )
+			#( 3 6 8 1 2 2 5 4 )
+		"--------------------------------"
+			#( 1 8 6 2 4 1 10 1 )
+			#( 1 3 6 5 7 2 9 )
+			#( 1 2 6 1 6 9 )
+			#( 4 6 7 2 12 )
+			#( 11 6 12 7 )
+		"--------------------------------"
+			#( 2 7 6 1 1 2 8 )
+			#( 2 5 2 1 1 1 3 5 )
+			#( 5 2 1 1 1 8 1 )
+			#( 1 2 1 1 1 )
+			#( 3 3 )
+		"--------------------------------"
+		)
+!
+
 joconde
 	^ self
 		rows: #(
@@ -1052,6 +1168,8 @@ reset
 Object subclass: #Strategist
 	instanceVariableNames: ''
 	package: 'Logimage'!
+!Strategist commentStamp!
+I apply (analyse, get a solution then apply) one or more strategies on a logimage, or a line.!
 
 !Strategist methodsFor: 'as yet unclassified'!
 
@@ -1103,6 +1221,8 @@ solve: logimage
 Object subclass: #Strategy
 	instanceVariableNames: ''
 	package: 'Logimage'!
+!Strategy commentStamp!
+I analyse a line and returns a solution with spaces and boxes.!
 
 !Strategy methodsFor: 'as yet unclassified'!
 
@@ -1126,18 +1246,22 @@ Strategy subclass: #StratCount
 	instanceVariableNames: ''
 	package: 'Logimage'!
 !StratCount commentStamp!
-Helper to implement strategy!
+I am a helper to implement strategy.
+I give some messages to count different sort of cells.!
 
 !StratCount methodsFor: 'as yet unclassified'!
 
 free: line
 	"I return the number of cells that are free to move"
+
+	"if no more hint, no free spaces"
 	(line hint size = 0) ifTrue: [ ^ 0 ].
 	^ (line cells size) - (self occupation: line hint)
 !
 
 occupation: hint
-	"I return the number of cell all numbers fill, with one space between each"
+	"I return the number of cells filled for all numbers in hint,
+	 with one space between each, minus one (the last)"
 	(hint size = 0) ifTrue: [ ^ 0 ].
 	^ (self sum: hint) + hint size - 1
 !
@@ -1151,26 +1275,30 @@ StratCount subclass: #StratAllDone
 	instanceVariableNames: ''
 	package: 'Logimage'!
 !StratAllDone commentStamp!
-Fill with boxes and spaces if no more rooms!
+I try to detect if a line is filled with boxes and spaces, ie no more rooms.!
 
 !StratAllDone methodsFor: 'as yet unclassified'!
 
 analyse: line
 	| sol |
-	"If no space remaining, all cell are filled"
+	"If some space remaining, could not find solution"
 	(self free: line) = 0
 		ifFalse: [ ^ self none ].
+	"If no space remaining, all cell are filled"
 	sol := Cells new.
 	line hint numbers do: [ :n |
 		sol addBoxes: n;
 			addSpaces: 1 ].
-	"remove last unknown if line full"
+	"remove last space if line full"
 	^ sol size: (line cells size)
 ! !
 
 StratCount subclass: #StratRecover
 	instanceVariableNames: ''
 	package: 'Logimage'!
+!StratRecover commentStamp!
+I calculate free available moves. I radd box on hint that are bigger then free, then recovers.
+Example: hint: 3 on 4 spaces, give 1 free and then | ? X X ? |!
 
 !StratRecover methodsFor: 'as yet unclassified'!
 
@@ -1191,19 +1319,26 @@ analyse: line
 Strategy subclass: #StratFirstCover
 	instanceVariableNames: ''
 	package: 'Logimage'!
+!StratFirstCover commentStamp!
+If a first hint crosses a box, all over crossed space are boxes until hint.
+Example: hint 3, with box at 2nd place |? X ?  give | ? X X!
 
 !StratFirstCover methodsFor: 'as yet unclassified'!
 
 analyse: line
 	| pos sol |
-	"test if boxe at start"
+	"get first box from start"
 	pos := (line cells firstBox) at: #pos.
+	"no box, no sol"
 	pos > 0 ifFalse: [ ^ self none ].
-	"test if hint"
-	line hint size > 0 ifFalse: [ ^ self none ].
-	"test hint over boxes"
+	"test if hint, no sol"
+	line hint isEmpty ifTrue: [ ^ self none ].
+	"test hint over first box"
 	line hint first > pos ifFalse: [ ^ self none ].
-	sol := Cells new addUnknowns: pos-1; addBoxes: line hint first-pos+1.
+	"yes, first hint cross the first box, get sol"
+	sol := Cells new
+		addUnknowns: pos-1;
+		addBoxes: line hint first-pos+1.
 	(line cells isBetter: sol) ifFalse: [ ^ self none ].
 	^ sol
 ! !
@@ -1215,18 +1350,19 @@ Strategy subclass: #StratFirstCutSpace
 !StratFirstCutSpace methodsFor: 'as yet unclassified'!
 
 analyse: line
-	| first firstline |
+	| firstcells firstline |
 	"check if 2 or more hints"
 	line hint size >= 2 ifFalse: [ ^ self none ].
-	first := line cells firstNotSpace.
+	firstcells := line cells firstNotSpace.
 	"check if one box min in first cells"
-	first numbers size > 0 ifFalse: [ ^ self none ].
+	firstcells numbers size > 0 ifFalse: [ ^ self none ].
 	"check if only first number forced to be inside first cells"
-	(line hint at: 1) + (line hint at: 2) + 1 > first size ifFalse: [ ^ self none ].
+	(line hint at: 1) + (line hint at: 2) + 1 > firstcells size
+		ifFalse: [ ^ self none ].
 	"analyse first cells"
 	firstline := Line
 		hint: (Hint new: { line hint first })
-		cells: first.
+		cells: firstcells.
 	Strategies instance do: [ :strategy | | res |
 		res := strategy analyse: firstline.
 		res isEmpty ifFalse: [ ^ res] ].
@@ -1236,6 +1372,8 @@ analyse: line
 Strategy subclass: #StratFirstDone
 	instanceVariableNames: ''
 	package: 'Logimage'!
+!StratFirstDone commentStamp!
+I add a space after first boxes done (corresponding to first hint).!
 
 !StratFirstDone methodsFor: 'as yet unclassified'!
 
@@ -1256,7 +1394,7 @@ Strategy subclass: #StratMinSpace
 	instanceVariableNames: ''
 	package: 'Logimage'!
 !StratMinSpace commentStamp!
-I fille cells with spaces when hint are bigger than holes!
+I fill first cells with spaces when min hint are bigger than first holes.!
 
 !StratMinSpace methodsFor: 'as yet unclassified'!
 
@@ -1278,7 +1416,8 @@ Strategy subclass: #StratNotReached
 	instanceVariableNames: ''
 	package: 'Logimage'!
 !StratNotReached commentStamp!
-Fill spaces cells that cannot be reached by boxes!
+I fill with spaces, cells that can not be reached by boxes.
+Used only if one hint.!
 
 !StratNotReached methodsFor: 'as yet unclassified'!
 
@@ -1320,6 +1459,8 @@ analyse: line
 StratReverted subclass: #StratLastCover
 	instanceVariableNames: ''
 	package: 'Logimage'!
+!StratLastCover commentStamp!
+Same as first cover but by other side (invert).!
 
 !StratLastCover methodsFor: 'as yet unclassified'!
 
@@ -1351,7 +1492,7 @@ Strategy subclass: #StratSpacesOnly
 	instanceVariableNames: ''
 	package: 'Logimage'!
 !StratSpacesOnly commentStamp!
-Fill spaces if no hints!
+I fill spaces if no hints.!
 
 !StratSpacesOnly methodsFor: 'as yet unclassified'!
 
@@ -1365,6 +1506,9 @@ analyse: line
 Strategy subclass: #StratTestBox
 	instanceVariableNames: ''
 	package: 'Logimage'!
+!StratTestBox commentStamp!
+I test one box at each position, try to detect if it is possible, regarding if the number of contigus boxes are greater than hints.
+If not, it is a space.!
 
 !StratTestBox methodsFor: 'as yet unclassified'!
 

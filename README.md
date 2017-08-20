@@ -38,3 +38,19 @@ grunt devel
 Developing the project (after brought alive):
  
 Start server with `amber serve` and go to `http://localhost:4000/` in your browser and follow the instructions
+
+## How to use
+
+* Resolve a logimage
+|l| l = Logimage question. Strategist new solve: l. Application new show: l
+
+* Create quickly some objects to test:
+** Line new: '1 1|   |'
+** Line hint: '1 1' cells: '   '
+** Cells new: '   '
+** Hint new: #(1 1)
+** Hint new: '1 1'
+** ...
+
+* Test a strategy
+StratAllDone analyse: '1 1|   |'

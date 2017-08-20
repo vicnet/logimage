@@ -163,22 +163,22 @@ $core.addMethod(
 $core.method({
 selector: "start",
 protocol: 'as yet unclassified',
-fn: function (){
+fn: function(){
 var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-return $recv($recv($globals.Application)._new())._show_($recv($globals.Logimage)._question());
+return $recv($recv($globals.Application)._new())._show_($recv($globals.Logimage)._chat());
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"start",{},$globals.Application.klass)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "start\x0a\x09^ Application new show: Logimage question",
+source: "start\x0a\x09^ Application new show: Logimage chat",
 referencedClasses: ["Application", "Logimage"],
 //>>excludeEnd("ide");
-messageSends: ["show:", "new", "question"]
+messageSends: ["show:", "new", "chat"]
 }),
 $globals.Application.klass);
 
@@ -1292,7 +1292,7 @@ $core.addMethod(
 $core.method({
 selector: "firstNotSpace",
 protocol: 'as yet unclassified',
-fn: function (){
+fn: function(){
 var self=this;
 var size;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -1347,7 +1347,7 @@ catch(e) {if(e===$early)return e[0]; throw e}
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "firstNotSpace\x0a\x09\x22Return a tupple with index (starting at 1) and size of cells without spaces\x22\x0a\x09| size |\x0a\x09size := 0.\x0a\x09cells withIndexDo: [ :c :i |\x0a\x09\x09c isSpace\x0a\x09\x09\x09ifTrue: [\x0a\x09\x09\x09\x09size > 0 ifTrue: [ ^ self copyFrom: i-size to: i-1 ]\x0a\x09\x09\x09\x09]\x0a\x09\x09\x09ifFalse: [\x0a\x09\x09\x09\x09size := size + 1\x0a\x09\x09\x09\x09]\x0a\x09\x09].\x0a\x09size>0 ifTrue: [ ^ self copyFrom: cells size-size+1 ].\x0a\x09^ Cells new",
+source: "firstNotSpace\x0a\x09\x22Return first cells stopping at first space (not box, not unknown)\x22\x0a\x09| size |\x0a\x09size := 0.\x0a\x09cells withIndexDo: [ :c :i |\x0a\x09\x09c isSpace\x0a\x09\x09\x09ifTrue: [\x0a\x09\x09\x09\x09size > 0 ifTrue: [ ^ self copyFrom: i-size to: i-1 ]\x0a\x09\x09\x09\x09]\x0a\x09\x09\x09ifFalse: [\x0a\x09\x09\x09\x09size := size + 1\x0a\x09\x09\x09\x09]\x0a\x09\x09].\x0a\x09size>0 ifTrue: [ ^ self copyFrom: cells size-size+1 ].\x0a\x09^ Cells new",
 referencedClasses: ["Cells"],
 //>>excludeEnd("ide");
 messageSends: ["withIndexDo:", "ifTrue:ifFalse:", "isSpace", "ifTrue:", ">", "copyFrom:to:", "-", "+", "copyFrom:", "size", "new"]
@@ -2524,6 +2524,53 @@ $globals.Hint);
 
 $core.addMethod(
 $core.method({
+selector: "initialize",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$recv(self["@numbers"]).__eq([]);
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"initialize",{},$globals.Hint)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "initialize\x0a\x09numbers = #()",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["="]
+}),
+$globals.Hint);
+
+$core.addMethod(
+$core.method({
+selector: "isEmpty",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+return $recv(self["@numbers"])._isEmpty();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"isEmpty",{},$globals.Hint)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "isEmpty\x0a\x09^ numbers isEmpty",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["isEmpty"]
+}),
+$globals.Hint);
+
+$core.addMethod(
+$core.method({
 selector: "lastRemoved:",
 protocol: 'as yet unclassified',
 fn: function(n){
@@ -2549,7 +2596,7 @@ $core.addMethod(
 $core.method({
 selector: "max",
 protocol: 'as yet unclassified',
-fn: function (){
+fn: function(){
 var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
@@ -2575,7 +2622,7 @@ return r;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "max\x0a\x09^ numbers inject: 0 into: [ :r :e | e > r ifTrue: [e] ifFalse: [r] ]",
+source: "max\x0a\x09^ numbers\x0a\x09\x09inject: 0\x0a\x09\x09into: [ :r :e | e > r ifTrue: [e] ifFalse: [r] ]",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["inject:into:", "ifTrue:ifFalse:", ">"]
@@ -2586,7 +2633,7 @@ $core.addMethod(
 $core.method({
 selector: "min",
 protocol: 'as yet unclassified',
-fn: function (){
+fn: function(){
 var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
@@ -2612,7 +2659,7 @@ return r;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "min\x0a\x09^ numbers inject: 1000 into: [ :r :e | e < r ifTrue: [e] ifFalse: [r] ]",
+source: "min\x0a\x09^ numbers\x0a\x09\x09inject: 1000\x0a\x09\x09into: [ :r :e | e < r ifTrue: [e] ifFalse: [r] ]",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["inject:into:", "ifTrue:ifFalse:", "<"]
@@ -3928,6 +3975,29 @@ $globals.Logimage);
 
 $core.addMethod(
 $core.method({
+selector: "chat",
+protocol: 'examples',
+fn: function(){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+return self._rows_cols_([[(7), (2), (1), (2), (1)], [(1), (1), (2), (2), (3), (2), (3)], [(1), (1), (3), (3), (3), (3), (3)], [(7), (1), (1), (3), (1), (1), (3)], [(1), (1), (1), (3), (3), (1), (2), (2)], [(1), (1), (1), (3), (3), (3), (1), (1)], [(1), (1), (1), (3), (3), (3), (3), (3)], [(1), (1), (1), (3), (3), (3), (3), (3)], [(7), (3), (3), (3), (3), (3)], [(9), (3), (3), (3)], [(7), (2), (10), (7)], [(7), (1), (14)], [(1), (1), (1), (1), (3)], [(1), (1), (1), (3), (2), (1)], [(1), (1), (5), (3), (1), (3), (1)], [(1), (1), (9), (5), (3), (1)], [(11), (7), (6)], [(29)], [(1), (24)], [(3), (26)], [(4), (19), (1)], [(1), (5), (7), (2)], [(2), (1), (12), (3)], [(1), (1), (3), (12)], [(1), (1), (2), (2), (2)], [(4), (1), (4), (2), (2), (1)], [(2), (2), (4), (2), (4), (3), (4), (3)], [(1), (3), (1), (4), (1), (2), (1), (5), (1), (1), (1)], [(1), (5), (1), (1), (6), (1), (3), (1), (1), (2)], [(2), (3), (1), (3), (1), (3), (1), (1)], [(6), (2), (5), (2), (3), (2)], [(6), (6), (3), (4)], [(1), (4), (1), (6), (1), (1), (3)], [(1), (4), (1), (7), (1), (1), (3), (1)], [(2), (3), (2), (1), (5), (1), (5), (1)], [(1), (4), (2), (1), (3), (2), (5), (2)], [(1), (3), (1), (2), (4), (6), (1)], [(7), (1), (1), (1), (1), (7), (1)], [(6), (1), (2), (2), (2), (9), (1)], [(5), (2), (9), (1)], [(6), (1), (2), (4), (8)], [(6), (2), (4), (9)], [(8), (5), (4)], [(2), (2), (3), (2)], [(3), (4), (3), (4)]],[[(2), (4), (3)], [(9), (6), (4), (3), (2), (5)], [(1), (1), (1), (2), (2), (2), (8), (1)], [(1), (1), (1), (2), (3), (1), (2), (1), (11), (1)], [(1), (6), (2), (1), (4), (4), (13)], [(1), (1), (1), (6), (1), (2), (14), (8)], [(1), (1), (1), (2), (1), (2), (6), (4), (3)], [(9), (2), (12), (2), (1)], [(5), (2), (1), (1), (5), (3), (1)], [(1), (2), (6), (2), (1), (1), (1), (6)], [(3), (1), (8), (2), (2), (1)], [(2), (6), (7), (1), (1), (2), (4), (1)], [(8), (7), (1), (3), (2), (3)], [(1), (7), (6), (1), (2), (3)], [(2), (2), (7), (1), (5)], [(2), (7), (8), (1), (3), (9)], [(9), (8), (2), (2), (1), (7), (1)], [(1), (7), (6), (13), (1), (1)], [(2), (2), (4), (10), (4), (2)], [(3), (2), (5), (1), (1), (8), (1), (1)], [(3), (7), (7), (2), (1), (1), (2)], [(10), (6), (1), (3), (2)], [(7), (8), (1), (2), (3), (2)], [(1), (1), (8), (1), (4), (3), (3)], [(3), (6), (8), (1), (2), (2), (5), (4)], [(1), (8), (6), (2), (4), (1), (10), (1)], [(1), (3), (6), (5), (7), (2), (9)], [(1), (2), (6), (1), (6), (9)], [(4), (6), (7), (2), (12)], [(11), (6), (12), (7)], [(2), (7), (6), (1), (1), (2), (8)], [(2), (5), (2), (1), (1), (1), (3), (5)], [(5), (2), (1), (1), (1), (8), (1)], [(1), (2), (1), (1), (1)], [(3), (3)]]);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"chat",{},$globals.Logimage.klass)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "chat\x0a\x09^ self\x0a\x09\x09rows: #(\x0a\x09\x09\x09#(       7 2 1 2 1 )\x0a\x09\x09\x09#(   1 1 2 2 3 2 3 )\x0a\x09\x09\x09#(   1 1 3 3 3 3 3 )\x0a\x09\x09\x09#(   7 1 1 3 1 1 3 )\x0a\x09\x09\x09#( 1 1 1 3 3 1 2 2 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#( 1 1 1 3 3 3 1 1 )\x0a\x09\x09\x09#( 1 1 1 3 3 3 3 3 )\x0a\x09\x09\x09#( 1 1 1 3 3 3 3 3 )\x0a\x09\x09\x09#(     7 3 3 3 3 3 )\x0a\x09\x09\x09#(         9 3 3 3 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#(        7 2 10 7 )\x0a\x09\x09\x09#(          7  1 14 )\x0a\x09\x09\x09#(       1 1 1 1 3 )\x0a\x09\x09\x09#(     1 1 1 3 2 1 )\x0a\x09\x09\x09#(   1 1 5 3 1 3 1 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#(     1 1 9 5 3 1 )\x0a\x09\x09\x09#(          11 7 6 )\x0a\x09\x09\x09#(               29 )\x0a\x09\x09\x09#(             1 24 )\x0a\x09\x09\x09#(             3 26 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#(          4 19 1 )\x0a\x09\x09\x09#(        1 5  7 2 )\x0a\x09\x09\x09#(        2 1 12 3 )\x0a\x09\x09\x09#(        1 1  3 12 )\x0a\x09\x09\x09#(      1 1 2  2 2 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#(           4 1 4 2 2 1 )\x0a\x09\x09\x09#(       2 2 4 2 4 3 4 3 )\x0a\x09\x09\x09#( 1 3 1 4 1 2 1 5 1 1 1 )\x0a\x09\x09\x09#(   1 5 1 1 6 1 3 1 1 2 )\x0a\x09\x09\x09#(       2 3 1 3 1 3 1 1 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#(     6 2 5 2 3 2 )\x0a\x09\x09\x09#(         6 6 3 4 )\x0a\x09\x09\x09#(   1 4 1 6 1 1 3 )\x0a\x09\x09\x09#( 1 4 1 7 1 1 3 1 )\x0a\x09\x09\x09#( 2 3 2 1 5 1 5 1 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#( 1 4 2 1 3 2 5 2 )\x0a\x09\x09\x09#(   1 3 1 2 4 6 1 )\x0a\x09\x09\x09#(   7 1 1 1 1 7 1 )\x0a\x09\x09\x09#(   6 1 2 2 2 9 1 )\x0a\x09\x09\x09#(         5 2 9 1 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#( 6 1 2 4 8 )\x0a\x09\x09\x09#(   6 2 4 9 )\x0a\x09\x09\x09#(     8 5 4 )\x0a\x09\x09\x09#(   2 2 3 2 )\x0a\x09\x09\x09#(   3 4 3 4 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09)\x0a\x09\x09cols: #(\x0a\x09\x09\x09#( 2 4 3 )\x0a\x09\x09\x09#( 9 6 4 3 2 5 )\x0a\x09\x09\x09#( 1 1 1 2 2 2 8 1 )\x0a\x09\x09\x09#( 1 1 1 2 3 1 2 1 11 1 )\x0a\x09\x09\x09#( 1 6 2 1 4 4 13 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#( 1 1 1 6 1 2 14 8 )\x0a\x09\x09\x09#( 1 1 1 2 1 2 6 4 3 )\x0a\x09\x09\x09#( 9 2 12 2 1 )\x0a\x09\x09\x09#( 5 2 1 1 5 3 1 )\x0a\x09\x09\x09#( 1 2 6 2 1 1 1 6 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#( 3 1 8 2 2 1 )\x0a\x09\x09\x09#( 2 6 7 1 1 2 4 1 )\x0a\x09\x09\x09#( 8 7 1 3 2 3 )\x0a\x09\x09\x09#( 1 7 6 1 2 3 )\x0a\x09\x09\x09#( 2 2 7 1 5 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#( 2 7 8 1 3 9 )\x0a\x09\x09\x09#( 9 8 2 2 1 7 1 )\x0a\x09\x09\x09#( 1 7 6 13 1 1 )\x0a\x09\x09\x09#( 2 2 4 10 4 2 )\x0a\x09\x09\x09#( 3 2 5 1 1 8 1 1 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#( 3 7 7 2 1 1 2 )\x0a\x09\x09\x09#( 10 6 1 3 2 )\x0a\x09\x09\x09#( 7 8 1 2 3 2 )\x0a\x09\x09\x09#( 1 1 8 1 4 3 3 )\x0a\x09\x09\x09#( 3 6 8 1 2 2 5 4 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#( 1 8 6 2 4 1 10 1 )\x0a\x09\x09\x09#( 1 3 6 5 7 2 9 )\x0a\x09\x09\x09#( 1 2 6 1 6 9 )\x0a\x09\x09\x09#( 4 6 7 2 12 )\x0a\x09\x09\x09#( 11 6 12 7 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#( 2 7 6 1 1 2 8 )\x0a\x09\x09\x09#( 2 5 2 1 1 1 3 5 )\x0a\x09\x09\x09#( 5 2 1 1 1 8 1 )\x0a\x09\x09\x09#( 1 2 1 1 1 )\x0a\x09\x09\x09#( 3 3 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09)",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["rows:cols:"]
+}),
+$globals.Logimage.klass);
+
+$core.addMethod(
+$core.method({
 selector: "joconde",
 protocol: 'examples',
 fn: function (){
@@ -4232,6 +4302,9 @@ $globals.Strategies.klass);
 
 
 $core.addClass('Strategist', $globals.Object, [], 'Logimage');
+//>>excludeStart("ide", pragmas.excludeIdeData);
+$globals.Strategist.comment="I apply (analyse, get a solution then apply) one or more strategies on a logimage, or a line.";
+//>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
 selector: "apply:on:",
@@ -4508,6 +4581,9 @@ $globals.Strategist);
 
 
 $core.addClass('Strategy', $globals.Object, [], 'Logimage');
+//>>excludeStart("ide", pragmas.excludeIdeData);
+$globals.Strategy.comment="I analyse a line and returns a solution with spaces and boxes.";
+//>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
 selector: "analyse:",
@@ -4596,13 +4672,13 @@ $globals.Strategy.klass);
 
 $core.addClass('StratCount', $globals.Strategy, [], 'Logimage');
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.StratCount.comment="Helper to implement strategy";
+$globals.StratCount.comment="I am a helper to implement strategy.\x0aI give some messages to count different sort of cells.";
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
 selector: "free:",
 protocol: 'as yet unclassified',
-fn: function (line){
+fn: function(line){
 var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
@@ -4627,7 +4703,7 @@ return $recv($recv($recv(line)._cells())._size()).__minus(self._occupation_($rec
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["line"],
-source: "free: line\x0a\x09\x22I return the number of cells that are free to move\x22\x0a\x09(line hint size = 0) ifTrue: [ ^ 0 ].\x0a\x09^ (line cells size) - (self occupation: line hint)",
+source: "free: line\x0a\x09\x22I return the number of cells that are free to move\x22\x0a\x0a\x09\x22if no more hint, no free spaces\x22\x0a\x09(line hint size = 0) ifTrue: [ ^ 0 ].\x0a\x09^ (line cells size) - (self occupation: line hint)",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["ifTrue:", "=", "size", "hint", "-", "cells", "occupation:"]
@@ -4638,7 +4714,7 @@ $core.addMethod(
 $core.method({
 selector: "occupation:",
 protocol: 'as yet unclassified',
-fn: function (hint){
+fn: function(hint){
 var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
@@ -4659,7 +4735,7 @@ return $recv($recv(self._sum_(hint)).__plus($recv(hint)._size())).__minus((1));
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["hint"],
-source: "occupation: hint\x0a\x09\x22I return the number of cell all numbers fill, with one space between each\x22\x0a\x09(hint size = 0) ifTrue: [ ^ 0 ].\x0a\x09^ (self sum: hint) + hint size - 1",
+source: "occupation: hint\x0a\x09\x22I return the number of cells filled for all numbers in hint,\x0a\x09 with one space between each, minus one (the last)\x22\x0a\x09(hint size = 0) ifTrue: [ ^ 0 ].\x0a\x09^ (self sum: hint) + hint size - 1",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["ifTrue:", "=", "size", "-", "+", "sum:"]
@@ -4701,13 +4777,13 @@ $globals.StratCount);
 
 $core.addClass('StratAllDone', $globals.StratCount, [], 'Logimage');
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.StratAllDone.comment="Fill with boxes and spaces if no more rooms";
+$globals.StratAllDone.comment="I try to detect if a line is filled with boxes and spaces, ie no more rooms.";
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
 selector: "analyse:",
 protocol: 'as yet unclassified',
-fn: function (line){
+fn: function(line){
 var self=this;
 var sol;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -4737,7 +4813,7 @@ return $recv(sol)._size_($recv($recv(line)._cells())._size());
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["line"],
-source: "analyse: line\x0a\x09| sol |\x0a\x09\x22If no space remaining, all cell are filled\x22\x0a\x09(self free: line) = 0\x0a\x09\x09ifFalse: [ ^ self none ].\x0a\x09sol := Cells new.\x0a\x09line hint numbers do: [ :n |\x0a\x09\x09sol addBoxes: n;\x0a\x09\x09\x09addSpaces: 1 ].\x0a\x09\x22remove last unknown if line full\x22\x0a\x09^ sol size: (line cells size)",
+source: "analyse: line\x0a\x09| sol |\x0a\x09\x22If some space remaining, could not find solution\x22\x0a\x09(self free: line) = 0\x0a\x09\x09ifFalse: [ ^ self none ].\x0a\x09\x22If no space remaining, all cell are filled\x22\x0a\x09sol := Cells new.\x0a\x09line hint numbers do: [ :n |\x0a\x09\x09sol addBoxes: n;\x0a\x09\x09\x09addSpaces: 1 ].\x0a\x09\x22remove last space if line full\x22\x0a\x09^ sol size: (line cells size)",
 referencedClasses: ["Cells"],
 //>>excludeEnd("ide");
 messageSends: ["ifFalse:", "=", "free:", "none", "new", "do:", "numbers", "hint", "addBoxes:", "addSpaces:", "size:", "size", "cells"]
@@ -4747,6 +4823,9 @@ $globals.StratAllDone);
 
 
 $core.addClass('StratRecover', $globals.StratCount, [], 'Logimage');
+//>>excludeStart("ide", pragmas.excludeIdeData);
+$globals.StratRecover.comment="I calculate free available moves. I radd box on hint that are bigger then free, then recovers.\x0aExample: hint: 3 on 4 spaces, give 1 free and then | ? X X ? |";
+//>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
 selector: "analyse:",
@@ -4803,17 +4882,20 @@ $globals.StratRecover);
 
 
 $core.addClass('StratFirstCover', $globals.Strategy, [], 'Logimage');
+//>>excludeStart("ide", pragmas.excludeIdeData);
+$globals.StratFirstCover.comment="If a first hint crosses a box, all over crossed space are boxes until hint.\x0aExample: hint 3, with box at 2nd place |? X ?  give | ? X X";
+//>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
 selector: "analyse:",
 protocol: 'as yet unclassified',
-fn: function (line){
+fn: function(line){
 var self=this;
 var pos,sol;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-var $2,$1,$3,$4,$7,$6,$5,$8,$11,$10,$9,$12,$13,$14,$15;
+var $2,$1,$3,$4,$6,$5,$7,$10,$9,$8,$11,$12,$13,$14;
 $2=$recv(line)._cells();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["cells"]=1;
@@ -4831,47 +4913,43 @@ $ctx1.sendIdx["none"]=1;
 //>>excludeEnd("ctx");
 return $4;
 };
-$7=$recv(line)._hint();
+$6=$recv(line)._hint();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["hint"]=1;
 //>>excludeEnd("ctx");
-$6=$recv($7)._size();
-$5=$recv($6).__gt((0));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx[">"]=2;
-//>>excludeEnd("ctx");
-if(!$core.assert($5)){
-$8=self._none();
+$5=$recv($6)._isEmpty();
+if($core.assert($5)){
+$7=self._none();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["none"]=2;
 //>>excludeEnd("ctx");
-return $8;
+return $7;
 };
-$11=$recv(line)._hint();
+$10=$recv(line)._hint();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["hint"]=2;
 //>>excludeEnd("ctx");
-$10=$recv($11)._first();
+$9=$recv($10)._first();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["first"]=1;
 //>>excludeEnd("ctx");
-$9=$recv($10).__gt(pos);
-if(!$core.assert($9)){
-$12=self._none();
+$8=$recv($9).__gt(pos);
+if(!$core.assert($8)){
+$11=self._none();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["none"]=3;
 //>>excludeEnd("ctx");
-return $12;
+return $11;
 };
-$13=$recv($globals.Cells)._new();
-$14=$recv(pos).__minus((1));
+$12=$recv($globals.Cells)._new();
+$13=$recv(pos).__minus((1));
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["-"]=1;
 //>>excludeEnd("ctx");
-$recv($13)._addUnknowns_($14);
-sol=$recv($13)._addBoxes_($recv($recv($recv($recv(line)._hint())._first()).__minus(pos)).__plus((1)));
-$15=$recv($recv(line)._cells())._isBetter_(sol);
-if(!$core.assert($15)){
+$recv($12)._addUnknowns_($13);
+sol=$recv($12)._addBoxes_($recv($recv($recv($recv(line)._hint())._first()).__minus(pos)).__plus((1)));
+$14=$recv($recv(line)._cells())._isBetter_(sol);
+if(!$core.assert($14)){
 return self._none();
 };
 return sol;
@@ -4881,10 +4959,10 @@ return sol;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["line"],
-source: "analyse: line\x0a\x09| pos sol |\x0a\x09\x22test if boxe at start\x22\x0a\x09pos := (line cells firstBox) at: #pos.\x0a\x09pos > 0 ifFalse: [ ^ self none ].\x0a\x09\x22test if hint\x22\x0a\x09line hint size > 0 ifFalse: [ ^ self none ].\x0a\x09\x22test hint over boxes\x22\x0a\x09line hint first > pos ifFalse: [ ^ self none ].\x0a\x09sol := Cells new addUnknowns: pos-1; addBoxes: line hint first-pos+1.\x0a\x09(line cells isBetter: sol) ifFalse: [ ^ self none ].\x0a\x09^ sol",
+source: "analyse: line\x0a\x09| pos sol |\x0a\x09\x22get first box from start\x22\x0a\x09pos := (line cells firstBox) at: #pos.\x0a\x09\x22no box, no sol\x22\x0a\x09pos > 0 ifFalse: [ ^ self none ].\x0a\x09\x22test if hint, no sol\x22\x0a\x09line hint isEmpty ifTrue: [ ^ self none ].\x0a\x09\x22test hint over first box\x22\x0a\x09line hint first > pos ifFalse: [ ^ self none ].\x0a\x09\x22yes, first hint cross the first box, get sol\x22\x0a\x09sol := Cells new\x0a\x09\x09addUnknowns: pos-1;\x0a\x09\x09addBoxes: line hint first-pos+1.\x0a\x09(line cells isBetter: sol) ifFalse: [ ^ self none ].\x0a\x09^ sol",
 referencedClasses: ["Cells"],
 //>>excludeEnd("ide");
-messageSends: ["at:", "firstBox", "cells", "ifFalse:", ">", "none", "size", "hint", "first", "addUnknowns:", "new", "-", "addBoxes:", "+", "isBetter:"]
+messageSends: ["at:", "firstBox", "cells", "ifFalse:", ">", "none", "ifTrue:", "isEmpty", "hint", "first", "addUnknowns:", "new", "-", "addBoxes:", "+", "isBetter:"]
 }),
 $globals.StratFirstCover);
 
@@ -4895,9 +4973,9 @@ $core.addMethod(
 $core.method({
 selector: "analyse:",
 protocol: 'as yet unclassified',
-fn: function (line){
+fn: function(line){
 var self=this;
-var first,firstline;
+var firstcells,firstline;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
@@ -4920,8 +4998,8 @@ $ctx1.sendIdx["none"]=1;
 //>>excludeEnd("ctx");
 return $4;
 };
-first=$recv($recv(line)._cells())._firstNotSpace();
-$6=$recv($recv(first)._numbers())._size();
+firstcells=$recv($recv(line)._cells())._firstNotSpace();
+$6=$recv($recv(firstcells)._numbers())._size();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["size"]=2;
 //>>excludeEnd("ctx");
@@ -4954,7 +5032,7 @@ $9=$recv($10).__plus((1));
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["+"]=1;
 //>>excludeEnd("ctx");
-$8=$recv($9).__gt($recv(first)._size());
+$8=$recv($9).__gt($recv(firstcells)._size());
 if(!$core.assert($8)){
 $15=self._none();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -4962,7 +5040,7 @@ $ctx1.sendIdx["none"]=3;
 //>>excludeEnd("ctx");
 return $15;
 };
-firstline=$recv($globals.Line)._hint_cells_($recv($globals.Hint)._new_([$recv($recv(line)._hint())._first()]),first);
+firstline=$recv($globals.Line)._hint_cells_($recv($globals.Hint)._new_([$recv($recv(line)._hint())._first()]),firstcells);
 $recv($recv($globals.Strategies)._instance())._do_((function(strategy){
 var res;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -4982,12 +5060,12 @@ return self._none();
 }
 catch(e) {if(e===$early)return e[0]; throw e}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line,first:first,firstline:firstline},$globals.StratFirstCutSpace)});
+}, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line,firstcells:firstcells,firstline:firstline},$globals.StratFirstCutSpace)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["line"],
-source: "analyse: line\x0a\x09| first firstline |\x0a\x09\x22check if 2 or more hints\x22\x0a\x09line hint size >= 2 ifFalse: [ ^ self none ].\x0a\x09first := line cells firstNotSpace.\x0a\x09\x22check if one box min in first cells\x22\x0a\x09first numbers size > 0 ifFalse: [ ^ self none ].\x0a\x09\x22check if only first number forced to be inside first cells\x22\x0a\x09(line hint at: 1) + (line hint at: 2) + 1 > first size ifFalse: [ ^ self none ].\x0a\x09\x22analyse first cells\x22\x0a\x09firstline := Line\x0a\x09\x09hint: (Hint new: { line hint first })\x0a\x09\x09cells: first.\x0a\x09Strategies instance do: [ :strategy | | res |\x0a\x09\x09res := strategy analyse: firstline.\x0a\x09\x09res isEmpty ifFalse: [ ^ res] ].\x0a\x09^ self none",
+source: "analyse: line\x0a\x09| firstcells firstline |\x0a\x09\x22check if 2 or more hints\x22\x0a\x09line hint size >= 2 ifFalse: [ ^ self none ].\x0a\x09firstcells := line cells firstNotSpace.\x0a\x09\x22check if one box min in first cells\x22\x0a\x09firstcells numbers size > 0 ifFalse: [ ^ self none ].\x0a\x09\x22check if only first number forced to be inside first cells\x22\x0a\x09(line hint at: 1) + (line hint at: 2) + 1 > firstcells size\x0a\x09\x09ifFalse: [ ^ self none ].\x0a\x09\x22analyse first cells\x22\x0a\x09firstline := Line\x0a\x09\x09hint: (Hint new: { line hint first })\x0a\x09\x09cells: firstcells.\x0a\x09Strategies instance do: [ :strategy | | res |\x0a\x09\x09res := strategy analyse: firstline.\x0a\x09\x09res isEmpty ifFalse: [ ^ res] ].\x0a\x09^ self none",
 referencedClasses: ["Line", "Hint", "Strategies"],
 //>>excludeEnd("ide");
 messageSends: ["ifFalse:", ">=", "size", "hint", "none", "firstNotSpace", "cells", ">", "numbers", "+", "at:", "hint:cells:", "new:", "first", "do:", "instance", "analyse:", "isEmpty"]
@@ -4997,6 +5075,9 @@ $globals.StratFirstCutSpace);
 
 
 $core.addClass('StratFirstDone', $globals.Strategy, [], 'Logimage');
+//>>excludeStart("ide", pragmas.excludeIdeData);
+$globals.StratFirstDone.comment="I add a space after first boxes done (corresponding to first hint).";
+//>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
 selector: "analyse:",
@@ -5053,7 +5134,7 @@ $globals.StratFirstDone);
 
 $core.addClass('StratMinSpace', $globals.Strategy, [], 'Logimage');
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.StratMinSpace.comment="I fille cells with spaces when hint are bigger than holes";
+$globals.StratMinSpace.comment="I fill first cells with spaces when min hint are bigger than first holes.";
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
@@ -5128,7 +5209,7 @@ $globals.StratMinSpace);
 
 $core.addClass('StratNotReached', $globals.Strategy, [], 'Logimage');
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.StratNotReached.comment="Fill spaces cells that cannot be reached by boxes";
+$globals.StratNotReached.comment="I fill with spaces, cells that can not be reached by boxes.\x0aUsed only if one hint.";
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
@@ -5281,6 +5362,9 @@ $globals.StratReverted);
 
 
 $core.addClass('StratLastCover', $globals.StratReverted, [], 'Logimage');
+//>>excludeStart("ide", pragmas.excludeIdeData);
+$globals.StratLastCover.comment="Same as first cover but by other side (invert).";
+//>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
 selector: "initialize",
@@ -5363,7 +5447,7 @@ $globals.StratLastDone);
 
 $core.addClass('StratSpacesOnly', $globals.Strategy, [], 'Logimage');
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.StratSpacesOnly.comment="Fill spaces if no hints";
+$globals.StratSpacesOnly.comment="I fill spaces if no hints.";
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
@@ -5400,6 +5484,9 @@ $globals.StratSpacesOnly);
 
 
 $core.addClass('StratTestBox', $globals.Strategy, [], 'Logimage');
+//>>excludeStart("ide", pragmas.excludeIdeData);
+$globals.StratTestBox.comment="I test one box at each position, try to detect if it is possible, regarding if the number of contigus boxes are greater than hints.\x0aIf not, it is a space.";
+//>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
 selector: "analyse:",
