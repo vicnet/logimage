@@ -4218,6 +4218,30 @@ messageSends: ["collect:", "new"]
 }),
 $globals.Strategies);
 
+$core.addMethod(
+$core.method({
+selector: "keysAndValuesDo:",
+protocol: 'as yet unclassified',
+fn: function(aBlock){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$recv(self["@list"])._keysAndValuesDo_(aBlock);
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"keysAndValuesDo:",{aBlock:aBlock},$globals.Strategies)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["aBlock"],
+source: "keysAndValuesDo: aBlock\x0a\x09list keysAndValuesDo: aBlock",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["keysAndValuesDo:"]
+}),
+$globals.Strategies);
+
 
 $globals.Strategies.klass.iVarNames = ['instance'];
 $core.addMethod(
@@ -4611,6 +4635,30 @@ $globals.Strategy);
 
 $core.addMethod(
 $core.method({
+selector: "isBidirectional",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+self._subclassResponsibility();
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"isBidirectional",{},$globals.Strategy)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "isBidirectional\x0a\x09self subclassResponsibility",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["subclassResponsibility"]
+}),
+$globals.Strategy);
+
+$core.addMethod(
+$core.method({
 selector: "none",
 protocol: 'as yet unclassified',
 fn: function (){
@@ -4820,11 +4868,29 @@ messageSends: ["ifFalse:", "=", "free:", "none", "new", "do:", "numbers", "hint"
 }),
 $globals.StratAllDone);
 
+$core.addMethod(
+$core.method({
+selector: "isBidirectional",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+return true;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "isBidirectional\x0a\x09^ true",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.StratAllDone);
+
 
 
 $core.addClass('StratRecover', $globals.StratCount, [], 'Logimage');
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.StratRecover.comment="I calculate free available moves. I radd box on hint that are bigger then free, then recovers.\x0aExample: hint: 3 on 4 spaces, give 1 free and then | ? X X ? |";
+$globals.StratRecover.comment="I calculate free available moves. I add box on hint that are bigger then free, then recovers.\x0aExample: hint: 3 on 4 spaces, give 1 free and then | ? X X ? |\x0aDuplicate 'StratAllDone' if free cells are  0 !";
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
@@ -4876,6 +4942,24 @@ source: "analyse: line\x0a\x09| free sol |\x0a\x09free := self free: line.\x0a\x
 referencedClasses: ["Cells"],
 //>>excludeEnd("ide");
 messageSends: ["free:", "new", "do:", "hint", "addUnknowns:", "min:", "addBoxes:", "-", "size:", "size", "cells", "ifFalse:", "isBetter:", "none"]
+}),
+$globals.StratRecover);
+
+$core.addMethod(
+$core.method({
+selector: "isBidirectional",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+return true;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "isBidirectional\x0a\x09^ true",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
 }),
 $globals.StratRecover);
 
@@ -4966,6 +5050,24 @@ messageSends: ["at:", "firstBox", "cells", "ifFalse:", ">", "none", "ifTrue:", "
 }),
 $globals.StratFirstCover);
 
+$core.addMethod(
+$core.method({
+selector: "isBidirectional",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+return false;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "isBidirectional\x0a\x09^ false",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.StratFirstCover);
+
 
 
 $core.addClass('StratFirstCutSpace', $globals.Strategy, [], 'Logimage');
@@ -4979,66 +5081,47 @@ var firstcells,firstline;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-var $3,$2,$1,$4,$6,$5,$7,$12,$11,$14,$13,$10,$9,$8,$15,$16;
+var $2,$1,$3,$4,$5,$7,$6,$8,$9;
 var $early={};
 try {
-$3=$recv(line)._hint();
+$2=$recv(line)._hint();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["hint"]=1;
 //>>excludeEnd("ctx");
-$2=$recv($3)._size();
+$1=$recv($2)._isEmpty();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["size"]=1;
+$ctx1.sendIdx["isEmpty"]=1;
 //>>excludeEnd("ctx");
-$1=$recv($2).__gt_eq((2));
-if(!$core.assert($1)){
-$4=self._none();
+if($core.assert($1)){
+$3=self._none();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["none"]=1;
 //>>excludeEnd("ctx");
-return $4;
+return $3;
 };
 firstcells=$recv($recv(line)._cells())._firstNotSpace();
-$6=$recv($recv(firstcells)._numbers())._size();
+$4=$recv(firstcells)._isEmpty();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["size"]=2;
+$ctx1.sendIdx["isEmpty"]=2;
 //>>excludeEnd("ctx");
-$5=$recv($6).__gt((0));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx[">"]=1;
-//>>excludeEnd("ctx");
-if(!$core.assert($5)){
-$7=self._none();
+if($core.assert($4)){
+$5=self._none();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["none"]=2;
 //>>excludeEnd("ctx");
-return $7;
+return $5;
 };
-$12=$recv(line)._hint();
+$7=$recv(line)._hint();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["hint"]=2;
 //>>excludeEnd("ctx");
-$11=$recv($12)._at_((1));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["at:"]=1;
-//>>excludeEnd("ctx");
-$14=$recv(line)._hint();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["hint"]=3;
-//>>excludeEnd("ctx");
-$13=$recv($14)._at_((2));
-$10=$recv($11).__plus($13);
-$9=$recv($10).__plus((1));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["+"]=1;
-//>>excludeEnd("ctx");
-$8=$recv($9).__gt($recv(firstcells)._size());
-if(!$core.assert($8)){
-$15=self._none();
+$6=self._isFirstForced_on_($7,firstcells);
+if(!$core.assert($6)){
+$8=self._none();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["none"]=3;
 //>>excludeEnd("ctx");
-return $15;
+return $8;
 };
 firstline=$recv($globals.Line)._hint_cells_($recv($globals.Hint)._new_([$recv($recv(line)._hint())._first()]),firstcells);
 $recv($recv($globals.Strategies)._instance())._do_((function(strategy){
@@ -5048,8 +5131,8 @@ return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
 res=$recv(strategy)._analyse_(firstline);
 res;
-$16=$recv(res)._isEmpty();
-if(!$core.assert($16)){
+$9=$recv(res)._isEmpty();
+if(!$core.assert($9)){
 throw $early=[res];
 };
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -5065,10 +5148,85 @@ catch(e) {if(e===$early)return e[0]; throw e}
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["line"],
-source: "analyse: line\x0a\x09| firstcells firstline |\x0a\x09\x22check if 2 or more hints\x22\x0a\x09line hint size >= 2 ifFalse: [ ^ self none ].\x0a\x09firstcells := line cells firstNotSpace.\x0a\x09\x22check if one box min in first cells\x22\x0a\x09firstcells numbers size > 0 ifFalse: [ ^ self none ].\x0a\x09\x22check if only first number forced to be inside first cells\x22\x0a\x09(line hint at: 1) + (line hint at: 2) + 1 > firstcells size\x0a\x09\x09ifFalse: [ ^ self none ].\x0a\x09\x22analyse first cells\x22\x0a\x09firstline := Line\x0a\x09\x09hint: (Hint new: { line hint first })\x0a\x09\x09cells: firstcells.\x0a\x09Strategies instance do: [ :strategy | | res |\x0a\x09\x09res := strategy analyse: firstline.\x0a\x09\x09res isEmpty ifFalse: [ ^ res] ].\x0a\x09^ self none",
+source: "analyse: line\x0a\x09| firstcells firstline |\x0a\x09\x22check min hint size\x22\x0a\x09line hint isEmpty ifTrue: [ ^ self none ].\x0a\x0a\x09\x22get first cells\x22\x0a\x09firstcells := line cells firstNotSpace.\x0a\x09firstcells isEmpty ifTrue: [ ^ self none ].\x0a\x0a\x09\x22check if only first number forced to be inside first cells\x22\x0a\x09(self isFirstForced: line hint on: firstcells)\x0a\x09\x09ifFalse: [ ^ self none ].\x0a\x0a\x09\x22analyse first cells\x22\x0a\x09firstline := Line\x0a\x09\x09hint: (Hint new: { line hint first })\x0a\x09\x09cells: firstcells.\x0a\x09Strategies instance do: [ :strategy | | res |\x0a\x09\x09res := strategy analyse: firstline.\x0a\x09\x09res isEmpty ifFalse: [ ^ res] ].\x0a\x09^ self none",
 referencedClasses: ["Line", "Hint", "Strategies"],
 //>>excludeEnd("ide");
-messageSends: ["ifFalse:", ">=", "size", "hint", "none", "firstNotSpace", "cells", ">", "numbers", "+", "at:", "hint:cells:", "new:", "first", "do:", "instance", "analyse:", "isEmpty"]
+messageSends: ["ifTrue:", "isEmpty", "hint", "none", "firstNotSpace", "cells", "ifFalse:", "isFirstForced:on:", "hint:cells:", "new:", "first", "do:", "instance", "analyse:"]
+}),
+$globals.StratFirstCutSpace);
+
+$core.addMethod(
+$core.method({
+selector: "isBidirectional",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+return false;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "isBidirectional\x0a\x09^ false",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.StratFirstCutSpace);
+
+$core.addMethod(
+$core.method({
+selector: "isFirstForced:on:",
+protocol: 'as yet unclassified',
+fn: function(hint,firstcells){
+var self=this;
+var firstbox;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $2,$1,$4,$3,$8,$7,$6,$5;
+firstbox=$recv(firstcells)._firstBox();
+$2=$recv(firstbox)._at_("pos");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["at:"]=1;
+//>>excludeEnd("ctx");
+$1=$recv($2).__gt((0));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[">"]=1;
+//>>excludeEnd("ctx");
+if(!$core.assert($1)){
+return false;
+};
+$4=$recv(hint)._size();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["size"]=1;
+//>>excludeEnd("ctx");
+$3=$recv($4).__gt_eq((2));
+if($core.assert($3)){
+$8=$recv(hint)._at_((1));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["at:"]=2;
+//>>excludeEnd("ctx");
+$7=$recv($8).__plus($recv(hint)._at_((2)));
+$6=$recv($7).__plus((1));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["+"]=1;
+//>>excludeEnd("ctx");
+$5=$recv($6).__gt($recv(firstcells)._size());
+if($core.assert($5)){
+return true;
+};
+};
+return false;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"isFirstForced:on:",{hint:hint,firstcells:firstcells,firstbox:firstbox},$globals.StratFirstCutSpace)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["hint", "firstcells"],
+source: "isFirstForced: hint on: firstcells\x0a\x09\x22check if only first number forced to be inside first cells\x22\x0a\x09\x22 hint contains at least one element, and cells one cell\x22\x0a\x09| firstbox |\x0a\x09firstbox := firstcells firstBox.\x0a\x09\x22check if one box min in first cells\x22\x0a\x09(firstbox at: #pos) > 0 ifFalse: [ ^ false ].\x0a\x0a\x09\x22check if only first number forced to be inside first cells\x22\x0a\x0a\x09\x22check for 2 or more hints\x22\x0a\x09hint size >= 2 ifTrue: [\x0a\x09\x09(hint at: 1) + (hint at: 2) + 1 > firstcells size\x0a\x09\x09\x09ifTrue: [ ^ true ]\x0a\x09\x09].\x0a\x09\x22check for 1 or more hints\x22\x0a\x22\x09hint size >= 1 ifTrue: [\x0a\x09\x09(hint at: 1) >= (firstbox at: #pos)\x0a\x09\x09\x09ifTrue: [ ^ true ]\x0a\x09\x09].\x0a\x22\x0a\x09\x22no good case, could not be sure that first hint is inside cells\x22\x0a\x09^ false",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["firstBox", "ifFalse:", ">", "at:", "ifTrue:", ">=", "size", "+"]
 }),
 $globals.StratFirstCutSpace);
 
@@ -5127,6 +5285,24 @@ source: "analyse: line\x0a\x09| first |\x0a\x09\x22check if first box is at begi
 referencedClasses: ["Cells"],
 //>>excludeEnd("ide");
 messageSends: ["firstBox", "cells", "ifFalse:", "=", "at:", "none", "first", "hint", "addBoxes:", "new", "addSpaces:"]
+}),
+$globals.StratFirstDone);
+
+$core.addMethod(
+$core.method({
+selector: "isBidirectional",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+return false;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "isBidirectional\x0a\x09^ false",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
 }),
 $globals.StratFirstDone);
 
@@ -5202,6 +5378,24 @@ source: "analyse: line\x0a\x09| min free |\x0a\x09\x22Get min hint, and check if
 referencedClasses: ["Cells"],
 //>>excludeEnd("ide");
 messageSends: ["min", "hint", "ifFalse:", ">", "none", "firstFreeSpace", "cells", "at:", "addUnknowns:", "new", "-", "addSpaces:"]
+}),
+$globals.StratMinSpace);
+
+$core.addMethod(
+$core.method({
+selector: "isBidirectional",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+return true;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "isBidirectional\x0a\x09^ true",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
 }),
 $globals.StratMinSpace);
 
@@ -5312,6 +5506,24 @@ messageSends: ["ifFalse:", "==", "size", "hint", "none", "firstBox", "cells", "i
 }),
 $globals.StratNotReached);
 
+$core.addMethod(
+$core.method({
+selector: "isBidirectional",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+return true;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "isBidirectional\x0a\x09^ true",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.StratNotReached);
+
 
 
 $core.addClass('StratReverted', $globals.Strategy, ['strategy'], 'Logimage');
@@ -5356,6 +5568,24 @@ source: "analyse: line\x0a\x09| sol |\x0a\x09\x22Use strategy on reversed line, 
 referencedClasses: ["Cells"],
 //>>excludeEnd("ide");
 messageSends: ["reversed", "analyse:", "ifTrue:", "=", "size", "none", "addUnknowns:", "new", "-", "cells", "addAll:"]
+}),
+$globals.StratReverted);
+
+$core.addMethod(
+$core.method({
+selector: "isBidirectional",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+return false;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "isBidirectional\x0a\x09^ false",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
 }),
 $globals.StratReverted);
 
@@ -5481,6 +5711,24 @@ messageSends: ["ifTrue:", "=", "size", "hint", "spaces:", "cells", "none"]
 }),
 $globals.StratSpacesOnly);
 
+$core.addMethod(
+$core.method({
+selector: "isBidirectional",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+return true;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "isBidirectional\x0a\x09^ true",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.StratSpacesOnly);
+
 
 
 $core.addClass('StratTestBox', $globals.Strategy, [], 'Logimage');
@@ -5491,7 +5739,7 @@ $core.addMethod(
 $core.method({
 selector: "analyse:",
 protocol: 'as yet unclassified',
-fn: function (line){
+fn: function(line){
 var self=this;
 var sol;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -5534,10 +5782,28 @@ return $recv(sol)._trimLast_($recv($globals.Cell)._unknown());
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["line"],
-source: "analyse: line\x0a\x09| sol |\x0a\x09sol := Cells new.\x0a\x091 to: line cells size do: [ :i | |l|\x0a\x09\x09l := line cells deepCopy at: i put: Cell box; yourself.\x0a\x09\x09(Hint new: l numbers) max > line hint max\x0a\x09\x09\x09ifTrue: [ sol addSpaces: 1 ]\x0a\x09\x09\x09ifFalse: [ sol addUnknowns: 1 ]\x0a\x09\x09].\x0a\x09^ sol trimLast: Cell unknown",
+source: "analyse: line\x0a\x09| sol |\x0a\x09sol := Cells new.\x0a\x091 to: line cells size do: [ :i | |l|\x0a\x22TODO test only unknown cells...\x22\x0a\x09\x09l := line cells deepCopy at: i put: Cell box; yourself.\x0a\x09\x09(Hint new: l numbers) max > line hint max\x0a\x09\x09\x09ifTrue: [ sol addSpaces: 1 ]\x0a\x09\x09\x09ifFalse: [ sol addUnknowns: 1 ]\x0a\x09\x09].\x0a\x09^ sol trimLast: Cell unknown",
 referencedClasses: ["Cells", "Cell", "Hint"],
 //>>excludeEnd("ide");
 messageSends: ["new", "to:do:", "size", "cells", "at:put:", "deepCopy", "box", "yourself", "ifTrue:ifFalse:", ">", "max", "new:", "numbers", "hint", "addSpaces:", "addUnknowns:", "trimLast:", "unknown"]
+}),
+$globals.StratTestBox);
+
+$core.addMethod(
+$core.method({
+selector: "isBidirectional",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+return true;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "isBidirectional\x0a\x09^ true",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
 }),
 $globals.StratTestBox);
 

@@ -1147,6 +1147,10 @@ initialize
 		#lastcutspace -> StratLastCutSpace.
 		}
 		collect: [ :strat | strat new ]
+!
+
+keysAndValuesDo: aBlock
+	list keysAndValuesDo: aBlock
 ! !
 
 Strategies class instanceVariableNames: 'instance'!
@@ -1230,6 +1234,10 @@ analyse: line
 	^ Cells new
 !
 
+isBidirectional
+	self subclassResponsibility
+!
+
 none
 	^ Cells new
 ! !
@@ -1291,14 +1299,19 @@ analyse: line
 			addSpaces: 1 ].
 	"remove last space if line full"
 	^ sol size: (line cells size)
+!
+
+isBidirectional
+	^ true
 ! !
 
 StratCount subclass: #StratRecover
 	instanceVariableNames: ''
 	package: 'Logimage'!
 !StratRecover commentStamp!
-I calculate free available moves. I radd box on hint that are bigger then free, then recovers.
-Example: hint: 3 on 4 spaces, give 1 free and then | ? X X ? |!
+I calculate free available moves. I add box on hint that are bigger then free, then recovers.
+Example: hint: 3 on 4 spaces, give 1 free and then | ? X X ? |
+Duplicate 'StratAllDone' if free cells are  0 !!!
 
 !StratRecover methodsFor: 'as yet unclassified'!
 
@@ -1314,6 +1327,10 @@ analyse: line
 	sol := sol size: (line cells size).
 	(line cells isBetter: sol) ifFalse: [ ^ self none ].
 	^ sol
+!
+
+isBidirectional
+	^ true
 ! !
 
 Strategy subclass: #StratFirstCover
@@ -1341,6 +1358,10 @@ analyse: line
 		addBoxes: line hint first-pos+1.
 	(line cells isBetter: sol) ifFalse: [ ^ self none ].
 	^ sol
+!
+
+isBidirectional
+	^ false
 ! !
 
 Strategy subclass: #StratFirstCutSpace
@@ -1351,14 +1372,17 @@ Strategy subclass: #StratFirstCutSpace
 
 analyse: line
 	| firstcells firstline |
-	"check if 2 or more hints"
-	line hint size >= 2 ifFalse: [ ^ self none ].
+	"check min hint size"
+	line hint isEmpty ifTrue: [ ^ self none ].
+
+	"get first cells"
 	firstcells := line cells firstNotSpace.
-	"check if one box min in first cells"
-	firstcells numbers size > 0 ifFalse: [ ^ self none ].
+	firstcells isEmpty ifTrue: [ ^ self none ].
+
 	"check if only first number forced to be inside first cells"
-	(line hint at: 1) + (line hint at: 2) + 1 > firstcells size
+	(self isFirstForced: line hint on: firstcells)
 		ifFalse: [ ^ self none ].
+
 	"analyse first cells"
 	firstline := Line
 		hint: (Hint new: { line hint first })
@@ -1367,6 +1391,35 @@ analyse: line
 		res := strategy analyse: firstline.
 		res isEmpty ifFalse: [ ^ res] ].
 	^ self none
+!
+
+isBidirectional
+	^ false
+!
+
+isFirstForced: hint on: firstcells
+	"check if only first number forced to be inside first cells"
+	" hint contains at least one element, and cells one cell"
+	| firstbox |
+	firstbox := firstcells firstBox.
+	"check if one box min in first cells"
+	(firstbox at: #pos) > 0 ifFalse: [ ^ false ].
+
+	"check if only first number forced to be inside first cells"
+
+	"check for 2 or more hints"
+	hint size >= 2 ifTrue: [
+		(hint at: 1) + (hint at: 2) + 1 > firstcells size
+			ifTrue: [ ^ true ]
+		].
+	"check for 1 or more hints"
+"	hint size >= 1 ifTrue: [
+		(hint at: 1) >= (firstbox at: #pos)
+			ifTrue: [ ^ true ]
+		].
+"
+	"no good case, could not be sure that first hint is inside cells"
+	^ false
 ! !
 
 Strategy subclass: #StratFirstDone
@@ -1388,6 +1441,10 @@ analyse: line
 	^ Cells new
 		addBoxes: (first at: #size);
 		addSpaces: 1
+!
+
+isBidirectional
+	^ false
 ! !
 
 Strategy subclass: #StratMinSpace
@@ -1410,6 +1467,10 @@ analyse: line
 	^ Cells new
 		addUnknowns: (free at: #pos)-1;
 		addSpaces: (free at: #size)
+!
+
+isBidirectional
+	^ true
 ! !
 
 Strategy subclass: #StratNotReached
@@ -1437,6 +1498,10 @@ analyse: line
 		addUnknowns: (2*n-(box at: #size));
 		addSpaces: (0 max: (line cells size - (box at: #pos)-n+1)).
 	^ sol
+!
+
+isBidirectional
+	^ true
 ! !
 
 Strategy subclass: #StratReverted
@@ -1454,6 +1519,10 @@ analyse: line
 		"and add first unknown cells before"
 		addUnknowns: line cells size - sol size;
 		addAll: sol
+!
+
+isBidirectional
+	^ false
 ! !
 
 StratReverted subclass: #StratLastCover
@@ -1501,6 +1570,10 @@ analyse: line
 	(line hint size = 0)
 		ifTrue: [ ^ Cells spaces: line cells size ].
 	^ self none
+!
+
+isBidirectional
+	^ true
 ! !
 
 Strategy subclass: #StratTestBox
@@ -1516,12 +1589,17 @@ analyse: line
 	| sol |
 	sol := Cells new.
 	1 to: line cells size do: [ :i | |l|
+"TODO test only unknown cells..."
 		l := line cells deepCopy at: i put: Cell box; yourself.
 		(Hint new: l numbers) max > line hint max
 			ifTrue: [ sol addSpaces: 1 ]
 			ifFalse: [ sol addUnknowns: 1 ]
 		].
 	^ sol trimLast: Cell unknown
+!
+
+isBidirectional
+	^ true
 ! !
 
 Object subclass: #WidgetCell
