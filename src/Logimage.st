@@ -1367,6 +1367,9 @@ isBidirectional
 Strategy subclass: #StratFirstCutSpace
 	instanceVariableNames: ''
 	package: 'Logimage'!
+!StratFirstCutSpace commentStamp!
+If a line contains a space, I cut in two parts and check if the first hint must be alone in the first part.
+If so, try strategies on this part with first hint.!
 
 !StratFirstCutSpace methodsFor: 'as yet unclassified'!
 
@@ -1375,9 +1378,11 @@ analyse: line
 	"check min hint size"
 	line hint isEmpty ifTrue: [ ^ self none ].
 
-	"get first cells"
+	"get first cells and check some rules"
 	firstcells := line cells firstNotSpace.
+	"if no space, already done by other firstXXX"
 	firstcells isEmpty ifTrue: [ ^ self none ].
+	firstcells size = line cells size ifTrue: [ ^ self none ].
 
 	"check if only first number forced to be inside first cells"
 	(self isFirstForced: line hint on: firstcells)
@@ -1412,12 +1417,9 @@ isFirstForced: hint on: firstcells
 		(hint at: 1) + (hint at: 2) + 1 > firstcells size
 			ifTrue: [ ^ true ]
 		].
-	"check for 1 or more hints"
-"	hint size >= 1 ifTrue: [
-		(hint at: 1) >= (firstbox at: #pos)
-			ifTrue: [ ^ true ]
-		].
-"
+	"check for 1 or more hints not work all case"
+	" only one is already done by firstXXX or lastXXX stratgies"
+
 	"no good case, could not be sure that first hint is inside cells"
 	^ false
 ! !

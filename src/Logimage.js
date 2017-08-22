@@ -5071,6 +5071,9 @@ $globals.StratFirstCover);
 
 
 $core.addClass('StratFirstCutSpace', $globals.Strategy, [], 'Logimage');
+//>>excludeStart("ide", pragmas.excludeIdeData);
+$globals.StratFirstCutSpace.comment="If a line contains a space, I cut in two parts and check if the first hint must be alone in the first part.\x0aIf so, try strategies on this part with first hint.";
+//>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
 selector: "analyse:",
@@ -5081,7 +5084,7 @@ var firstcells,firstline;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-var $2,$1,$3,$4,$5,$7,$6,$8,$9;
+var $2,$1,$3,$4,$5,$6,$8,$7,$9,$11,$10,$12,$13;
 var $early={};
 try {
 $2=$recv(line)._hint();
@@ -5099,29 +5102,45 @@ $ctx1.sendIdx["none"]=1;
 //>>excludeEnd("ctx");
 return $3;
 };
-firstcells=$recv($recv(line)._cells())._firstNotSpace();
-$4=$recv(firstcells)._isEmpty();
+$4=$recv(line)._cells();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["cells"]=1;
+//>>excludeEnd("ctx");
+firstcells=$recv($4)._firstNotSpace();
+$5=$recv(firstcells)._isEmpty();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["isEmpty"]=2;
 //>>excludeEnd("ctx");
-if($core.assert($4)){
-$5=self._none();
+if($core.assert($5)){
+$6=self._none();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["none"]=2;
 //>>excludeEnd("ctx");
-return $5;
+return $6;
 };
-$7=$recv(line)._hint();
+$8=$recv(firstcells)._size();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["hint"]=2;
+$ctx1.sendIdx["size"]=1;
 //>>excludeEnd("ctx");
-$6=self._isFirstForced_on_($7,firstcells);
-if(!$core.assert($6)){
-$8=self._none();
+$7=$recv($8).__eq($recv($recv(line)._cells())._size());
+if($core.assert($7)){
+$9=self._none();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["none"]=3;
 //>>excludeEnd("ctx");
-return $8;
+return $9;
+};
+$11=$recv(line)._hint();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["hint"]=2;
+//>>excludeEnd("ctx");
+$10=self._isFirstForced_on_($11,firstcells);
+if(!$core.assert($10)){
+$12=self._none();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["none"]=4;
+//>>excludeEnd("ctx");
+return $12;
 };
 firstline=$recv($globals.Line)._hint_cells_($recv($globals.Hint)._new_([$recv($recv(line)._hint())._first()]),firstcells);
 $recv($recv($globals.Strategies)._instance())._do_((function(strategy){
@@ -5131,12 +5150,12 @@ return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
 res=$recv(strategy)._analyse_(firstline);
 res;
-$9=$recv(res)._isEmpty();
-if(!$core.assert($9)){
+$13=$recv(res)._isEmpty();
+if(!$core.assert($13)){
 throw $early=[res];
 };
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({strategy:strategy,res:res},$ctx1,4)});
+}, function($ctx2) {$ctx2.fillBlock({strategy:strategy,res:res},$ctx1,5)});
 //>>excludeEnd("ctx");
 }));
 return self._none();
@@ -5148,10 +5167,10 @@ catch(e) {if(e===$early)return e[0]; throw e}
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["line"],
-source: "analyse: line\x0a\x09| firstcells firstline |\x0a\x09\x22check min hint size\x22\x0a\x09line hint isEmpty ifTrue: [ ^ self none ].\x0a\x0a\x09\x22get first cells\x22\x0a\x09firstcells := line cells firstNotSpace.\x0a\x09firstcells isEmpty ifTrue: [ ^ self none ].\x0a\x0a\x09\x22check if only first number forced to be inside first cells\x22\x0a\x09(self isFirstForced: line hint on: firstcells)\x0a\x09\x09ifFalse: [ ^ self none ].\x0a\x0a\x09\x22analyse first cells\x22\x0a\x09firstline := Line\x0a\x09\x09hint: (Hint new: { line hint first })\x0a\x09\x09cells: firstcells.\x0a\x09Strategies instance do: [ :strategy | | res |\x0a\x09\x09res := strategy analyse: firstline.\x0a\x09\x09res isEmpty ifFalse: [ ^ res] ].\x0a\x09^ self none",
+source: "analyse: line\x0a\x09| firstcells firstline |\x0a\x09\x22check min hint size\x22\x0a\x09line hint isEmpty ifTrue: [ ^ self none ].\x0a\x0a\x09\x22get first cells and check some rules\x22\x0a\x09firstcells := line cells firstNotSpace.\x0a\x09\x22if no space, already done by other firstXXX\x22\x0a\x09firstcells isEmpty ifTrue: [ ^ self none ].\x0a\x09firstcells size = line cells size ifTrue: [ ^ self none ].\x0a\x0a\x09\x22check if only first number forced to be inside first cells\x22\x0a\x09(self isFirstForced: line hint on: firstcells)\x0a\x09\x09ifFalse: [ ^ self none ].\x0a\x0a\x09\x22analyse first cells\x22\x0a\x09firstline := Line\x0a\x09\x09hint: (Hint new: { line hint first })\x0a\x09\x09cells: firstcells.\x0a\x09Strategies instance do: [ :strategy | | res |\x0a\x09\x09res := strategy analyse: firstline.\x0a\x09\x09res isEmpty ifFalse: [ ^ res] ].\x0a\x09^ self none",
 referencedClasses: ["Line", "Hint", "Strategies"],
 //>>excludeEnd("ide");
-messageSends: ["ifTrue:", "isEmpty", "hint", "none", "firstNotSpace", "cells", "ifFalse:", "isFirstForced:on:", "hint:cells:", "new:", "first", "do:", "instance", "analyse:"]
+messageSends: ["ifTrue:", "isEmpty", "hint", "none", "firstNotSpace", "cells", "=", "size", "ifFalse:", "isFirstForced:on:", "hint:cells:", "new:", "first", "do:", "instance", "analyse:"]
 }),
 $globals.StratFirstCutSpace);
 
@@ -5223,7 +5242,7 @@ return false;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["hint", "firstcells"],
-source: "isFirstForced: hint on: firstcells\x0a\x09\x22check if only first number forced to be inside first cells\x22\x0a\x09\x22 hint contains at least one element, and cells one cell\x22\x0a\x09| firstbox |\x0a\x09firstbox := firstcells firstBox.\x0a\x09\x22check if one box min in first cells\x22\x0a\x09(firstbox at: #pos) > 0 ifFalse: [ ^ false ].\x0a\x0a\x09\x22check if only first number forced to be inside first cells\x22\x0a\x0a\x09\x22check for 2 or more hints\x22\x0a\x09hint size >= 2 ifTrue: [\x0a\x09\x09(hint at: 1) + (hint at: 2) + 1 > firstcells size\x0a\x09\x09\x09ifTrue: [ ^ true ]\x0a\x09\x09].\x0a\x09\x22check for 1 or more hints\x22\x0a\x22\x09hint size >= 1 ifTrue: [\x0a\x09\x09(hint at: 1) >= (firstbox at: #pos)\x0a\x09\x09\x09ifTrue: [ ^ true ]\x0a\x09\x09].\x0a\x22\x0a\x09\x22no good case, could not be sure that first hint is inside cells\x22\x0a\x09^ false",
+source: "isFirstForced: hint on: firstcells\x0a\x09\x22check if only first number forced to be inside first cells\x22\x0a\x09\x22 hint contains at least one element, and cells one cell\x22\x0a\x09| firstbox |\x0a\x09firstbox := firstcells firstBox.\x0a\x09\x22check if one box min in first cells\x22\x0a\x09(firstbox at: #pos) > 0 ifFalse: [ ^ false ].\x0a\x0a\x09\x22check if only first number forced to be inside first cells\x22\x0a\x0a\x09\x22check for 2 or more hints\x22\x0a\x09hint size >= 2 ifTrue: [\x0a\x09\x09(hint at: 1) + (hint at: 2) + 1 > firstcells size\x0a\x09\x09\x09ifTrue: [ ^ true ]\x0a\x09\x09].\x0a\x09\x22check for 1 or more hints not work all case\x22\x0a\x09\x22 only one is already done by firstXXX or lastXXX stratgies\x22\x0a\x0a\x09\x22no good case, could not be sure that first hint is inside cells\x22\x0a\x09^ false",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["firstBox", "ifFalse:", ">", "at:", "ifTrue:", ">=", "size", "+"]
