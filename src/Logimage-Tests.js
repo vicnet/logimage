@@ -33,13 +33,13 @@ $core.addMethod(
 $core.method({
 selector: "testCellsAccesses",
 protocol: 'tests',
-fn: function (){
+fn: function(){
 var self=this;
 var c;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-var $4,$5,$3,$2,$7,$8,$6,$1,$12,$13,$11,$10,$15,$16,$14,$9,$20,$21,$19,$18,$23,$22,$17,$27,$28,$26,$25,$30,$31,$29,$24,$35,$36,$34,$33,$38,$39,$37,$32,$43,$44,$42,$41,$46,$47,$45,$40,$51,$52,$50,$49,$54,$55,$53,$48,$59,$60,$58,$57,$62,$63,$61,$56,$64,$65,$67,$69,$70,$68,$66,$72,$74,$75,$73,$71,$77,$79,$80,$78,$76,$83,$82,$85,$86,$84,$81,$89,$88,$91,$92,$90,$87,$94,$96,$97,$95,$93,$101,$102,$100,$99,$104,$105,$103,$98,$109,$110,$108,$107,$112,$113,$111,$106,$117,$118,$116,$115,$120,$119,$114,$124,$125,$123,$122,$127,$126,$121;
+var $4,$5,$3,$2,$7,$8,$6,$1,$12,$13,$11,$10,$15,$16,$14,$9,$20,$21,$19,$18,$23,$22,$17,$27,$28,$26,$25,$30,$31,$29,$24,$35,$36,$34,$33,$38,$39,$37,$32,$43,$44,$42,$41,$46,$47,$45,$40,$51,$52,$50,$49,$54,$55,$53,$48,$59,$60,$58,$57,$62,$63,$61,$56,$64,$65,$67,$69,$70,$68,$66,$72,$74,$75,$73,$71,$77,$79,$80,$78,$76,$83,$82,$85,$86,$84,$81,$89,$88,$91,$92,$90,$87,$94,$96,$97,$95,$93,$101,$102,$100,$99,$104,$105,$103,$98,$109,$110,$108,$107,$112,$113,$111,$106,$117,$118,$116,$115,$120,$119,$114,$124,$125,$123,$122,$127,$126,$121,$129,$128,$130;
 $4=$recv($globals.Cells)._new();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["new"]=1;
@@ -871,12 +871,29 @@ $ctx1.sendIdx["u"]=23;
 //>>excludeEnd("ctx");
 $123=$125;
 $122=$recv($123)._firstNotSpace();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["firstNotSpace"]=4;
+//>>excludeEnd("ctx");
 $127=$recv($globals.Cells)._new();
 $recv($127)._u();
 $recv($127)._b();
 $126=$recv($127)._pos_((3));
 $121=$recv($122).__eq($126);
 self._assert_($121);
+$129=$recv($globals.Cells)._new_("  X-");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["new:"]=1;
+//>>excludeEnd("ctx");
+$128=$recv($129)._firstNotSpace();
+$130=$recv($globals.Cells)._new_("  X");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["new:"]=2;
+//>>excludeEnd("ctx");
+self._assert_equals_($128,$130);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=1;
+//>>excludeEnd("ctx");
+self._assert_equals_($recv($recv($globals.Cells)._new_("  X"))._firstBox(),$globals.HashedCollection._newFromPairs_(["pos",(3),"size",(1)]));
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"testCellsAccesses",{c:c},$globals.LogimageTest)});
@@ -884,10 +901,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "testCellsAccesses\x0a\x09| c |\x0a\x09\x22test firstDones\x22\x0a\x09self assert: (Cells new s; b; b; s; u) firstDones = (Cells new s; b; b; s).\x0a\x09self assert: (Cells new s; b; s; b; u) firstDones = (Cells new s; b; s).\x0a\x09self assert: (Cells new s; b; u) firstDones = (Cells new s).\x0a\x09self assert: (Cells new s; b; b) firstDones = (Cells new s; b; b).\x0a\x09\x22test last dones\x22\x0a\x09self assert: (Cells new s; b; u; b; s) lastDones = (Cells new s; pos: 5).\x0a\x09self assert: (Cells new s; u; s; b; b; s) lastDones = (Cells new s; b; b; s; pos: 3).\x0a\x09\x22test copyFrom: with number\x22\x0a\x09self assert: ((Cells new s; b; b) copyFrom: 1) = (Cells new s; b; b).\x0a\x09self assert: ((Cells new s; b; b) copyFrom: 2) = (Cells new pos: 2; b; b).\x0a\x09\x22test trim functions\x22\x0a\x09c := Cells new s; s; b; s; u; b; s.\x0a\x09self assert: c trimFirst = (Cells new b; s; u; b; s; pos: 3).\x0a\x09self assert: c trimLast = (Cells new s; s; b; s; u; b).\x0a\x09self assert: c trim = (Cells new b; s; u; b; pos: 3).\x0a\x09self assert: c trim trimFirst = (Cells new b; s; u; b; pos: 3).\x0a\x09self assert: c trim trimLast = (Cells new b; s; u; b; pos: 3).\x0a\x09self assert: c trim trim = (Cells new b; s; u; b; pos: 3).\x0a\x09\x22test firstNotSpace\x22\x0a\x09self assert: (Cells new u; b; b; u) firstNotSpace = (Cells new u; b; b; u).\x0a\x09self assert: (Cells new u; b; b; s) firstNotSpace = (Cells new u; b; b).\x0a\x09self assert: (Cells new u; s; b; u) firstNotSpace = (Cells new u).\x0a\x09self assert: (Cells new s; s; u; b; s; u) firstNotSpace = (Cells new u; b; pos: 3).\x0a\x09\x22\x0a\x09c := Cells new s; b; b; s; u; b; s.\x0a\x09self assert: c lastNumbers = { }.\x0a\x09self assert: (Cells new s; b; b; s; s; b; s) lastNumbers = { 2. 1 }.\x0a\x09self assert: c firstBox = #{ #pos -> 2. #size -> 2 }.\x0a\x09self assert: c numbers = { 2. 1 }.\x0a\x09self assert: ((Cells new u;s;u;b) firstFreeSpace) = #{ #pos -> 1. #size -> 1 }.\x0a\x09self assert: ((Cells new b;s;u;u) firstFreeSpace) = #{ #pos -> 3. #size -> 2 }.\x0a\x09self assert: ((Cells new s;u;s;u;b) firstNotSpace) = #{ #pos -> 2. #size -> 1 }.\x0a\x09self assert: ((Cells new s;b;u;s;u;u) firstNotSpace) = #{ #pos -> 2. #size -> 2 }.\x22",
+source: "testCellsAccesses\x0a\x09| c |\x0a\x09\x22test firstDones\x22\x0a\x09self assert: (Cells new s; b; b; s; u) firstDones = (Cells new s; b; b; s).\x0a\x09self assert: (Cells new s; b; s; b; u) firstDones = (Cells new s; b; s).\x0a\x09self assert: (Cells new s; b; u) firstDones = (Cells new s).\x0a\x09self assert: (Cells new s; b; b) firstDones = (Cells new s; b; b).\x0a\x09\x22test last dones\x22\x0a\x09self assert: (Cells new s; b; u; b; s) lastDones = (Cells new s; pos: 5).\x0a\x09self assert: (Cells new s; u; s; b; b; s) lastDones = (Cells new s; b; b; s; pos: 3).\x0a\x09\x22test copyFrom: with number\x22\x0a\x09self assert: ((Cells new s; b; b) copyFrom: 1) = (Cells new s; b; b).\x0a\x09self assert: ((Cells new s; b; b) copyFrom: 2) = (Cells new pos: 2; b; b).\x0a\x09\x22test trim functions\x22\x0a\x09c := Cells new s; s; b; s; u; b; s.\x0a\x09self assert: c trimFirst = (Cells new b; s; u; b; s; pos: 3).\x0a\x09self assert: c trimLast = (Cells new s; s; b; s; u; b).\x0a\x09self assert: c trim = (Cells new b; s; u; b; pos: 3).\x0a\x09self assert: c trim trimFirst = (Cells new b; s; u; b; pos: 3).\x0a\x09self assert: c trim trimLast = (Cells new b; s; u; b; pos: 3).\x0a\x09self assert: c trim trim = (Cells new b; s; u; b; pos: 3).\x0a\x09\x22test firstNotSpace\x22\x0a\x09self assert: (Cells new u; b; b; u) firstNotSpace = (Cells new u; b; b; u).\x0a\x09self assert: (Cells new u; b; b; s) firstNotSpace = (Cells new u; b; b).\x0a\x09self assert: (Cells new u; s; b; u) firstNotSpace = (Cells new u).\x0a\x09self assert: (Cells new s; s; u; b; s; u) firstNotSpace = (Cells new u; b; pos: 3).\x0a\x09self assert: (Cells new: '  X-') firstNotSpace equals: (Cells new: '  X').\x0a\x09\x22\x0a\x09c := Cells new s; b; b; s; u; b; s.\x0a\x09self assert: c lastNumbers = { }.\x0a\x09self assert: (Cells new s; b; b; s; s; b; s) lastNumbers = { 2. 1 }.\x0a\x09self assert: c firstBox = #{ #pos -> 2. #size -> 2 }.\x0a\x09self assert: c numbers = { 2. 1 }.\x0a\x09self assert: ((Cells new u;s;u;b) firstFreeSpace) = #{ #pos -> 1. #size -> 1 }.\x0a\x09self assert: ((Cells new b;s;u;u) firstFreeSpace) = #{ #pos -> 3. #size -> 2 }.\x0a\x09self assert: ((Cells new s;u;s;u;b) firstNotSpace) = #{ #pos -> 2. #size -> 1 }.\x0a\x09self assert: ((Cells new s;b;u;s;u;u) firstNotSpace) = #{ #pos -> 2. #size -> 2 }.\x22\x0a\x09self assert: (Cells new: '  X') firstBox equals: #{ #pos -> 3. #size -> 1 }.",
 referencedClasses: ["Cells"],
 //>>excludeEnd("ide");
-messageSends: ["assert:", "=", "firstDones", "s", "new", "b", "u", "lastDones", "pos:", "copyFrom:", "trimFirst", "trimLast", "trim", "firstNotSpace"]
+messageSends: ["assert:", "=", "firstDones", "s", "new", "b", "u", "lastDones", "pos:", "copyFrom:", "trimFirst", "trimLast", "trim", "firstNotSpace", "assert:equals:", "new:", "firstBox"]
 }),
 $globals.LogimageTest);
 
@@ -895,7 +912,7 @@ $core.addMethod(
 $core.method({
 selector: "testLineAccesses",
 protocol: 'tests',
-fn: function (){
+fn: function(){
 var self=this;
 var l;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -940,6 +957,9 @@ $ctx1.sendIdx["s"]=3;
 //>>excludeEnd("ctx");
 $2=$4;
 l=$recv($globals.Line)._hint_cells_($1,$2);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["hint:cells:"]=1;
+//>>excludeEnd("ctx");
 $6=$recv(l)._reversed();
 $8=$recv($globals.Line)._new();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -1029,9 +1049,9 @@ $19=$recv($18)._s();
 $ctx1.sendIdx["s"]=9;
 //>>excludeEnd("ctx");
 $17=$19;
-$15=$recv($globals.Line)._new_cells_($16,$17);
+$15=$recv($globals.Line)._hint_cells_($16,$17);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["new:cells:"]=1;
+$ctx1.sendIdx["hint:cells:"]=2;
 //>>excludeEnd("ctx");
 $14=$recv($15)._reducedLast();
 $21=$recv($globals.Hint)._new_([(2)]);
@@ -1059,9 +1079,9 @@ $24=$recv($23)._u();
 $ctx1.sendIdx["u"]=4;
 //>>excludeEnd("ctx");
 $22=$24;
-$20=$recv($globals.Line)._new_cells_($21,$22);
+$20=$recv($globals.Line)._hint_cells_($21,$22);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["new:cells:"]=2;
+$ctx1.sendIdx["hint:cells:"]=3;
 //>>excludeEnd("ctx");
 $13=$recv($14).__eq($20);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -1108,9 +1128,9 @@ $31=$recv($30)._s();
 $ctx1.sendIdx["s"]=13;
 //>>excludeEnd("ctx");
 $29=$31;
-$27=$recv($globals.Line)._new_cells_($28,$29);
+$27=$recv($globals.Line)._hint_cells_($28,$29);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["new:cells:"]=3;
+$ctx1.sendIdx["hint:cells:"]=4;
 //>>excludeEnd("ctx");
 $26=$recv($27)._reducedFirst();
 $33=$recv($globals.Hint)._new_([(1)]);
@@ -1119,7 +1139,7 @@ $recv($35)._u();
 $recv($35)._b();
 $recv($35)._s();
 $34=$recv($35)._pos_((5));
-$32=$recv($globals.Line)._new_cells_($33,$34);
+$32=$recv($globals.Line)._hint_cells_($33,$34);
 $25=$recv($26).__eq($32);
 self._assert_($25);
 return self;
@@ -1129,10 +1149,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "testLineAccesses\x0a\x09| l |\x0a\x09l := Line\x0a\x09\x09hint:  ( Hint new: { 2 . 1 } )\x0a\x09\x09cells: ( Cells new s; b; b; s; u; b; s).\x0a\x09self assert: l reversed =\x0a\x09\x09(Line new hint: (Hint new: { 1. 2}); cells: (Cells new s; b; u; s; b; b; s)).\x0a\x09self assert: (Line new: (Hint new: {2. 1}) cells: (Cells new s; b; b; u; s; b; s)) reducedLast =\x0a\x09\x09(Line new: (Hint new: {2}) cells: (Cells new s; b; b; u)).\x0a\x09self assert: (Line new: (Hint new: {2. 1}) cells: (Cells new s; b; b; s; u; b; s)) reducedFirst =\x0a\x09\x09(Line new: (Hint new: {1}) cells: (Cells new u; b; s; pos: 5)).",
+source: "testLineAccesses\x0a\x09| l |\x0a\x09l := Line\x0a\x09\x09hint:  ( Hint new: { 2 . 1 } )\x0a\x09\x09cells: ( Cells new s; b; b; s; u; b; s).\x0a\x09self assert: l reversed =\x0a\x09\x09(Line new hint: (Hint new: { 1. 2}); cells: (Cells new s; b; u; s; b; b; s)).\x0a\x09self assert: (Line hint: (Hint new: {2. 1}) cells: (Cells new s; b; b; u; s; b; s)) reducedLast =\x0a\x09\x09(Line hint: (Hint new: {2}) cells: (Cells new s; b; b; u)).\x0a\x09self assert: (Line hint: (Hint new: {2. 1}) cells: (Cells new s; b; b; s; u; b; s)) reducedFirst =\x0a\x09\x09(Line hint: (Hint new: {1}) cells: (Cells new u; b; s; pos: 5)).",
 referencedClasses: ["Line", "Hint", "Cells"],
 //>>excludeEnd("ide");
-messageSends: ["hint:cells:", "new:", "s", "new", "b", "u", "assert:", "=", "reversed", "hint:", "cells:", "reducedLast", "new:cells:", "reducedFirst", "pos:"]
+messageSends: ["hint:cells:", "new:", "s", "new", "b", "u", "assert:", "=", "reversed", "hint:", "cells:", "reducedLast", "reducedFirst", "pos:"]
 }),
 $globals.LogimageTest);
 
@@ -1157,6 +1177,43 @@ source: "testLogimageAccesses\x0a\x09self assert: (logimage colCellsAt: 1) notNi
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["assert:", "notNil", "colCellsAt:"]
+}),
+$globals.LogimageTest);
+
+$core.addMethod(
+$core.method({
+selector: "testStratFirstCutSpace",
+protocol: 'tests',
+fn: function(){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $1,$2;
+$1=$recv($globals.StratFirstCutSpace)._analyse_("3 1|  X- ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["analyse:"]=1;
+//>>excludeEnd("ctx");
+$2=$recv($globals.Cells)._new_("XXX-X");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["new:"]=1;
+//>>excludeEnd("ctx");
+self._assert_equals_($1,$2);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=1;
+//>>excludeEnd("ctx");
+self._assert_equals_($recv($globals.StratFirstCutSpace)._analyse_("3 1|  X-  "),$recv($globals.Cells)._new_("XXX-"));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"testStratFirstCutSpace",{},$globals.LogimageTest)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "testStratFirstCutSpace\x0a\x09self assert: (StratFirstCutSpace analyse: '3 1|  X- ')\x0a\x09\x09 equals: (Cells new: 'XXX-X').\x0a\x09self assert: (StratFirstCutSpace analyse: '3 1|  X-  ')\x0a\x09\x09 equals: (Cells new: 'XXX-').",
+referencedClasses: ["StratFirstCutSpace", "Cells"],
+//>>excludeEnd("ide");
+messageSends: ["assert:equals:", "analyse:", "new:"]
 }),
 $globals.LogimageTest);
 

@@ -37,6 +37,7 @@ testCellsAccesses
 	self assert: (Cells new u; b; b; s) firstNotSpace = (Cells new u; b; b).
 	self assert: (Cells new u; s; b; u) firstNotSpace = (Cells new u).
 	self assert: (Cells new s; s; u; b; s; u) firstNotSpace = (Cells new u; b; pos: 3).
+	self assert: (Cells new: '  X-') firstNotSpace equals: (Cells new: '  X').
 	"
 	c := Cells new s; b; b; s; u; b; s.
 	self assert: c lastNumbers = { }.
@@ -47,6 +48,7 @@ testCellsAccesses
 	self assert: ((Cells new b;s;u;u) firstFreeSpace) = #{ #pos -> 3. #size -> 2 }.
 	self assert: ((Cells new s;u;s;u;b) firstNotSpace) = #{ #pos -> 2. #size -> 1 }.
 	self assert: ((Cells new s;b;u;s;u;u) firstNotSpace) = #{ #pos -> 2. #size -> 2 }."
+	self assert: (Cells new: '  X') firstBox equals: #{ #pos -> 3. #size -> 1 }.
 !
 
 testLineAccesses
@@ -56,14 +58,21 @@ testLineAccesses
 		cells: ( Cells new s; b; b; s; u; b; s).
 	self assert: l reversed =
 		(Line new hint: (Hint new: { 1. 2}); cells: (Cells new s; b; u; s; b; b; s)).
-	self assert: (Line new: (Hint new: {2. 1}) cells: (Cells new s; b; b; u; s; b; s)) reducedLast =
-		(Line new: (Hint new: {2}) cells: (Cells new s; b; b; u)).
-	self assert: (Line new: (Hint new: {2. 1}) cells: (Cells new s; b; b; s; u; b; s)) reducedFirst =
-		(Line new: (Hint new: {1}) cells: (Cells new u; b; s; pos: 5)).
+	self assert: (Line hint: (Hint new: {2. 1}) cells: (Cells new s; b; b; u; s; b; s)) reducedLast =
+		(Line hint: (Hint new: {2}) cells: (Cells new s; b; b; u)).
+	self assert: (Line hint: (Hint new: {2. 1}) cells: (Cells new s; b; b; s; u; b; s)) reducedFirst =
+		(Line hint: (Hint new: {1}) cells: (Cells new u; b; s; pos: 5)).
 !
 
 testLogimageAccesses
 	self assert: (logimage colCellsAt: 1) notNil
+!
+
+testStratFirstCutSpace
+	self assert: (StratFirstCutSpace analyse: '3 1|  X- ')
+		 equals: (Cells new: 'XXX-X').
+	self assert: (StratFirstCutSpace analyse: '3 1|  X-  ')
+		 equals: (Cells new: 'XXX-').
 !
 
 testStratNotReached

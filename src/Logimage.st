@@ -127,7 +127,7 @@ Cell subclass: #CellSpace
 !CellSpace methodsFor: 'printing'!
 
 alternative
-	^ #('.')
+	^ #()
 !
 
 isSpace
@@ -222,23 +222,24 @@ do: aBlock
 
 firstBox
 	"Return a tupple with index (starting at 1) of first box if exists, and size"
-	| pos size |
-	pos := 0.
+	| posi size |
+	posi := 0.
 	size := 0.
 	cells do: [ :c |
 		(size>0)
 			ifTrue: [
 				c isBox
 					ifTrue: [ size := size+1 ]
-					ifFalse: [ ^ #{ #pos -> pos. #size -> size } ]
+					ifFalse: [ ^ #{ #pos -> posi. #size -> size } ]
 				]
 			ifFalse: [
-				pos := pos+1.
+				posi := posi+1.
 				c isBox
 					ifTrue: [ size := 1 ]
 				]
 		].
-	^ #{ #pos -> 0. #size -> 0 }
+	size=0 ifTrue: [ posi:=0 ].
+	^ #{ #pos -> posi. #size -> size }
 !
 
 firstFreeSpace
@@ -316,10 +317,10 @@ withIndexDo: aBlock
 copyFrom: ref
 	| p1 p2 res |
 	ref isNumber
-		ifTrue: [
+		ifTrue: [ "it is a number where to begin"
 			p1 := ref.
 			p2 := cells size ]
-		ifFalse: [
+		ifFalse: [ "is is a tuple where tobegin and size"
 			p1 := ref at: #pos.
 			p2 := (ref at: #pos) + (ref at: #size) - 1 ].
 	^ Cells new
@@ -1374,7 +1375,7 @@ If so, try strategies on this part with first hint.!
 !StratFirstCutSpace methodsFor: 'as yet unclassified'!
 
 analyse: line
-	| firstcells firstline |
+	| firstcells firstline othercells otherline firstres otherres |
 	"check min hint size"
 	line hint isEmpty ifTrue: [ ^ self none ].
 
@@ -1392,10 +1393,20 @@ analyse: line
 	firstline := Line
 		hint: (Hint new: { line hint first })
 		cells: firstcells.
-	Strategies instance do: [ :strategy | | res |
-		res := strategy analyse: firstline.
-		res isEmpty ifFalse: [ ^ res] ].
-	^ self none
+	firstres := self testStrategies: firstline.
+
+	" complete first res if needed to the first cells size"
+	firstres addUnknowns: (firstcells size - firstres size).
+	
+	othercells := (line cells copyFrom: firstcells size + 1) trimFirst.
+	otherline := Line
+		hint: (line hint firstRemoved: 1)
+		cells: othercells.
+	otherres := self testStrategies: otherline.
+	firstres addSpaces: (othercells pos - firstcells size - 1).
+	firstres addAll: otherres.
+
+	^ firstres
 !
 
 isBidirectional
@@ -1422,6 +1433,13 @@ isFirstForced: hint on: firstcells
 
 	"no good case, could not be sure that first hint is inside cells"
 	^ false
+!
+
+testStrategies: line
+	Strategies instance do: [ :strategy | | res |
+		res := strategy analyse: line.
+		res isEmpty ifFalse: [ ^ res] ].
+	^ self none
 ! !
 
 Strategy subclass: #StratFirstDone
