@@ -13,7 +13,7 @@ $core.packages["Logimage"].innerEval = function (expr) { return eval(expr); };
 $core.packages["Logimage"].imports = ["silk/Silk"];
 $core.packages["Logimage"].transport = {"type":"amd","amdNamespace":"amber-logimage"};
 
-$core.addClass('Application', $globals.Object, ['rows', 'cols', 'grid'], 'Logimage');
+$core.addClass('Application', $globals.Object, ['rows', 'cols', 'grid', 'logimage'], 'Logimage');
 $core.addMethod(
 $core.method({
 selector: "initialize",
@@ -60,69 +60,24 @@ $globals.Application);
 
 $core.addMethod(
 $core.method({
-selector: "renderOnSilk:",
+selector: "refresh",
 protocol: 'as yet unclassified',
-fn: function (silk){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $2,$5,$4,$3,$1,$6;
-$2=$recv($recv(silk)._resetContents())._TABLE();
-$5=$recv($globals.Silk)._TR();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["TR"]=1;
-//>>excludeEnd("ctx");
-$4=$recv($5).__lt_lt($recv($globals.Silk)._TD());
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["<<"]=4;
-//>>excludeEnd("ctx");
-$3=$recv($4).__lt_lt(self["@cols"]);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["<<"]=3;
-//>>excludeEnd("ctx");
-$1=$recv($2).__lt_lt($3);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["<<"]=2;
-//>>excludeEnd("ctx");
-$6=$recv($recv($recv($globals.Silk)._TR()).__lt_lt(self["@rows"])).__lt_lt(self["@grid"]);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["<<"]=5;
-//>>excludeEnd("ctx");
-$recv($1).__lt_lt($6);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["<<"]=1;
-//>>excludeEnd("ctx");
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"renderOnSilk:",{silk:silk},$globals.Application)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["silk"],
-source: "renderOnSilk: silk\x0a\x09silk resetContents\x0a\x09\x09TABLE\x0a\x09\x09\x09<< (Silk TR << (Silk TD) << cols)\x0a\x09\x09\x09<< (Silk TR << rows << grid)",
-referencedClasses: ["Silk"],
-//>>excludeEnd("ide");
-messageSends: ["<<", "TABLE", "resetContents", "TR", "TD"]
-}),
-$globals.Application);
-
-$core.addMethod(
-$core.method({
-selector: "show:",
-protocol: 'as yet unclassified',
-fn: function (logimage){
+fn: function(){
 var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
 var $1,$3,$2,$4,$6,$5;
+$recv(self["@cols"])._resetContents();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["resetContents"]=1;
+//>>excludeEnd("ctx");
 $1=self["@cols"];
 $3=$recv($globals.WidgetHints)._new();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["new"]=1;
 //>>excludeEnd("ctx");
-$2=$recv($3)._show_($recv(logimage)._colHints());
+$2=$recv($3)._show_($recv(self["@logimage"])._colHints());
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["show:"]=1;
 //>>excludeEnd("ctx");
@@ -130,12 +85,16 @@ $recv($1).__lt_lt($2);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["<<"]=1;
 //>>excludeEnd("ctx");
+$recv(self["@rows"])._resetContents();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["resetContents"]=2;
+//>>excludeEnd("ctx");
 $4=self["@rows"];
 $6=$recv($globals.WidgetHints)._new();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["new"]=2;
 //>>excludeEnd("ctx");
-$5=$recv($6)._show_($recv(logimage)._rowHints());
+$5=$recv($6)._show_($recv(self["@logimage"])._rowHints());
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["show:"]=2;
 //>>excludeEnd("ctx");
@@ -143,18 +102,121 @@ $recv($4).__lt_lt($5);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["<<"]=2;
 //>>excludeEnd("ctx");
-$recv(self["@grid"]).__lt_lt($recv($recv($globals.WidgetGrid)._new())._show_($recv(logimage)._grid()));
+$recv(self["@grid"])._resetContents();
+$recv(self["@grid"]).__lt_lt($recv($recv($globals.WidgetGrid)._new())._show_($recv(self["@logimage"])._grid()));
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"show:",{logimage:logimage},$globals.Application)});
+}, function($ctx1) {$ctx1.fill(self,"refresh",{},$globals.Application)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["logimage"],
-source: "show: logimage\x0a\x09cols << (WidgetHints new show: logimage colHints).\x0a\x09rows << (WidgetHints new show: logimage rowHints).\x0a\x09grid << (WidgetGrid new show: logimage grid)",
+args: [],
+source: "refresh\x0a\x09cols resetContents.\x0a\x09cols << (WidgetHints new show: logimage colHints).\x0a\x09rows resetContents.\x0a\x09rows << (WidgetHints new show: logimage rowHints).\x0a\x09grid resetContents.\x0a\x09grid << (WidgetGrid new show: logimage grid)",
 referencedClasses: ["WidgetHints", "WidgetGrid"],
 //>>excludeEnd("ide");
-messageSends: ["<<", "show:", "new", "colHints", "rowHints", "grid"]
+messageSends: ["resetContents", "<<", "show:", "new", "colHints", "rowHints", "grid"]
+}),
+$globals.Application);
+
+$core.addMethod(
+$core.method({
+selector: "renderOnSilk:",
+protocol: 'as yet unclassified',
+fn: function(silk){
+var self=this;
+var menu,btn,list;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $5,$4,$3,$2,$8,$7,$6,$1,$9,$11,$10;
+$recv(silk)._resetContents();
+$5="class".__minus_gt("logimage");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["->"]=1;
+//>>excludeEnd("ctx");
+$4=[$5];
+$3=$recv(silk)._DIV_($4);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["DIV:"]=1;
+//>>excludeEnd("ctx");
+$2=$recv($3)._TABLE();
+$8=$recv($globals.Silk)._TR();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["TR"]=1;
+//>>excludeEnd("ctx");
+$7=$recv($8).__lt_lt($recv($globals.Silk)._TD());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["<<"]=4;
+//>>excludeEnd("ctx");
+$6=$recv($7).__lt_lt(self["@cols"]);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["<<"]=3;
+//>>excludeEnd("ctx");
+$1=$recv($2).__lt_lt($6);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["<<"]=2;
+//>>excludeEnd("ctx");
+$9=$recv($recv($recv($globals.Silk)._TR()).__lt_lt(self["@rows"])).__lt_lt(self["@grid"]);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["<<"]=5;
+//>>excludeEnd("ctx");
+$recv($1).__lt_lt($9);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["<<"]=1;
+//>>excludeEnd("ctx");
+$11="class".__minus_gt("menu");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["->"]=2;
+//>>excludeEnd("ctx");
+$10=[$11];
+menu=$recv(silk)._DIV_($10);
+list=$recv(menu)._SELECT_(["multiple"]);
+btn=$recv(menu)._A_(["class".__minus_gt("button"),"Step"]);
+$recv(btn)._on_bind_("click",(function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return self._step();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"renderOnSilk:",{silk:silk,menu:menu,btn:btn,list:list},$globals.Application)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["silk"],
+source: "renderOnSilk: silk\x0a\x09| menu btn list |\x0a\x09silk resetContents.\x0a\x09(silk DIV: { #class -> 'logimage' })\x0a\x09\x09TABLE\x0a\x09\x09\x09<< (Silk TR << (Silk TD) << cols)\x0a\x09\x09\x09<< (Silk TR << rows << grid).\x0a\x09menu := silk DIV: { #class -> 'menu' }.\x0a\x09list := menu SELECT: { #multiple }.\x0a\x09btn := menu\x09A: { #class -> 'button'. 'Step' }.\x0a\x09btn on: #click bind: [ self step ]",
+referencedClasses: ["Silk"],
+//>>excludeEnd("ide");
+messageSends: ["resetContents", "<<", "TABLE", "DIV:", "->", "TR", "TD", "SELECT:", "A:", "on:bind:", "step"]
+}),
+$globals.Application);
+
+$core.addMethod(
+$core.method({
+selector: "show:",
+protocol: 'as yet unclassified',
+fn: function(aLogimage){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+self["@logimage"]=aLogimage;
+self._refresh();
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"show:",{aLogimage:aLogimage},$globals.Application)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["aLogimage"],
+source: "show: aLogimage\x0a\x09logimage := aLogimage.\x0a\x09self refresh",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["refresh"]
 }),
 $globals.Application);
 
@@ -180,6 +242,42 @@ source: "solve: logimage\x0a\x09Strategist new solve: logimage.\x0a\x09self show
 referencedClasses: ["Strategist"],
 //>>excludeEnd("ide");
 messageSends: ["solve:", "new", "show:"]
+}),
+$globals.Application);
+
+$core.addMethod(
+$core.method({
+selector: "step",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+var strategist;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+strategist=$recv($globals.Strategist)._new();
+$recv(self["@logimage"])._toOld();
+$recv($recv($globals.Strategies)._instance())._do_((function(strategy){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv(strategist)._apply_on_(strategy,self["@logimage"]);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({strategy:strategy},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+self._refresh();
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"step",{strategist:strategist},$globals.Application)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "step\x0a\x09| strategist |\x0a\x09strategist := Strategist new.\x0a\x09logimage toOld.\x0a\x09Strategies instance do: [ :strategy |\x0a\x09\x09\x09strategist apply: strategy on: logimage ].\x0a\x09self refresh",
+referencedClasses: ["Strategist", "Strategies"],
+//>>excludeEnd("ide");
+messageSends: ["new", "toOld", "do:", "instance", "apply:on:", "refresh"]
 }),
 $globals.Application);
 
@@ -5136,7 +5234,7 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["logimage"],
-source: "solve: logimage\x0aStrategies reset.\x0a10 timesRepeat: [\x0a\x09Strategies instance do: [ :strategy |\x0a\x09\x09self apply: strategy on: logimage ]\x0a\x09]\x0a\x2250 timesRepeat: [ | strategy |\x0a\x09strategy := Strategies instance atRandom.\x0a\x09Transcript show: strategy class name; cr.\x0a\x09self apply: strategy on: logimage ]\x22",
+source: "solve: logimage\x0a\x09Strategies reset.\x0a\x0910 timesRepeat: [\x0a\x09\x09Strategies instance do: [ :strategy |\x0a\x09\x09\x09self apply: strategy on: logimage ]\x0a\x09\x09]\x0a\x2250 timesRepeat: [ | strategy |\x0a\x09strategy := Strategies instance atRandom.\x0a\x09Transcript show: strategy class name; cr.\x0a\x09self apply: strategy on: logimage ]\x22",
 referencedClasses: ["Strategies"],
 //>>excludeEnd("ide");
 messageSends: ["reset", "timesRepeat:", "do:", "instance", "apply:on:"]
@@ -5942,51 +6040,63 @@ $core.addMethod(
 $core.method({
 selector: "analyse:",
 protocol: 'as yet unclassified',
-fn: function (line){
+fn: function(line){
 var self=this;
 var first;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-var $2,$1,$3,$5,$6,$4,$7;
-first=$recv($recv(line)._cells())._firstBox();
-$2=$recv(first)._at_("pos");
+var $2,$1,$3,$5,$4,$6,$8,$9,$7,$10;
+$2=$recv(line)._hint();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["at:"]=1;
+$ctx1.sendIdx["hint"]=1;
 //>>excludeEnd("ctx");
-$1=$recv($2).__eq((1));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["="]=1;
-//>>excludeEnd("ctx");
-if(!$core.assert($1)){
+$1=$recv($2)._isEmpty();
+if($core.assert($1)){
 $3=self._none();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["none"]=1;
 //>>excludeEnd("ctx");
 return $3;
 };
-$5=$recv($recv(line)._hint())._first();
-$6=$recv(first)._at_("size");
+first=$recv($recv(line)._cells())._firstBox();
+$5=$recv(first)._at_("pos");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["at:"]=1;
+//>>excludeEnd("ctx");
+$4=$recv($5).__eq((1));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["="]=1;
+//>>excludeEnd("ctx");
+if(!$core.assert($4)){
+$6=self._none();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["none"]=2;
+//>>excludeEnd("ctx");
+return $6;
+};
+$8=$recv($recv(line)._hint())._first();
+$9=$recv(first)._at_("size");
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["at:"]=2;
 //>>excludeEnd("ctx");
-$4=$recv($5).__eq($6);
-if(!$core.assert($4)){
+$7=$recv($8).__eq($9);
+if(!$core.assert($7)){
 return self._none();
 };
-$7=$recv($globals.Cells)._new();
-$recv($7)._addBoxes_($recv(first)._at_("size"));
-return $recv($7)._addSpaces_((1));
+$10=$recv($globals.Cells)._new();
+$recv($10)._addBoxes_($recv(first)._at_("size"));
+return $recv($10)._addSpaces_((1));
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line,first:first},$globals.StratFirstDone)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["line"],
-source: "analyse: line\x0a\x09| first |\x0a\x09\x22check if first box is at begining, begining spaces should be removed yet\x22\x0a\x09first := line cells firstBox.\x0a\x09(first at: #pos) = 1 ifFalse: [ ^ self none ].\x0a\x09\x22test if strategy apply, ie first hint is same as box\x22\x0a\x09line hint first = (first at: #size) ifFalse: [ ^ self none ].\x0a\x09\x22get solution, without space\x22\x0a\x09^ Cells new\x0a\x09\x09addBoxes: (first at: #size);\x0a\x09\x09addSpaces: 1",
+source: "analyse: line\x0a\x09| first |\x0a\x09line hint isEmpty ifTrue: [ ^ self none ].\x0a\x09\x22check if first box is at begining, begining spaces should be removed yet\x22\x0a\x09first := line cells firstBox.\x0a\x09(first at: #pos) = 1 ifFalse: [ ^ self none ].\x0a\x09\x22test if strategy apply, ie first hint is same as box\x22\x0a\x09line hint first = (first at: #size) ifFalse: [ ^ self none ].\x0a\x09\x22get solution, without space\x22\x0a\x09^ Cells new\x0a\x09\x09addBoxes: (first at: #size);\x0a\x09\x09addSpaces: 1",
 referencedClasses: ["Cells"],
 //>>excludeEnd("ide");
-messageSends: ["firstBox", "cells", "ifFalse:", "=", "at:", "none", "first", "hint", "addBoxes:", "new", "addSpaces:"]
+messageSends: ["ifTrue:", "isEmpty", "hint", "none", "firstBox", "cells", "ifFalse:", "=", "at:", "first", "addBoxes:", "new", "addSpaces:"]
 }),
 $globals.StratFirstDone);
 

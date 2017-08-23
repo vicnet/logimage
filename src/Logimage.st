@@ -1,7 +1,7 @@
 Smalltalk createPackage: 'Logimage'!
 (Smalltalk packageAt: 'Logimage') imports: {'silk/Silk'}!
 Object subclass: #Application
-	instanceVariableNames: 'rows cols grid'
+	instanceVariableNames: 'rows cols grid logimage'
 	package: 'Logimage'!
 
 !Application methodsFor: 'as yet unclassified'!
@@ -15,22 +15,45 @@ initialize
 	Silk new << self
 !
 
-renderOnSilk: silk
-	silk resetContents
-		TABLE
-			<< (Silk TR << (Silk TD) << cols)
-			<< (Silk TR << rows << grid)
+refresh
+	cols resetContents.
+	cols << (WidgetHints new show: logimage colHints).
+	rows resetContents.
+	rows << (WidgetHints new show: logimage rowHints).
+	grid resetContents.
+	grid << (WidgetGrid new show: logimage grid)
 !
 
-show: logimage
-	cols << (WidgetHints new show: logimage colHints).
-	rows << (WidgetHints new show: logimage rowHints).
-	grid << (WidgetGrid new show: logimage grid)
+renderOnSilk: silk
+	| menu btn list |
+	silk resetContents.
+	(silk DIV: { #class -> 'logimage' })
+		TABLE
+			<< (Silk TR << (Silk TD) << cols)
+			<< (Silk TR << rows << grid).
+	menu := silk DIV: { #class -> 'menu' }.
+	list := menu SELECT: { #multiple }.
+	btn := menu	A: { #class -> 'button'. 'Step' }.
+	btn on: #click bind: [ self step ]
+!
+
+show: aLogimage
+	logimage := aLogimage.
+	self refresh
 !
 
 solve: logimage
 	Strategist new solve: logimage.
 	self show: logimage
+!
+
+step
+	| strategist |
+	strategist := Strategist new.
+	logimage toOld.
+	Strategies instance do: [ :strategy |
+			strategist apply: strategy on: logimage ].
+	self refresh
 ! !
 
 !Application class methodsFor: 'as yet unclassified'!
@@ -1323,11 +1346,11 @@ setSol: cells on: logimage atRow: y after: start
 !
 
 solve: logimage
-Strategies reset.
-10 timesRepeat: [
-	Strategies instance do: [ :strategy |
-		self apply: strategy on: logimage ]
-	]
+	Strategies reset.
+	10 timesRepeat: [
+		Strategies instance do: [ :strategy |
+			self apply: strategy on: logimage ]
+		]
 "50 timesRepeat: [ | strategy |
 	strategy := Strategies instance atRandom.
 	Transcript show: strategy class name; cr.
@@ -1586,6 +1609,7 @@ I add a space after first boxes done (corresponding to first hint).!
 
 analyse: line
 	| first |
+	line hint isEmpty ifTrue: [ ^ self none ].
 	"check if first box is at begining, begining spaces should be removed yet"
 	first := line cells firstBox.
 	(first at: #pos) = 1 ifFalse: [ ^ self none ].
