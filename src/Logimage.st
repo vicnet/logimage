@@ -26,6 +26,11 @@ show: logimage
 	cols << (WidgetHints new show: logimage colHints).
 	rows << (WidgetHints new show: logimage rowHints).
 	grid << (WidgetGrid new show: logimage grid)
+!
+
+solve: logimage
+	Strategist new solve: logimage.
+	self show: logimage
 ! !
 
 !Application class methodsFor: 'as yet unclassified'!
@@ -55,12 +60,24 @@ isBox
 	^ false
 !
 
+isNew
+	^ false
+!
+
 isSpace
 	^ false
 !
 
 isUnknown
 	^ false
+!
+
+toNew
+	^ self
+!
+
+toOld
+	^ self
 ! !
 
 Cell class instanceVariableNames: 'cells'!
@@ -94,6 +111,14 @@ initialize
 		]
 !
 
+newBox
+	^ cells at: #boxnew
+!
+
+newSpace
+	^ cells at: #spacenew
+!
+
 space
 	^ cells at: #space
 !
@@ -105,6 +130,12 @@ unknown
 Cell subclass: #CellBox
 	instanceVariableNames: ''
 	package: 'Logimage'!
+
+!CellBox methodsFor: 'as yet unclassified'!
+
+toNew
+	^ Cell at: #boxnew
+! !
 
 !CellBox methodsFor: 'printing'!
 
@@ -118,6 +149,24 @@ isBox
 
 printOn: stream
 	stream nextPutAll: '@'
+! !
+
+CellBox subclass: #CellBoxNew
+	instanceVariableNames: ''
+	package: 'Logimage'!
+
+!CellBoxNew methodsFor: 'as yet unclassified'!
+
+isNew
+	^ true
+!
+
+printOn: stream
+	stream nextPutAll: (String fromCharCode: 174)
+!
+
+toOld
+	^ Cell at: #box
 ! !
 
 Cell subclass: #CellSpace
@@ -136,6 +185,28 @@ isSpace
 
 printOn: stream
 	stream nextPutAll: '-'
+!
+
+toNew
+	^ Cell at: #spacenew
+! !
+
+CellSpace subclass: #CellSpaceNew
+	instanceVariableNames: ''
+	package: 'Logimage'!
+
+!CellSpaceNew methodsFor: 'as yet unclassified'!
+
+isNew
+	^ true
+!
+
+printOn: stream
+	stream nextPutAll: '+'
+!
+
+toOld
+	^ Cell at: #space
 ! !
 
 Cell subclass: #CellUnknown
@@ -492,6 +563,18 @@ box: point
 	self at: point put: (Cell box)
 !
 
+newBox: point
+	(self at: point) isBox ifTrue: [ ^ self ].
+	(self at: point) isUnknown ifFalse: [ self error: 'try to set new cell on already set' ].
+	self at: point put: Cell newBox
+!
+
+newSpace: point
+	(self at: point) isSpace ifTrue: [ ^ self ].
+	(self at: point) isUnknown ifFalse: [ self error: 'try to set new cell on already set' ].
+	self at: point put: Cell newSpace
+!
+
 size
 	"I return a point with x and y sizes"
 	^ size
@@ -526,6 +609,10 @@ at: point put: cell
 
 indexOf: point
 	^ (size x * (point y - 1)) + point x.
+!
+
+toOld
+	cells := cells collect: [ :cell | cell toOld ]
 ! !
 
 Object subclass: #Hint
@@ -808,6 +895,10 @@ rowLineAt: index
 rowLines
 	^ (1 to: row size) collect: [ :index |
 			self rowLineAt: index ]
+!
+
+toOld
+	^ grid toOld
 ! !
 
 !Logimage methodsFor: 'as yet unclassified'!
@@ -830,6 +921,14 @@ initialize
 	row := Hints new.
 	col := Hints new.
 	grid := Grid new
+!
+
+newBox: point
+	grid newBox: point
+!
+
+newSpace: point
+	grid newSpace: point
 !
 
 resize
@@ -1127,6 +1226,10 @@ at: name
 	^ list at: name
 !
 
+atRandom
+	^ list values atRandom
+!
+
 do: aBlock
 	list valuesDo: aBlock
 !
@@ -1135,7 +1238,8 @@ initialize
 	"TODO should be autodeclared by each instance !!"
 	list := #{
 		#spaceonly -> StratSpacesOnly.
-		#alldone -> StratAllDone.
+		#allhintdone -> StratAllHintDone.
+		#allcountdone -> StratCountAllDone.
 		#recover -> StratRecover.
 		#notreached -> StratNotReached.
 		#firstcover -> StratFirstCover.
@@ -1202,8 +1306,10 @@ apply: strategy onRowOf: logimage
 !
 
 setSol: cell on: logimage at: point
-	cell isBox ifTrue: [ logimage box: point. ^ self ].
-	cell isSpace ifTrue: [ logimage space: point. ^ self ]
+	(point x > logimage grid size x) ifTrue: [ ^ self ].
+	(point y > logimage grid size y) ifTrue: [ ^ self ].
+	cell isBox ifTrue: [ logimage newBox: point. ^ self ].
+	cell isSpace ifTrue: [ logimage newSpace: point. ^ self ]
 !
 
 setSol: cells on: logimage atCol: x after: start
@@ -1217,10 +1323,15 @@ setSol: cells on: logimage atRow: y after: start
 !
 
 solve: logimage
+Strategies reset.
 10 timesRepeat: [
-	Strategies reset instance do: [ :strategy |
+	Strategies instance do: [ :strategy |
 		self apply: strategy on: logimage ]
 	]
+"50 timesRepeat: [ | strategy |
+	strategy := Strategies instance atRandom.
+	Transcript show: strategy class name; cr.
+	self apply: strategy on: logimage ]"
 ! !
 
 Object subclass: #Strategy
@@ -1249,6 +1360,29 @@ analyse: line
 	line isString ifTrue: [
 		^ self new analyse: (Line new: line) ].
 	^ self new analyse: line
+! !
+
+Strategy subclass: #StratAllHintDone
+	instanceVariableNames: ''
+	package: 'Logimage'!
+
+!StratAllHintDone methodsFor: 'as yet unclassified'!
+
+analyse: line
+	| sol |
+	(line hint) = (Hint new: (line cells numbers)) ifFalse: [ ^ self none ].
+	"If all hints are resolved, all cell are filled"
+	sol := Cells new.
+	"replace unknown by spaces"
+	line cells do: [ :c |
+		c isUnknown
+			ifFalse: [ sol addUnknowns: 1 ]
+			ifTrue: [ sol addSpaces: 1 ] ].
+	^ sol
+!
+
+isBidirectional
+	^ true
 ! !
 
 Strategy subclass: #StratCount
@@ -1280,13 +1414,13 @@ sum: hint
 	^ hint numbers inject: 0 into: [ :s :n | s+n ]
 ! !
 
-StratCount subclass: #StratAllDone
+StratCount subclass: #StratCountAllDone
 	instanceVariableNames: ''
 	package: 'Logimage'!
-!StratAllDone commentStamp!
+!StratCountAllDone commentStamp!
 I try to detect if a line is filled with boxes and spaces, ie no more rooms.!
 
-!StratAllDone methodsFor: 'as yet unclassified'!
+!StratCountAllDone methodsFor: 'as yet unclassified'!
 
 analyse: line
 	| sol |
@@ -1637,9 +1771,13 @@ renderOnSilk: silk
 !
 
 show: cell
+	| class |
 	div resetContents.
-	cell isBox ifTrue: [ div << { #class -> 'cell box' } ].
-	cell isSpace ifTrue: [ div << { #class -> 'cell space' } ]
+	class := 'cell'.
+	cell isBox ifTrue: [ class := class,' box' ].
+	cell isSpace ifTrue: [ class := class,' space' ].
+	cell isNew ifTrue: [ class := class,' new' ].
+	div << { #class -> class }
 ! !
 
 Object subclass: #WidgetGrid

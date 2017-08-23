@@ -54,3 +54,9 @@
     /*background-color: lightgrey;*/
     background: radial-gradient( circle at center, grey 25%, white 10% );
 }
+.box.new {
+    background-color: red
+}
+.space.new {
+    background: radial-gradient( circle at center, red 25%, white 10% );
+}
