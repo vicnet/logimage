@@ -32,9 +32,22 @@ renderOnSilk: silk
 			<< (Silk TR << (Silk TD) << cols)
 			<< (Silk TR << rows << grid).
 	menu := silk DIV: { #class -> 'menu' }.
-	list := menu SELECT: { #multiple }.
+	list := menu DIV: { #class -> 'checkboxes' }.
+	Strategies instance do: [ :strategy | | name |
+		name := strategy id.
+		(list DIV: { #class -> 'checkbox' })
+			<< (Silk INPUT: { #type -> 'checkbox'.
+							  #id -> name.
+							  #checked -> 'checked' })
+			<< (Silk LABEL: { #for -> name. name })
+		].
 	btn := menu	A: { #class -> 'button'. 'Step' }.
-	btn on: #click bind: [ self step ]
+	btn on: #click bind: [ | selected |
+		selected :=	(list allAt: '.checkbox>input')
+			select: [ :cb | cb element checked ]
+			thenCollect: [ :cb | Strategies instance at: (cb element id) ].
+		self stepWith: selected
+		]
 !
 
 show: aLogimage
@@ -52,7 +65,16 @@ step
 	strategist := Strategist new.
 	logimage toOld.
 	Strategies instance do: [ :strategy |
-			strategist apply: strategy on: logimage ].
+		strategist apply: strategy on: logimage ].
+	self refresh
+!
+
+stepWith: strategies
+	| strategist |
+	strategist := Strategist new.
+	logimage toOld.
+	strategies do: [ :strategy |
+		strategist apply: strategy on: logimage ].
 	self refresh
 ! !
 
@@ -1260,9 +1282,9 @@ do: aBlock
 initialize
 	"TODO should be autodeclared by each instance !!"
 	list := #{
-		#spaceonly -> StratSpacesOnly.
+		#spacesonly -> StratSpacesOnly.
 		#allhintdone -> StratAllHintDone.
-		#allcountdone -> StratCountAllDone.
+		#countalldone -> StratCountAllDone.
 		#recover -> StratRecover.
 		#notreached -> StratNotReached.
 		#firstcover -> StratFirstCover.
@@ -1369,6 +1391,10 @@ analyse: line
 	^ Cells new
 !
 
+id
+	^ self class id
+!
+
 isBidirectional
 	self subclassResponsibility
 !
@@ -1383,6 +1409,14 @@ analyse: line
 	line isString ifTrue: [
 		^ self new analyse: (Line new: line) ].
 	^ self new analyse: line
+!
+
+id
+	| name |
+	name := self name.
+	name := name copyFrom: 6 to: (name size).
+	name := name asLowercase.
+	^ name
 ! !
 
 Strategy subclass: #StratAllHintDone
