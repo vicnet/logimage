@@ -60,6 +60,32 @@ $globals.Application);
 
 $core.addMethod(
 $core.method({
+selector: "newButton:onClick:",
+protocol: 'as yet unclassified',
+fn: function(text,action){
+var self=this;
+var btn;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+btn=$recv($globals.Silk)._A_(["class".__minus_gt("button"),text]);
+$recv(btn)._on_bind_("click",action);
+return btn;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"newButton:onClick:",{text:text,action:action,btn:btn},$globals.Application)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["text", "action"],
+source: "newButton: text onClick: action\x0a\x09| btn |\x0a\x09btn := Silk\x09A: { #class -> 'button'. text }.\x0a\x09btn on: #click bind: action.\x0a\x09^ btn",
+referencedClasses: ["Silk"],
+//>>excludeEnd("ide");
+messageSends: ["A:", "->", "on:bind:"]
+}),
+$globals.Application);
+
+$core.addMethod(
+$core.method({
 selector: "refresh",
 protocol: 'as yet unclassified',
 fn: function(){
@@ -128,7 +154,7 @@ var menu,btn,list;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-var $5,$4,$3,$2,$8,$7,$6,$1,$10,$9,$12,$11,$13,$15,$14,$16,$19,$21,$20,$18,$24,$25,$26,$23,$22,$17,$29,$28,$27,$30;
+var $5,$4,$3,$2,$8,$7,$6,$1,$10,$9,$12,$11,$13,$15,$14,$16,$19,$21,$20,$18,$24,$25,$26,$23,$22,$17,$27,$29,$28;
 $recv(silk)._resetContents();
 $5="class".__minus_gt("logimage");
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -223,13 +249,10 @@ $ctx2.sendIdx["->"]=7;
 $23=[$24,$25,$26];
 $22=$recv($globals.Silk)._INPUT_($23);
 $17=$recv($18).__lt_lt($22);
-$29="for".__minus_gt(name);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["->"]=8;
+$ctx2.sendIdx["<<"]=8;
 //>>excludeEnd("ctx");
-$28=[$29,name];
-$27=$recv($globals.Silk)._LABEL_($28);
-return $recv($17).__lt_lt($27);
+return $recv($17).__lt_lt($recv($globals.Silk)._LABEL_(["for".__minus_gt(name),name]));
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx2.sendIdx["<<"]=7;
 //>>excludeEnd("ctx");
@@ -237,8 +260,8 @@ $ctx2.sendIdx["<<"]=7;
 }, function($ctx2) {$ctx2.fillBlock({strategy:strategy,name:name},$ctx1,1)});
 //>>excludeEnd("ctx");
 }));
-btn=$recv(menu)._A_(["class".__minus_gt("button"),"Step"]);
-$recv(btn)._on_bind_("click",(function(){
+$27=menu;
+$28=self._newButton_onClick_("Step",(function(){
 var selected;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
@@ -247,11 +270,11 @@ selected=$recv($recv(list)._allAt_(".checkbox>input"))._select_thenCollect_((fun
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx3) {
 //>>excludeEnd("ctx");
-$30=$recv(cb)._element();
+$29=$recv(cb)._element();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx3.sendIdx["element"]=1;
 //>>excludeEnd("ctx");
-return $recv($30)._checked();
+return $recv($29)._checked();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx3) {$ctx3.fillBlock({cb:cb},$ctx2,3)});
 //>>excludeEnd("ctx");
@@ -270,6 +293,22 @@ return self._stepWith_(selected);
 }, function($ctx2) {$ctx2.fillBlock({selected:selected},$ctx1,2)});
 //>>excludeEnd("ctx");
 }));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["newButton:onClick:"]=1;
+//>>excludeEnd("ctx");
+$recv($27).__lt_lt($28);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["<<"]=9;
+//>>excludeEnd("ctx");
+$recv(menu).__lt_lt(self._newButton_onClick_("Reset",(function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return self._reset();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,5)});
+//>>excludeEnd("ctx");
+})));
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"renderOnSilk:",{silk:silk,menu:menu,btn:btn,list:list},$globals.Application)});
@@ -277,10 +316,35 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["silk"],
-source: "renderOnSilk: silk\x0a\x09| menu btn list |\x0a\x09silk resetContents.\x0a\x09(silk DIV: { #class -> 'logimage' })\x0a\x09\x09TABLE\x0a\x09\x09\x09<< (Silk TR << (Silk TD) << cols)\x0a\x09\x09\x09<< (Silk TR << rows << grid).\x0a\x09menu := silk DIV: { #class -> 'menu' }.\x0a\x09list := menu DIV: { #class -> 'checkboxes' }.\x0a\x09Strategies instance do: [ :strategy | | name |\x0a\x09\x09name := strategy id.\x0a\x09\x09(list DIV: { #class -> 'checkbox' })\x0a\x09\x09\x09<< (Silk INPUT: { #type -> 'checkbox'.\x0a\x09\x09\x09\x09\x09\x09\x09  #id -> name.\x0a\x09\x09\x09\x09\x09\x09\x09  #checked -> 'checked' })\x0a\x09\x09\x09<< (Silk LABEL: { #for -> name. name })\x0a\x09\x09].\x0a\x09btn := menu\x09A: { #class -> 'button'. 'Step' }.\x0a\x09btn on: #click bind: [ | selected |\x0a\x09\x09selected :=\x09(list allAt: '.checkbox>input')\x0a\x09\x09\x09select: [ :cb | cb element checked ]\x0a\x09\x09\x09thenCollect: [ :cb | Strategies instance at: (cb element id) ].\x0a\x09\x09self stepWith: selected\x0a\x09\x09]",
+source: "renderOnSilk: silk\x0a\x09| menu btn list |\x0a\x09silk resetContents.\x0a\x09(silk DIV: { #class -> 'logimage' })\x0a\x09\x09TABLE\x0a\x09\x09\x09<< (Silk TR << (Silk TD) << cols)\x0a\x09\x09\x09<< (Silk TR << rows << grid).\x0a\x09menu := silk DIV: { #class -> 'menu' }.\x0a\x09list := menu DIV: { #class -> 'checkboxes' }.\x0a\x09Strategies instance do: [ :strategy | | name |\x0a\x09\x09name := strategy id.\x0a\x09\x09(list DIV: { #class -> 'checkbox' })\x0a\x09\x09\x09<< (Silk INPUT: { #type -> 'checkbox'.\x0a\x09\x09\x09\x09\x09\x09\x09  #id -> name.\x0a\x09\x09\x09\x09\x09\x09\x09  #checked -> 'checked' })\x0a\x09\x09\x09<< (Silk LABEL: { #for -> name. name })\x0a\x09\x09].\x0a\x09 menu << (self newButton: 'Step' onClick: [ | selected |\x0a\x09\x09selected :=\x09(list allAt: '.checkbox>input')\x0a\x09\x09\x09select: [ :cb | cb element checked ]\x0a\x09\x09\x09thenCollect: [ :cb | Strategies instance at: (cb element id) ].\x0a\x09\x09self stepWith: selected\x09]).\x0a\x09 menu << (self newButton: 'Reset' onClick: [\x0a\x09\x09 self reset ])",
 referencedClasses: ["Silk", "Strategies"],
 //>>excludeEnd("ide");
-messageSends: ["resetContents", "<<", "TABLE", "DIV:", "->", "TR", "TD", "do:", "instance", "id", "INPUT:", "LABEL:", "A:", "on:bind:", "select:thenCollect:", "allAt:", "checked", "element", "at:", "stepWith:"]
+messageSends: ["resetContents", "<<", "TABLE", "DIV:", "->", "TR", "TD", "do:", "instance", "id", "INPUT:", "LABEL:", "newButton:onClick:", "select:thenCollect:", "allAt:", "checked", "element", "at:", "stepWith:", "reset"]
+}),
+$globals.Application);
+
+$core.addMethod(
+$core.method({
+selector: "reset",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$recv(self["@logimage"])._reset();
+self._refresh();
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"reset",{},$globals.Application)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "reset\x0a\x09logimage reset.\x0a\x09self refresh",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["reset", "refresh"]
 }),
 $globals.Application);
 
@@ -457,6 +521,24 @@ source: "* n\x0a\x09^ Cells new add: n cell: self",
 referencedClasses: ["Cells"],
 //>>excludeEnd("ide");
 messageSends: ["add:cell:", "new"]
+}),
+$globals.Cell);
+
+$core.addMethod(
+$core.method({
+selector: "=",
+protocol: 'as yet unclassified',
+fn: function(other){
+var self=this;
+return false;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["other"],
+source: "= other\x0a\x09^ false",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
 }),
 $globals.Cell);
 
@@ -824,6 +906,29 @@ $globals.Cell.klass);
 $core.addClass('CellBox', $globals.Cell, [], 'Logimage');
 $core.addMethod(
 $core.method({
+selector: "=",
+protocol: 'printing',
+fn: function(other){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+return $recv(other)._isBox();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"=",{other:other},$globals.CellBox)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["other"],
+source: "= other\x0a\x09^ other isBox",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["isBox"]
+}),
+$globals.CellBox);
+
+$core.addMethod(
+$core.method({
 selector: "alternative",
 protocol: 'printing',
 fn: function(){
@@ -914,6 +1019,24 @@ $globals.CellBox);
 $core.addClass('CellBoxNew', $globals.CellBox, [], 'Logimage');
 $core.addMethod(
 $core.method({
+selector: "alternative",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+return [];
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "alternative\x0a\x09^ #()",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.CellBoxNew);
+
+$core.addMethod(
+$core.method({
 selector: "isNew",
 protocol: 'as yet unclassified',
 fn: function(){
@@ -980,6 +1103,29 @@ $globals.CellBoxNew);
 
 
 $core.addClass('CellSpace', $globals.Cell, [], 'Logimage');
+$core.addMethod(
+$core.method({
+selector: "=",
+protocol: 'printing',
+fn: function(other){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+return $recv(other)._isSpace();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"=",{other:other},$globals.CellSpace)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["other"],
+source: "= other\x0a\x09^ other isSpace",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["isSpace"]
+}),
+$globals.CellSpace);
+
 $core.addMethod(
 $core.method({
 selector: "alternative",
@@ -1072,6 +1218,24 @@ $globals.CellSpace);
 $core.addClass('CellSpaceNew', $globals.CellSpace, [], 'Logimage');
 $core.addMethod(
 $core.method({
+selector: "alternative",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+return [];
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "alternative\x0a\x09^ #()",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.CellSpaceNew);
+
+$core.addMethod(
+$core.method({
 selector: "isNew",
 protocol: 'as yet unclassified',
 fn: function(){
@@ -1138,6 +1302,29 @@ $globals.CellSpaceNew);
 
 
 $core.addClass('CellUnknown', $globals.Cell, [], 'Logimage');
+$core.addMethod(
+$core.method({
+selector: "=",
+protocol: 'printing',
+fn: function(other){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+return $recv(other)._isUnknown();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"=",{other:other},$globals.CellUnknown)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["other"],
+source: "= other\x0a\x09^ other isUnknown",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["isUnknown"]
+}),
+$globals.CellUnknown);
+
 $core.addMethod(
 $core.method({
 selector: "alternative",
@@ -1405,6 +1592,38 @@ source: "asArray\x0a\x09^ cells",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: []
+}),
+$globals.Cells);
+
+$core.addMethod(
+$core.method({
+selector: "asNew",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+self["@cells"]=$recv(self["@cells"])._collect_((function(c){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv(c)._toNew();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({c:c},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"asNew",{},$globals.Cells)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "asNew\x0a\x09cells := cells collect: [ :c | c toNew ]",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["collect:", "toNew"]
 }),
 $globals.Cells);
 
@@ -3922,7 +4141,7 @@ $core.addMethod(
 $core.method({
 selector: "reducedFirst",
 protocol: 'accessing',
-fn: function (){
+fn: function(){
 var self=this;
 var dones,first;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -3957,7 +4176,7 @@ catch(e) {if(e===$early)return e[0]; throw e}
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "reducedFirst\x0a\x09| dones first |\x0a\x09dones := cells firstDones.\x0a\x09first :=  dones numbers.\x0a\x09first ifEmpty: [ ^ self trimFirst ].\x0a\x09^ Line\x0a\x09\x09hint: (hint firstRemoved: first size)\x0a\x09\x09cells: (cells copyFrom: (dones size)+1) \x22copy after dones\x22",
+source: "reducedFirst\x0a\x09| dones first |\x0a\x09dones := cells firstDones.\x0a\x09first := dones numbers.\x0a\x09first ifEmpty: [ ^ self trimFirst ].\x0a\x09^ Line\x0a\x09\x09hint: (hint firstRemoved: first size)\x0a\x09\x09cells: (cells copyFrom: (dones size)+1) \x22copy after dones\x22",
 referencedClasses: ["Line"],
 //>>excludeEnd("ide");
 messageSends: ["firstDones", "numbers", "ifEmpty:", "trimFirst", "hint:cells:", "firstRemoved:", "size", "copyFrom:", "+"]
@@ -4478,6 +4697,31 @@ $globals.Logimage);
 
 $core.addMethod(
 $core.method({
+selector: "reset",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+self["@grid"]=$recv($globals.Grid)._new();
+self._resize();
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"reset",{},$globals.Logimage)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "reset\x0a\x09grid := Grid new.\x0a\x09self resize",
+referencedClasses: ["Grid"],
+//>>excludeEnd("ide");
+messageSends: ["new", "resize"]
+}),
+$globals.Logimage);
+
+$core.addMethod(
+$core.method({
 selector: "resize",
 protocol: 'as yet unclassified',
 fn: function (){
@@ -4930,7 +5174,7 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-self["@list"]=$recv($globals.HashedCollection._newFromPairs_(["spacesonly",$globals.StratSpacesOnly,"allhintdone",$globals.StratAllHintDone,"countalldone",$globals.StratCountAllDone,"recover",$globals.StratRecover,"notreached",$globals.StratNotReached,"firstcover",$globals.StratFirstCover,"lastcover",$globals.StratLastCover,"minspace",$globals.StratMinSpace,"firstdone",$globals.StratFirstDone,"lastdone",$globals.StratLastDone,"testbox",$globals.StratTestBox,"firstcutspace",$globals.StratFirstCutSpace,"lastcutspace",$globals.StratLastCutSpace]))._collect_((function(strat){
+self["@list"]=$recv($globals.HashedCollection._newFromPairs_(["spacesonly",$globals.StratSpacesOnly,"allhintdone",$globals.StratAllHintDone,"countalldone",$globals.StratCountAllDone,"recover",$globals.StratRecover,"notreached",$globals.StratNotReached,"firstcover",$globals.StratFirstCover,"lastcover",$globals.StratLastCover,"minspace",$globals.StratMinSpace,"firstdone",$globals.StratFirstDone,"lastdone",$globals.StratLastDone,"testbox",$globals.StratTestBox,"firstcutspace",$globals.StratFirstCutSpace,"lastcutspace",$globals.StratLastCutSpace,"firstmore",$globals.StratFirstMore,"lastmore",$globals.StratLastMore]))._collect_((function(strat){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
@@ -4946,8 +5190,8 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "initialize\x0a\x09\x22TODO should be autodeclared by each instance !\x22\x0a\x09list := #{\x0a\x09\x09#spacesonly -> StratSpacesOnly.\x0a\x09\x09#allhintdone -> StratAllHintDone.\x0a\x09\x09#countalldone -> StratCountAllDone.\x0a\x09\x09#recover -> StratRecover.\x0a\x09\x09#notreached -> StratNotReached.\x0a\x09\x09#firstcover -> StratFirstCover.\x0a\x09\x09#lastcover -> StratLastCover.\x0a\x09\x09#minspace -> StratMinSpace.\x0a\x09\x09#firstdone -> StratFirstDone.\x0a\x09\x09#lastdone -> StratLastDone.\x0a\x09\x09#testbox -> StratTestBox.\x0a\x09\x09#firstcutspace -> StratFirstCutSpace.\x0a\x09\x09#lastcutspace -> StratLastCutSpace.\x0a\x09\x09}\x0a\x09\x09collect: [ :strat | strat new ]",
-referencedClasses: ["StratSpacesOnly", "StratAllHintDone", "StratCountAllDone", "StratRecover", "StratNotReached", "StratFirstCover", "StratLastCover", "StratMinSpace", "StratFirstDone", "StratLastDone", "StratTestBox", "StratFirstCutSpace", "StratLastCutSpace"],
+source: "initialize\x0a\x09\x22TODO should be autodeclared by each instance !\x22\x0a\x09list := #{\x0a\x09\x09#spacesonly -> StratSpacesOnly.\x0a\x09\x09#allhintdone -> StratAllHintDone.\x0a\x09\x09#countalldone -> StratCountAllDone.\x0a\x09\x09#recover -> StratRecover.\x0a\x09\x09#notreached -> StratNotReached.\x0a\x09\x09#firstcover -> StratFirstCover.\x0a\x09\x09#lastcover -> StratLastCover.\x0a\x09\x09#minspace -> StratMinSpace.\x0a\x09\x09#firstdone -> StratFirstDone.\x0a\x09\x09#lastdone -> StratLastDone.\x0a\x09\x09#testbox -> StratTestBox.\x0a\x09\x09#firstcutspace -> StratFirstCutSpace.\x0a\x09\x09#lastcutspace -> StratLastCutSpace.\x0a\x09\x09#firstmore -> StratFirstMore.\x0a\x09\x09#lastmore -> StratLastMore.\x0a\x09\x09}\x0a\x09\x09collect: [ :strat | strat new ]",
+referencedClasses: ["StratSpacesOnly", "StratAllHintDone", "StratCountAllDone", "StratRecover", "StratNotReached", "StratFirstCover", "StratLastCover", "StratMinSpace", "StratFirstDone", "StratLastDone", "StratTestBox", "StratFirstCutSpace", "StratLastCutSpace", "StratFirstMore", "StratLastMore"],
 //>>excludeEnd("ide");
 messageSends: ["collect:", "new"]
 }),
@@ -5093,7 +5337,7 @@ $core.addMethod(
 $core.method({
 selector: "apply:onColOf:",
 protocol: 'as yet unclassified',
-fn: function (strategy,logimage){
+fn: function(strategy,logimage){
 var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
@@ -5137,7 +5381,7 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["strategy", "logimage"],
-source: "apply: strategy onColOf: logimage\x0a\x091 to: logimage grid size x do: [ :x | | sol line reduced start |\x0a\x09\x09line := logimage colLineAt: x.\x0a\x09\x09reduced := line reducedFirst.\x0a\x09\x09start := line cells size - reduced cells size.\x0a\x09\x09sol := strategy analyse: reduced reducedLast.\x0a\x09\x09self setSol: sol on: logimage atCol: x after: start ]",
+source: "apply: strategy onColOf: logimage\x0a\x091 to: logimage grid size x do: [ :x | | sol line reduced start |\x0a\x09\x09line := logimage colLineAt: x.\x0a\x22Transcript show: 'apply on col: '; show: x; show: ' => '; show: line; cr.\x22\x0a\x09\x09reduced := line reducedFirst.\x0a\x09\x09start := line cells size - reduced cells size.\x0a\x09\x09sol := strategy analyse: reduced reducedLast.\x0a\x09\x09self setSol: sol on: logimage atCol: x after: start ]",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["to:do:", "x", "size", "grid", "colLineAt:", "reducedFirst", "-", "cells", "analyse:", "reducedLast", "setSol:on:atCol:after:"]
@@ -5148,7 +5392,7 @@ $core.addMethod(
 $core.method({
 selector: "apply:onRowOf:",
 protocol: 'as yet unclassified',
-fn: function (strategy,logimage){
+fn: function(strategy,logimage){
 var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
@@ -5192,7 +5436,7 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["strategy", "logimage"],
-source: "apply: strategy onRowOf: logimage\x0a\x091 to: logimage grid size y do: [ :y | | sol line reduced start |\x0a\x09\x09line := logimage rowLineAt: y.\x0a\x09\x09reduced := line reducedFirst.\x0a\x09\x09start := line cells size - reduced cells size.\x0a\x09\x09sol := strategy analyse: reduced reducedLast.\x0a\x09\x09self setSol: sol on: logimage atRow: y after: start ]",
+source: "apply: strategy onRowOf: logimage\x0a\x091 to: logimage grid size y do: [ :y | | sol line reduced start |\x0a\x09\x09line := logimage rowLineAt: y.\x0a\x22Transcript show: 'apply on row: '; show: y; show: ' => '; show: line; cr.\x22\x0a\x09\x09reduced := line reducedFirst.\x0a\x09\x09start := line cells size - reduced cells size.\x0a\x09\x09sol := strategy analyse: reduced reducedLast.\x0a\x09\x09self setSol: sol on: logimage atRow: y after: start ]",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["to:do:", "y", "size", "grid", "rowLineAt:", "reducedFirst", "-", "cells", "analyse:", "reducedLast", "setSol:on:atRow:after:"]
@@ -5851,90 +6095,55 @@ $globals.StratRecover);
 
 
 
-$core.addClass('StratFirstCover', $globals.Strategy, [], 'Logimage');
+$core.addClass('StratFirstBox', $globals.Strategy, [], 'Logimage');
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.StratFirstCover.comment="If a first hint crosses a box, all over crossed space are boxes until hint.\x0aExample: hint 3, with box at 2nd place |? X ?  give | ? X X";
+$globals.StratFirstBox.comment="I am a base for strategy base on first box inside the first hint.";
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
-selector: "analyse:",
+selector: "firstBox:",
 protocol: 'as yet unclassified',
 fn: function(line){
 var self=this;
-var pos,sol;
+var first;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-var $2,$1,$3,$4,$6,$5,$7,$10,$9,$8,$11,$12,$13,$14;
-$2=$recv(line)._cells();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["cells"]=1;
-//>>excludeEnd("ctx");
-$1=$recv($2)._firstBox();
-pos=$recv($1)._at_("pos");
-$3=$recv(pos).__gt((0));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx[">"]=1;
-//>>excludeEnd("ctx");
-if(!$core.assert($3)){
-$4=self._none();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["none"]=1;
-//>>excludeEnd("ctx");
-return $4;
-};
-$6=$recv(line)._hint();
+var $2,$1,$4,$3,$5;
+$2=$recv(line)._hint();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["hint"]=1;
 //>>excludeEnd("ctx");
-$5=$recv($6)._isEmpty();
-if($core.assert($5)){
-$7=self._none();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["none"]=2;
-//>>excludeEnd("ctx");
-return $7;
+$1=$recv($2)._isEmpty();
+if($core.assert($1)){
+return nil;
 };
-$10=$recv(line)._hint();
+first=$recv($recv(line)._cells())._firstBox();
+$4=$recv(first)._at_("pos");
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["hint"]=2;
+$ctx1.sendIdx["at:"]=1;
 //>>excludeEnd("ctx");
-$9=$recv($10)._first();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["first"]=1;
-//>>excludeEnd("ctx");
-$8=$recv($9).__gt(pos);
-if(!$core.assert($8)){
-$11=self._none();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["none"]=3;
-//>>excludeEnd("ctx");
-return $11;
+$3=$recv($4).__gt((0));
+if(!$core.assert($3)){
+return nil;
 };
-$12=$recv($globals.Cells)._new();
-$13=$recv(pos).__minus((1));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["-"]=1;
-//>>excludeEnd("ctx");
-$recv($12)._addUnknowns_($13);
-sol=$recv($12)._addBoxes_($recv($recv($recv($recv(line)._hint())._first()).__minus(pos)).__plus((1)));
-$14=$recv($recv(line)._cells())._isBetter_(sol);
-if(!$core.assert($14)){
-return self._none();
+$5=$recv($recv($recv(line)._hint())._first()).__gt_eq($recv(first)._at_("pos"));
+if(!$core.assert($5)){
+return nil;
 };
-return sol;
+return first;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line,pos:pos,sol:sol},$globals.StratFirstCover)});
+}, function($ctx1) {$ctx1.fill(self,"firstBox:",{line:line,first:first},$globals.StratFirstBox)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["line"],
-source: "analyse: line\x0a\x09| pos sol |\x0a\x09\x22get first box from start\x22\x0a\x09pos := (line cells firstBox) at: #pos.\x0a\x09\x22no box, no sol\x22\x0a\x09pos > 0 ifFalse: [ ^ self none ].\x0a\x09\x22test if hint, no sol\x22\x0a\x09line hint isEmpty ifTrue: [ ^ self none ].\x0a\x09\x22test hint over first box\x22\x0a\x09line hint first > pos ifFalse: [ ^ self none ].\x0a\x09\x22yes, first hint cross the first box, get sol\x22\x0a\x09sol := Cells new\x0a\x09\x09addUnknowns: pos-1;\x0a\x09\x09addBoxes: line hint first-pos+1.\x0a\x09(line cells isBetter: sol) ifFalse: [ ^ self none ].\x0a\x09^ sol",
-referencedClasses: ["Cells"],
+source: "firstBox: line\x0a\x09\x22analyse a line to detect if a box is inside the first hint\x22\x0a\x09| first |\x0a\x09\x22check if one hint min\x22\x0a\x09line hint isEmpty ifTrue: [ ^ nil ].\x0a\x09\x22get first box\x22\x0a\x09first := line cells firstBox.\x0a\x09\x22no box, no sol\x22\x0a\x09(first at: #pos) > 0 ifFalse: [ ^ nil ].\x0a\x09\x22test hint over first box\x22\x0a\x09line hint first >= (first at: #pos) ifFalse: [ ^ nil ].\x0a\x09^ first",
+referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["at:", "firstBox", "cells", "ifFalse:", ">", "none", "ifTrue:", "isEmpty", "hint", "first", "addUnknowns:", "new", "-", "addBoxes:", "+", "isBetter:"]
+messageSends: ["ifTrue:", "isEmpty", "hint", "firstBox", "cells", "ifFalse:", ">", "at:", ">=", "first"]
 }),
-$globals.StratFirstCover);
+$globals.StratFirstBox);
 
 $core.addMethod(
 $core.method({
@@ -5952,7 +6161,237 @@ referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: []
 }),
+$globals.StratFirstBox);
+
+
+
+$core.addClass('StratFirstCover', $globals.StratFirstBox, [], 'Logimage');
+//>>excludeStart("ide", pragmas.excludeIdeData);
+$globals.StratFirstCover.comment="If a first hint crosses a box from the begining, all over crossed space are boxes until hint.\x0aExample: 3|?X?  give |?XX";
+//>>excludeEnd("ide");
+$core.addMethod(
+$core.method({
+selector: "analyse:",
+protocol: 'as yet unclassified',
+fn: function(line){
+var self=this;
+var first,pos,sol;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $1,$2,$3,$4,$5,$receiver;
+first=self._firstBox_(line);
+$1=first;
+if(($receiver = $1) == null || $receiver.isNil){
+$2=self._none();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["none"]=1;
+//>>excludeEnd("ctx");
+return $2;
+} else {
+$1;
+};
+pos=$recv(first)._at_("pos");
+$3=$recv($globals.Cells)._new();
+$4=$recv(pos).__minus((1));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["-"]=1;
+//>>excludeEnd("ctx");
+$recv($3)._addUnknowns_($4);
+sol=$recv($3)._addBoxes_($recv($recv($recv($recv(line)._hint())._first()).__minus(pos)).__plus((1)));
+$5=$recv($recv(line)._cells())._isBetter_(sol);
+if(!$core.assert($5)){
+return self._none();
+};
+return sol;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line,first:first,pos:pos,sol:sol},$globals.StratFirstCover)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["line"],
+source: "analyse: line\x0a\x09| first pos sol |\x0a\x09first := self firstBox: line.\x0a\x09first ifNil: [ ^ self none ].\x0a\x09\x22yes, first hint cross the first box, get sol\x22\x0a\x09pos := first at: #pos.\x0a\x09sol := Cells new\x0a\x09\x09addUnknowns: pos-1;\x0a\x09\x09addBoxes: line hint first-pos+1.\x0a\x09(line cells isBetter: sol) ifFalse: [ ^ self none ].\x0a\x09^ sol",
+referencedClasses: ["Cells"],
+//>>excludeEnd("ide");
+messageSends: ["firstBox:", "ifNil:", "none", "at:", "addUnknowns:", "new", "-", "addBoxes:", "+", "first", "hint", "ifFalse:", "isBetter:", "cells"]
+}),
 $globals.StratFirstCover);
+
+
+
+$core.addClass('StratFirstDone', $globals.StratFirstBox, [], 'Logimage');
+//>>excludeStart("ide", pragmas.excludeIdeData);
+$globals.StratFirstDone.comment="I add a space after first boxes done (corresponding to first hint).";
+//>>excludeEnd("ide");
+$core.addMethod(
+$core.method({
+selector: "analyse:",
+protocol: 'as yet unclassified',
+fn: function(line){
+var self=this;
+var first;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $1,$2,$4,$3,$5,$7,$8,$6,$9,$receiver;
+first=self._firstBox_(line);
+$1=first;
+if(($receiver = $1) == null || $receiver.isNil){
+$2=self._none();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["none"]=1;
+//>>excludeEnd("ctx");
+return $2;
+} else {
+$1;
+};
+$4=$recv(first)._at_("pos");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["at:"]=1;
+//>>excludeEnd("ctx");
+$3=$recv($4).__eq((1));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["="]=1;
+//>>excludeEnd("ctx");
+if(!$core.assert($3)){
+$5=self._none();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["none"]=2;
+//>>excludeEnd("ctx");
+return $5;
+};
+$7=$recv($recv(line)._hint())._first();
+$8=$recv(first)._at_("size");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["at:"]=2;
+//>>excludeEnd("ctx");
+$6=$recv($7).__eq($8);
+if(!$core.assert($6)){
+return self._none();
+};
+$9=$recv($globals.Cells)._new();
+$recv($9)._addBoxes_($recv(first)._at_("size"));
+return $recv($9)._addSpaces_((1));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line,first:first},$globals.StratFirstDone)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["line"],
+source: "analyse: line\x0a\x09| first |\x0a\x09first := self firstBox: line.\x0a\x09first ifNil: [ ^ self none ].\x0a\x09\x22check that it is the first place\x22\x0a\x09(first at: #pos) = 1 ifFalse: [ ^ self none ].\x0a\x09\x22test if first hint is same as box\x22\x0a\x09line hint first = (first at: #size) ifFalse: [ ^ self none ].\x0a\x09\x22get solution, without space\x22\x0a\x09^ Cells new\x0a\x09\x09addBoxes: (first at: #size);\x0a\x09\x09addSpaces: 1",
+referencedClasses: ["Cells"],
+//>>excludeEnd("ide");
+messageSends: ["firstBox:", "ifNil:", "none", "ifFalse:", "=", "at:", "first", "hint", "addBoxes:", "new", "addSpaces:"]
+}),
+$globals.StratFirstDone);
+
+
+
+$core.addClass('StratFirstMore', $globals.StratFirstBox, [], 'Logimage');
+$core.addMethod(
+$core.method({
+selector: "analyse:",
+protocol: 'as yet unclassified',
+fn: function(line){
+var self=this;
+var first,pos,size;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $1,$2,$4,$6,$5,$3,$7,$10,$11,$9,$8,$14,$13,$12,$15,$17,$16,$receiver;
+first=self._firstBox_(line);
+$1=first;
+if(($receiver = $1) == null || $receiver.isNil){
+$2=self._none();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["none"]=1;
+//>>excludeEnd("ctx");
+return $2;
+} else {
+$1;
+};
+size=$recv($recv(line)._hint())._first();
+pos=$recv(first)._at_("pos");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["at:"]=1;
+//>>excludeEnd("ctx");
+$4=$recv(pos).__plus(size);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["+"]=1;
+//>>excludeEnd("ctx");
+$6=$recv(line)._cells();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["cells"]=1;
+//>>excludeEnd("ctx");
+$5=$recv($6)._size();
+$3=$recv($4).__gt($5);
+if($core.assert($3)){
+$7=self._none();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["none"]=2;
+//>>excludeEnd("ctx");
+return $7;
+};
+$10=$recv(line)._cells();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["cells"]=2;
+//>>excludeEnd("ctx");
+$11=$recv(pos).__plus(size);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["+"]=2;
+//>>excludeEnd("ctx");
+$9=$recv($10)._at_($11);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["at:"]=2;
+//>>excludeEnd("ctx");
+$8=$recv($9)._isBox();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["isBox"]=1;
+//>>excludeEnd("ctx");
+if(!$core.assert($8)){
+return self._none();
+};
+$14=$recv(pos).__plus(size);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["+"]=3;
+//>>excludeEnd("ctx");
+$13=$recv($14).__minus((1));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["-"]=1;
+//>>excludeEnd("ctx");
+$12=$recv($13)._to_by_((1),(-1));
+first=$recv($12)._detect_((function(i){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv($recv($recv($recv(line)._cells())._at_(i))._isBox())._not();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({i:i},$ctx1,4)});
+//>>excludeEnd("ctx");
+}));
+$15=$recv($globals.Cells)._new();
+$17=$recv(first).__minus(size);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["-"]=3;
+//>>excludeEnd("ctx");
+$16=$recv($17).__minus((1));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["-"]=2;
+//>>excludeEnd("ctx");
+$recv($15)._addUnknowns_($16);
+return $recv($15)._addBoxes_($recv($recv(pos).__plus(size)).__minus(first));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line,first:first,pos:pos,size:size},$globals.StratFirstMore)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["line"],
+source: "analyse: line\x0a\x09| first pos size |\x0a\x09first := self firstBox: line.\x0a\x09first ifNil: [ ^ self none ].\x0a\x09\x22yes, first hint cross the first box, test if over\x22\x0a\x09\x22test if at least one extra box after last hint box\x22\x0a\x09size := line hint first.\x0a\x09pos := first at: #pos.\x0a\x09pos+size > line cells size ifTrue: [ ^ self none ].\x0a\x09(line cells at: pos+size) isBox\x0a\x09\x09ifFalse: [ ^ self none ].\x0a\x09\x22build a solution\x22\x0a\x09\x22find first non-box from over box downto start\x22\x0a\x09first := (pos+size-1 to: 1 by: -1)\x0a\x09\x09detect: [ :i |\x0a\x09\x09\x09(line cells at: i) isBox not ].\x0a\x09^  Cells new\x0a\x09\x09addUnknowns: first-size-1;\x0a\x09\x09addBoxes: pos+size-first",
+referencedClasses: ["Cells"],
+//>>excludeEnd("ide");
+messageSends: ["firstBox:", "ifNil:", "none", "first", "hint", "at:", "ifTrue:", ">", "+", "size", "cells", "ifFalse:", "isBox", "detect:", "to:by:", "-", "not", "addUnknowns:", "new", "addBoxes:"]
+}),
+$globals.StratFirstMore);
 
 
 
@@ -6207,94 +6646,6 @@ $globals.StratFirstCutSpace);
 
 
 
-$core.addClass('StratFirstDone', $globals.Strategy, [], 'Logimage');
-//>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.StratFirstDone.comment="I add a space after first boxes done (corresponding to first hint).";
-//>>excludeEnd("ide");
-$core.addMethod(
-$core.method({
-selector: "analyse:",
-protocol: 'as yet unclassified',
-fn: function(line){
-var self=this;
-var first;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $2,$1,$3,$5,$4,$6,$8,$9,$7,$10;
-$2=$recv(line)._hint();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["hint"]=1;
-//>>excludeEnd("ctx");
-$1=$recv($2)._isEmpty();
-if($core.assert($1)){
-$3=self._none();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["none"]=1;
-//>>excludeEnd("ctx");
-return $3;
-};
-first=$recv($recv(line)._cells())._firstBox();
-$5=$recv(first)._at_("pos");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["at:"]=1;
-//>>excludeEnd("ctx");
-$4=$recv($5).__eq((1));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["="]=1;
-//>>excludeEnd("ctx");
-if(!$core.assert($4)){
-$6=self._none();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["none"]=2;
-//>>excludeEnd("ctx");
-return $6;
-};
-$8=$recv($recv(line)._hint())._first();
-$9=$recv(first)._at_("size");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["at:"]=2;
-//>>excludeEnd("ctx");
-$7=$recv($8).__eq($9);
-if(!$core.assert($7)){
-return self._none();
-};
-$10=$recv($globals.Cells)._new();
-$recv($10)._addBoxes_($recv(first)._at_("size"));
-return $recv($10)._addSpaces_((1));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line,first:first},$globals.StratFirstDone)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["line"],
-source: "analyse: line\x0a\x09| first |\x0a\x09line hint isEmpty ifTrue: [ ^ self none ].\x0a\x09\x22check if first box is at begining, begining spaces should be removed yet\x22\x0a\x09first := line cells firstBox.\x0a\x09(first at: #pos) = 1 ifFalse: [ ^ self none ].\x0a\x09\x22test if strategy apply, ie first hint is same as box\x22\x0a\x09line hint first = (first at: #size) ifFalse: [ ^ self none ].\x0a\x09\x22get solution, without space\x22\x0a\x09^ Cells new\x0a\x09\x09addBoxes: (first at: #size);\x0a\x09\x09addSpaces: 1",
-referencedClasses: ["Cells"],
-//>>excludeEnd("ide");
-messageSends: ["ifTrue:", "isEmpty", "hint", "none", "firstBox", "cells", "ifFalse:", "=", "at:", "first", "addBoxes:", "new", "addSpaces:"]
-}),
-$globals.StratFirstDone);
-
-$core.addMethod(
-$core.method({
-selector: "isBidirectional",
-protocol: 'as yet unclassified',
-fn: function(){
-var self=this;
-return false;
-
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "isBidirectional\x0a\x09^ false",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: []
-}),
-$globals.StratFirstDone);
-
-
-
 $core.addClass('StratMinSpace', $globals.Strategy, [], 'Logimage');
 //>>excludeStart("ide", pragmas.excludeIdeData);
 $globals.StratMinSpace.comment="I fill first cells with spaces when min hint are bigger than first holes.";
@@ -6303,7 +6654,7 @@ $core.addMethod(
 $core.method({
 selector: "analyse:",
 protocol: 'as yet unclassified',
-fn: function (line){
+fn: function(line){
 var self=this;
 var min,free;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -6659,6 +7010,33 @@ referencedClasses: ["StratFirstDone"],
 messageSends: ["new"]
 }),
 $globals.StratLastDone);
+
+
+
+$core.addClass('StratLastMore', $globals.StratReverted, ['strategy'], 'Logimage');
+$core.addMethod(
+$core.method({
+selector: "initialize",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+self["@strategy"]=$recv($globals.StratFirstMore)._new();
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"initialize",{},$globals.StratLastMore)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "initialize\x0a\x09strategy := StratFirstMore new",
+referencedClasses: ["StratFirstMore"],
+//>>excludeEnd("ide");
+messageSends: ["new"]
+}),
+$globals.StratLastMore);
 
 
 

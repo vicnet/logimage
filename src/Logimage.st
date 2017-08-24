@@ -15,6 +15,13 @@ initialize
 	Silk new << self
 !
 
+newButton: text onClick: action
+	| btn |
+	btn := Silk	A: { #class -> 'button'. text }.
+	btn on: #click bind: action.
+	^ btn
+!
+
 refresh
 	cols resetContents.
 	cols << (WidgetHints new show: logimage colHints).
@@ -41,13 +48,18 @@ renderOnSilk: silk
 							  #checked -> 'checked' })
 			<< (Silk LABEL: { #for -> name. name })
 		].
-	btn := menu	A: { #class -> 'button'. 'Step' }.
-	btn on: #click bind: [ | selected |
+	 menu << (self newButton: 'Step' onClick: [ | selected |
 		selected :=	(list allAt: '.checkbox>input')
 			select: [ :cb | cb element checked ]
 			thenCollect: [ :cb | Strategies instance at: (cb element id) ].
-		self stepWith: selected
-		]
+		self stepWith: selected	]).
+	 menu << (self newButton: 'Reset' onClick: [
+		 self reset ])
+!
+
+reset
+	logimage reset.
+	self refresh
 !
 
 show: aLogimage
@@ -94,6 +106,10 @@ A simple cell or pixel.!
 
 * n
 	^ Cells new add: n cell: self
+!
+
+= other
+	^ false
 !
 
 alternative
@@ -184,6 +200,10 @@ toNew
 
 !CellBox methodsFor: 'printing'!
 
+= other
+	^ other isBox
+!
+
 alternative
 	^ #('X')
 !
@@ -202,6 +222,10 @@ CellBox subclass: #CellBoxNew
 
 !CellBoxNew methodsFor: 'as yet unclassified'!
 
+alternative
+	^ #()
+!
+
 isNew
 	^ true
 !
@@ -219,6 +243,10 @@ Cell subclass: #CellSpace
 	package: 'Logimage'!
 
 !CellSpace methodsFor: 'printing'!
+
+= other
+	^ other isSpace
+!
 
 alternative
 	^ #()
@@ -242,6 +270,10 @@ CellSpace subclass: #CellSpaceNew
 
 !CellSpaceNew methodsFor: 'as yet unclassified'!
 
+alternative
+	^ #()
+!
+
 isNew
 	^ true
 !
@@ -259,6 +291,10 @@ Cell subclass: #CellUnknown
 	package: 'Logimage'!
 
 !CellUnknown methodsFor: 'printing'!
+
+= other
+	^ other isUnknown
+!
 
 alternative
 	^ #('?' '_')
@@ -310,6 +346,10 @@ addUnknowns: n
 
 asArray
 	^ cells
+!
+
+asNew
+	cells := cells collect: [ :c | c toNew ]
 !
 
 at: index
@@ -835,7 +875,7 @@ line: aLine
 reducedFirst
 	| dones first |
 	dones := cells firstDones.
-	first :=  dones numbers.
+	first := dones numbers.
 	first ifEmpty: [ ^ self trimFirst ].
 	^ Line
 		hint: (hint firstRemoved: first size)
@@ -974,6 +1014,11 @@ newBox: point
 
 newSpace: point
 	grid newSpace: point
+!
+
+reset
+	grid := Grid new.
+	self resize
 !
 
 resize
@@ -1295,6 +1340,8 @@ initialize
 		#testbox -> StratTestBox.
 		#firstcutspace -> StratFirstCutSpace.
 		#lastcutspace -> StratLastCutSpace.
+		#firstmore -> StratFirstMore.
+		#lastmore -> StratLastMore.
 		}
 		collect: [ :strat | strat new ]
 !
@@ -1335,6 +1382,7 @@ apply: strategy on: logimage
 apply: strategy onColOf: logimage
 	1 to: logimage grid size x do: [ :x | | sol line reduced start |
 		line := logimage colLineAt: x.
+"Transcript show: 'apply on col: '; show: x; show: ' => '; show: line; cr."
 		reduced := line reducedFirst.
 		start := line cells size - reduced cells size.
 		sol := strategy analyse: reduced reducedLast.
@@ -1344,6 +1392,7 @@ apply: strategy onColOf: logimage
 apply: strategy onRowOf: logimage
 	1 to: logimage grid size y do: [ :y | | sol line reduced start |
 		line := logimage rowLineAt: y.
+"Transcript show: 'apply on row: '; show: y; show: ' => '; show: line; cr."
 		reduced := line reducedFirst.
 		start := line cells size - reduced cells size.
 		sol := strategy analyse: reduced reducedLast.
@@ -1525,35 +1574,101 @@ isBidirectional
 	^ true
 ! !
 
-Strategy subclass: #StratFirstCover
+Strategy subclass: #StratFirstBox
+	instanceVariableNames: ''
+	package: 'Logimage'!
+!StratFirstBox commentStamp!
+I am a base for strategy base on first box inside the first hint.!
+
+!StratFirstBox methodsFor: 'as yet unclassified'!
+
+firstBox: line
+	"analyse a line to detect if a box is inside the first hint"
+	| first |
+	"check if one hint min"
+	line hint isEmpty ifTrue: [ ^ nil ].
+	"get first box"
+	first := line cells firstBox.
+	"no box, no sol"
+	(first at: #pos) > 0 ifFalse: [ ^ nil ].
+	"test hint over first box"
+	line hint first >= (first at: #pos) ifFalse: [ ^ nil ].
+	^ first
+!
+
+isBidirectional
+	^ false
+! !
+
+StratFirstBox subclass: #StratFirstCover
 	instanceVariableNames: ''
 	package: 'Logimage'!
 !StratFirstCover commentStamp!
-If a first hint crosses a box, all over crossed space are boxes until hint.
-Example: hint 3, with box at 2nd place |? X ?  give | ? X X!
+If a first hint crosses a box from the begining, all over crossed space are boxes until hint.
+Example: 3|?X?  give |?XX!
 
 !StratFirstCover methodsFor: 'as yet unclassified'!
 
 analyse: line
-	| pos sol |
-	"get first box from start"
-	pos := (line cells firstBox) at: #pos.
-	"no box, no sol"
-	pos > 0 ifFalse: [ ^ self none ].
-	"test if hint, no sol"
-	line hint isEmpty ifTrue: [ ^ self none ].
-	"test hint over first box"
-	line hint first > pos ifFalse: [ ^ self none ].
+	| first pos sol |
+	first := self firstBox: line.
+	first ifNil: [ ^ self none ].
 	"yes, first hint cross the first box, get sol"
+	pos := first at: #pos.
 	sol := Cells new
 		addUnknowns: pos-1;
 		addBoxes: line hint first-pos+1.
 	(line cells isBetter: sol) ifFalse: [ ^ self none ].
 	^ sol
-!
+! !
 
-isBidirectional
-	^ false
+StratFirstBox subclass: #StratFirstDone
+	instanceVariableNames: ''
+	package: 'Logimage'!
+!StratFirstDone commentStamp!
+I add a space after first boxes done (corresponding to first hint).!
+
+!StratFirstDone methodsFor: 'as yet unclassified'!
+
+analyse: line
+	| first |
+	first := self firstBox: line.
+	first ifNil: [ ^ self none ].
+	"check that it is the first place"
+	(first at: #pos) = 1 ifFalse: [ ^ self none ].
+	"test if first hint is same as box"
+	line hint first = (first at: #size) ifFalse: [ ^ self none ].
+	"get solution, without space"
+	^ Cells new
+		addBoxes: (first at: #size);
+		addSpaces: 1
+! !
+
+StratFirstBox subclass: #StratFirstMore
+	instanceVariableNames: ''
+	package: 'Logimage'!
+
+!StratFirstMore methodsFor: 'as yet unclassified'!
+
+analyse: line
+	| first pos size |
+	first := self firstBox: line.
+	first ifNil: [ ^ self none ].
+	"yes, first hint cross the first box, test if over"
+	"test if at least one extra box after last hint box"
+	size := line hint first.
+	pos := first at: #pos.
+	pos+size > line cells size ifTrue: [ ^ self none ].
+	(line cells at: pos+size) isBox
+		ifFalse: [ ^ self none ].
+	"build a solution"
+	"find first non-box from over box downto start"
+	first := (pos+size-1 to: 1 by: -1)
+		detect: [ :i |
+			(line cells at: i) isBox not ].
+	^  Cells new
+		addUnknowns: first-size-1;
+		addBoxes: pos+size-first
 ! !
 
 Strategy subclass: #StratFirstCutSpace
@@ -1631,32 +1746,6 @@ testStrategies: line
 		res := strategy analyse: line.
 		res isEmpty ifFalse: [ ^ res] ].
 	^ self none
-! !
-
-Strategy subclass: #StratFirstDone
-	instanceVariableNames: ''
-	package: 'Logimage'!
-!StratFirstDone commentStamp!
-I add a space after first boxes done (corresponding to first hint).!
-
-!StratFirstDone methodsFor: 'as yet unclassified'!
-
-analyse: line
-	| first |
-	line hint isEmpty ifTrue: [ ^ self none ].
-	"check if first box is at begining, begining spaces should be removed yet"
-	first := line cells firstBox.
-	(first at: #pos) = 1 ifFalse: [ ^ self none ].
-	"test if strategy apply, ie first hint is same as box"
-	line hint first = (first at: #size) ifFalse: [ ^ self none ].
-	"get solution, without space"
-	^ Cells new
-		addBoxes: (first at: #size);
-		addSpaces: 1
-!
-
-isBidirectional
-	^ false
 ! !
 
 Strategy subclass: #StratMinSpace
@@ -1767,6 +1856,16 @@ StratReverted subclass: #StratLastDone
 
 initialize
 	strategy := StratFirstDone new
+! !
+
+StratReverted subclass: #StratLastMore
+	instanceVariableNames: 'strategy'
+	package: 'Logimage'!
+
+!StratLastMore methodsFor: 'as yet unclassified'!
+
+initialize
+	strategy := StratFirstMore new
 ! !
 
 Strategy subclass: #StratSpacesOnly

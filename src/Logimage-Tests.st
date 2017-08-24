@@ -11,6 +11,19 @@ setUp
 
 !LogimageTest methodsFor: 'tests'!
 
+testCellAccesses
+	self assert: (Cell at: #box) equals: (Cell at: #box).
+	self assert: (Cell at: #box) equals: (Cell at: #boxnew).
+	self assert: (Cell at: #space) equals: (Cell at: #space).
+	self assert: (Cell at: #space) equals: (Cell at: #spacenew).
+	self assert: (Cell at: #unknown) equals: (Cell at: #unknown).
+	self assert: (Cell at: #box) = (Cell at: #box).
+	self assert: (Cell at: #box) = (Cell at: #boxnew).
+	self assert: (Cell at: #box) == (Cell at: #box).
+	self assert: (Cell at: #box) ~~ (Cell at: #boxnew).
+	self assert: (Cell at: #box) ~= (Cell at: #space).
+!
+
 testCellsAccesses
 	| c |
 	"test firstDones"
@@ -84,14 +97,38 @@ testStratNotReached
 	self assert: sol = (Cells new s; s; u; u; u; s; s)
 !
 
+testStratXCover
+	self assert: (StratFirstCover new analyse: (Line new: '2|X '))
+		 equals: (Cells new: 'XX').
+	self assert: (StratFirstCover new analyse: (Line new: '3|X  '))
+		 equals: (Cells new: 'XXX').
+	self assert: (StratFirstCover new analyse: (Line new: '3| X '))
+		 equals: (Cells new: ' XX').
+	self assert: (StratFirstCover new analyse: (Line new: '3|  X'))
+		 equals: (Cells new: '').
+	self assert: (StratFirstCover new analyse: (Line new: '3|   X'))
+		 equals: (Cells new: '').
+!
+
 testStratXDone
-	| l sol res |
+	| l |
 	l := Line new
 		hint: (Hint new: {1. 2});
 		cells: (Cells new b;u;b;b).
-	sol := StratFirstDone new analyse: l.
-	self assert: sol = (Cells new b;s).
-	sol := StratLastDone new analyse: l.
-	self assert: sol = (Cells new u;s;b;b)
+	self assert: (StratFirstDone new analyse: l) 
+		 equals: (Cells new b;s).
+	self assert: (StratLastDone new analyse: l)
+		 equals: (Cells new u;s;b;b)
+!
+
+testStratXMore
+	self assert: (StratFirstMore new analyse: (Line new: '3 2|  X XX'))
+		 equals: (Cells new: 'XX').
+	self assert: (StratFirstMore new analyse: (Line new: '3 2|  X  X'))
+		 equals: (Cells new: ' X').
+	self assert: (StratFirstMore new analyse: (Line new: '3 2|  X   X'))
+		 equals: (Cells new: '').
+	self assert: (StratFirstMore new analyse: (Line new: '4 2|   X XXX'))
+		 equals: (Cells new: 'XXX').
 ! !
 
