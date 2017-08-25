@@ -1749,5 +1749,125 @@ messageSends: ["assert:equals:", "analyse:", "new", "new:"]
 }),
 $globals.LogimageTest);
 
+$core.addMethod(
+$core.method({
+selector: "testStratXNotReachedMore",
+protocol: 'tests',
+fn: function(){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $2,$3,$1,$4,$6,$7,$5,$8,$10,$11,$9;
+$2=$recv($globals.StratFirstNotReachedMore)._new();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["new"]=1;
+//>>excludeEnd("ctx");
+$3=$recv($globals.Line)._new_("1| X");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["new:"]=1;
+//>>excludeEnd("ctx");
+$1=$recv($2)._analyse_($3);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["analyse:"]=1;
+//>>excludeEnd("ctx");
+$4=$recv($globals.Cells)._new_("-");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["new:"]=2;
+//>>excludeEnd("ctx");
+self._assert_equals_($1,$4);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=1;
+//>>excludeEnd("ctx");
+$6=$recv($globals.StratFirstNotReachedMore)._new();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["new"]=2;
+//>>excludeEnd("ctx");
+$7=$recv($globals.Line)._new_("2|  XX");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["new:"]=3;
+//>>excludeEnd("ctx");
+$5=$recv($6)._analyse_($7);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["analyse:"]=2;
+//>>excludeEnd("ctx");
+$8=$recv($globals.Cells)._new_("-");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["new:"]=4;
+//>>excludeEnd("ctx");
+self._assert_equals_($5,$8);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=2;
+//>>excludeEnd("ctx");
+$10=$recv($globals.StratFirstNotReachedMore)._new();
+$11=$recv($globals.Line)._new_("3|   XX ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["new:"]=5;
+//>>excludeEnd("ctx");
+$9=$recv($10)._analyse_($11);
+self._assert_equals_($9,$recv($globals.Cells)._new_("-"));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"testStratXNotReachedMore",{},$globals.LogimageTest)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "testStratXNotReachedMore\x0a\x09self assert: (StratFirstNotReachedMore new analyse: (Line new: '1| X'))\x0a\x09\x09 equals: (Cells new: '-').\x0a\x09self assert: (StratFirstNotReachedMore new analyse: (Line new: '2|  XX'))\x0a\x09\x09 equals: (Cells new: '-').\x0a\x09self assert: (StratFirstNotReachedMore new analyse: (Line new: '3|   XX '))\x0a\x09\x09 equals: (Cells new: '-').",
+referencedClasses: ["StratFirstNotReachedMore", "Line", "Cells"],
+//>>excludeEnd("ide");
+messageSends: ["assert:equals:", "analyse:", "new", "new:"]
+}),
+$globals.LogimageTest);
+
+$core.addMethod(
+$core.method({
+selector: "testStratXPosMore",
+protocol: 'tests',
+fn: function(){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $1,$2,$3,$4;
+$1=$recv($globals.StratFirstPosMore)._analyse_("1|  X");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["analyse:"]=1;
+//>>excludeEnd("ctx");
+$2=$recv($globals.Cells)._new_(" -");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["new:"]=1;
+//>>excludeEnd("ctx");
+self._assert_equals_($1,$2);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=1;
+//>>excludeEnd("ctx");
+$3=$recv($globals.StratFirstPosMore)._analyse_("2|   XX");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["analyse:"]=2;
+//>>excludeEnd("ctx");
+$4=$recv($globals.Cells)._new_("  -");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["new:"]=2;
+//>>excludeEnd("ctx");
+self._assert_equals_($3,$4);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=2;
+//>>excludeEnd("ctx");
+self._assert_equals_($recv($globals.StratFirstPosMore)._analyse_("2|   XXX"),$recv($globals.Cells)._new_("XX-"));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"testStratXPosMore",{},$globals.LogimageTest)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "testStratXPosMore\x0a\x09self assert: (StratFirstPosMore analyse: '1|  X')\x0a\x09\x09 equals: (Cells new: ' -').\x0a\x09self assert: (StratFirstPosMore analyse: '2|   XX')\x0a\x09\x09 equals: (Cells new: '  -').\x0a\x09self assert: (StratFirstPosMore analyse: '2|   XXX')\x0a\x09\x09 equals: (Cells new: 'XX-').",
+referencedClasses: ["StratFirstPosMore", "Cells"],
+//>>excludeEnd("ide");
+messageSends: ["assert:equals:", "analyse:", "new:"]
+}),
+$globals.LogimageTest);
+
 
 });

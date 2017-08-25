@@ -130,5 +130,23 @@ testStratXMore
 		 equals: (Cells new: '').
 	self assert: (StratFirstMore new analyse: (Line new: '4 2|   X XXX'))
 		 equals: (Cells new: 'XXX').
+!
+
+testStratXNotReachedMore
+	self assert: (StratFirstNotReachedMore new analyse: (Line new: '1| X'))
+		 equals: (Cells new: '-').
+	self assert: (StratFirstNotReachedMore new analyse: (Line new: '2|  XX'))
+		 equals: (Cells new: '-').
+	self assert: (StratFirstNotReachedMore new analyse: (Line new: '3|   XX '))
+		 equals: (Cells new: '-').
+!
+
+testStratXPosMore
+	self assert: (StratFirstPosMore analyse: '1|  X')
+		 equals: (Cells new: ' -').
+	self assert: (StratFirstPosMore analyse: '2|   XX')
+		 equals: (Cells new: '  -').
+	self assert: (StratFirstPosMore analyse: '2|   XXX')
+		 equals: (Cells new: 'XX-').
 ! !
 

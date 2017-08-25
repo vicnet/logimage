@@ -1342,6 +1342,10 @@ initialize
 		#lastcutspace -> StratLastCutSpace.
 		#firstmore -> StratFirstMore.
 		#lastmore -> StratLastMore.
+		#firstnotreachedmore -> StratFirstNotReachedMore.
+		#lastnotreachedmore -> StratLastNotReachedMore.
+		#firstposmore -> StratFirstPosMore.
+		#lastposmore -> StratLastPosMore.
 		}
 		collect: [ :strat | strat new ]
 !
@@ -1647,6 +1651,8 @@ analyse: line
 StratFirstBox subclass: #StratFirstMore
 	instanceVariableNames: ''
 	package: 'Logimage'!
+!StratFirstMore commentStamp!
+If the first hint is over the first box, I test if first hint should be restrict to the left due to overlap on a more boxes for next hint.!
 
 !StratFirstMore methodsFor: 'as yet unclassified'!
 
@@ -1746,6 +1752,70 @@ testStrategies: line
 		res := strategy analyse: line.
 		res isEmpty ifFalse: [ ^ res] ].
 	^ self none
+! !
+
+Strategy subclass: #StratFirstNotReachedMore
+	instanceVariableNames: ''
+	package: 'Logimage'!
+!StratFirstNotReachedMore commentStamp!
+Likre not reached but by testing too more boxes for first hint if set at first position.
+Example: 2|??X => |-?X first cell should be space!
+
+!StratFirstNotReachedMore methodsFor: 'as yet unclassified'!
+
+analyse: line
+	"analyse a line to detect if a box just after the first hint"
+	| first |
+	"check if one hint min"
+	line hint isEmpty ifTrue: [ ^ self none ].
+	"test first box"
+	first := line cells firstBox.
+	"test if first box just after hint"
+	(first at: #pos) = (line hint first + 1) ifFalse: [ ^ self none ].
+	^ Cells new addSpaces: 1
+!
+
+isBidirectional
+	^ false
+! !
+
+Strategy subclass: #StratFirstPosMore
+	instanceVariableNames: ''
+	package: 'Logimage'!
+!StratFirstPosMore commentStamp!
+I try to set a box next to the first hint at first position, if the new first box number is too big for the first hint, I have a solution for at least one space at.
+If it is more than first hint, I could place the the hint exactly.
+Examples:
+- 2|??TX =>|??-XX
+- 2|??TXXX =>|XX-XX!
+
+!StratFirstPosMore methodsFor: 'as yet unclassified'!
+
+analyse: line
+	"analyse a line to detect if a box just after the first hint"
+	| first hint sol |
+	"check if one hint min"
+	line hint isEmpty ifTrue: [ ^ self none ].
+	hint := line hint first.
+	"test first box"
+	first := line cells firstBox.
+	"test if first box just after hint"
+	(first at: #pos) = (hint + 2)
+		ifFalse: [ ^ self none ].
+	"it should be at least same size as first hint"
+	(first at: #size) >= hint
+		ifFalse: [ ^ self none ].
+	"OK, one solution"
+	sol := Cells new.
+	(first at: #size) = hint
+		ifTrue: [ sol addUnknowns: hint ]
+		ifFalse: [ sol addBoxes: hint ].
+	sol addSpaces: 1.
+	^ sol
+!
+
+isBidirectional
+	^ false
 ! !
 
 Strategy subclass: #StratMinSpace
@@ -1868,6 +1938,26 @@ initialize
 	strategy := StratFirstMore new
 ! !
 
+StratReverted subclass: #StratLastNotReachedMore
+	instanceVariableNames: 'strategy'
+	package: 'Logimage'!
+
+!StratLastNotReachedMore methodsFor: 'as yet unclassified'!
+
+initialize
+	strategy := StratFirstNotReachedMore new
+! !
+
+StratReverted subclass: #StratLastPosMore
+	instanceVariableNames: 'strategy'
+	package: 'Logimage'!
+
+!StratLastPosMore methodsFor: 'as yet unclassified'!
+
+initialize
+	strategy := StratFirstPosMore new
+! !
+
 Strategy subclass: #StratSpacesOnly
 	instanceVariableNames: ''
 	package: 'Logimage'!
@@ -1923,6 +2013,10 @@ initialize
 	div := Silk DIV: { #class -> 'cell' }
 !
 
+limit
+	div element className: (div element className), ' limit'
+!
+
 renderOnSilk: silk
 	silk << div
 !
@@ -1958,10 +2052,15 @@ show: grid
 	grid rowDo: [ :row | | line x |
 		x := 0.
 		y := y+1.
-		line := div DIV: { #class -> ('line',(y\\5=0 ifTrue: [' gras'] ifFalse: [''])) }.
-		row do: [ :cell |
+		line := div DIV: {
+			#class -> ('line',(y\\5=0
+				ifTrue: [' gras']
+				ifFalse: [''])) }.
+		row do: [ :cell | | w |
 			x := x + 1.
-			line << (WidgetCell new show: cell)
+			w := WidgetCell new show: cell.
+			x\\5=0 ifTrue: [ w limit ].
+			line << w
 		]
 	]
 ! !

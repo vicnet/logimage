@@ -47,6 +47,9 @@
 .line.gras .cell {
     border-bottom-width: 2px;    
 }
+.cell.limit {
+    border-right-width: 2px;
+}
 .box {
     background-color: black
 }

@@ -5174,7 +5174,7 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-self["@list"]=$recv($globals.HashedCollection._newFromPairs_(["spacesonly",$globals.StratSpacesOnly,"allhintdone",$globals.StratAllHintDone,"countalldone",$globals.StratCountAllDone,"recover",$globals.StratRecover,"notreached",$globals.StratNotReached,"firstcover",$globals.StratFirstCover,"lastcover",$globals.StratLastCover,"minspace",$globals.StratMinSpace,"firstdone",$globals.StratFirstDone,"lastdone",$globals.StratLastDone,"testbox",$globals.StratTestBox,"firstcutspace",$globals.StratFirstCutSpace,"lastcutspace",$globals.StratLastCutSpace,"firstmore",$globals.StratFirstMore,"lastmore",$globals.StratLastMore]))._collect_((function(strat){
+self["@list"]=$recv($globals.HashedCollection._newFromPairs_(["spacesonly",$globals.StratSpacesOnly,"allhintdone",$globals.StratAllHintDone,"countalldone",$globals.StratCountAllDone,"recover",$globals.StratRecover,"notreached",$globals.StratNotReached,"firstcover",$globals.StratFirstCover,"lastcover",$globals.StratLastCover,"minspace",$globals.StratMinSpace,"firstdone",$globals.StratFirstDone,"lastdone",$globals.StratLastDone,"testbox",$globals.StratTestBox,"firstcutspace",$globals.StratFirstCutSpace,"lastcutspace",$globals.StratLastCutSpace,"firstmore",$globals.StratFirstMore,"lastmore",$globals.StratLastMore,"firstnotreachedmore",$globals.StratFirstNotReachedMore,"lastnotreachedmore",$globals.StratLastNotReachedMore,"firstposmore",$globals.StratFirstPosMore,"lastposmore",$globals.StratLastPosMore]))._collect_((function(strat){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
@@ -5190,8 +5190,8 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "initialize\x0a\x09\x22TODO should be autodeclared by each instance !\x22\x0a\x09list := #{\x0a\x09\x09#spacesonly -> StratSpacesOnly.\x0a\x09\x09#allhintdone -> StratAllHintDone.\x0a\x09\x09#countalldone -> StratCountAllDone.\x0a\x09\x09#recover -> StratRecover.\x0a\x09\x09#notreached -> StratNotReached.\x0a\x09\x09#firstcover -> StratFirstCover.\x0a\x09\x09#lastcover -> StratLastCover.\x0a\x09\x09#minspace -> StratMinSpace.\x0a\x09\x09#firstdone -> StratFirstDone.\x0a\x09\x09#lastdone -> StratLastDone.\x0a\x09\x09#testbox -> StratTestBox.\x0a\x09\x09#firstcutspace -> StratFirstCutSpace.\x0a\x09\x09#lastcutspace -> StratLastCutSpace.\x0a\x09\x09#firstmore -> StratFirstMore.\x0a\x09\x09#lastmore -> StratLastMore.\x0a\x09\x09}\x0a\x09\x09collect: [ :strat | strat new ]",
-referencedClasses: ["StratSpacesOnly", "StratAllHintDone", "StratCountAllDone", "StratRecover", "StratNotReached", "StratFirstCover", "StratLastCover", "StratMinSpace", "StratFirstDone", "StratLastDone", "StratTestBox", "StratFirstCutSpace", "StratLastCutSpace", "StratFirstMore", "StratLastMore"],
+source: "initialize\x0a\x09\x22TODO should be autodeclared by each instance !\x22\x0a\x09list := #{\x0a\x09\x09#spacesonly -> StratSpacesOnly.\x0a\x09\x09#allhintdone -> StratAllHintDone.\x0a\x09\x09#countalldone -> StratCountAllDone.\x0a\x09\x09#recover -> StratRecover.\x0a\x09\x09#notreached -> StratNotReached.\x0a\x09\x09#firstcover -> StratFirstCover.\x0a\x09\x09#lastcover -> StratLastCover.\x0a\x09\x09#minspace -> StratMinSpace.\x0a\x09\x09#firstdone -> StratFirstDone.\x0a\x09\x09#lastdone -> StratLastDone.\x0a\x09\x09#testbox -> StratTestBox.\x0a\x09\x09#firstcutspace -> StratFirstCutSpace.\x0a\x09\x09#lastcutspace -> StratLastCutSpace.\x0a\x09\x09#firstmore -> StratFirstMore.\x0a\x09\x09#lastmore -> StratLastMore.\x0a\x09\x09#firstnotreachedmore -> StratFirstNotReachedMore.\x0a\x09\x09#lastnotreachedmore -> StratLastNotReachedMore.\x0a\x09\x09#firstposmore -> StratFirstPosMore.\x0a\x09\x09#lastposmore -> StratLastPosMore.\x0a\x09\x09}\x0a\x09\x09collect: [ :strat | strat new ]",
+referencedClasses: ["StratSpacesOnly", "StratAllHintDone", "StratCountAllDone", "StratRecover", "StratNotReached", "StratFirstCover", "StratLastCover", "StratMinSpace", "StratFirstDone", "StratLastDone", "StratTestBox", "StratFirstCutSpace", "StratLastCutSpace", "StratFirstMore", "StratLastMore", "StratFirstNotReachedMore", "StratLastNotReachedMore", "StratFirstPosMore", "StratLastPosMore"],
 //>>excludeEnd("ide");
 messageSends: ["collect:", "new"]
 }),
@@ -6288,6 +6288,9 @@ $globals.StratFirstDone);
 
 
 $core.addClass('StratFirstMore', $globals.StratFirstBox, [], 'Logimage');
+//>>excludeStart("ide", pragmas.excludeIdeData);
+$globals.StratFirstMore.comment="If the first hint is over the first box, I test if first hint should be restrict to the left due to overlap on a more boxes for next hint.";
+//>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
 selector: "analyse:",
@@ -6643,6 +6646,166 @@ referencedClasses: ["Strategies"],
 messageSends: ["do:", "instance", "analyse:", "ifFalse:", "isEmpty", "none"]
 }),
 $globals.StratFirstCutSpace);
+
+
+
+$core.addClass('StratFirstNotReachedMore', $globals.Strategy, [], 'Logimage');
+//>>excludeStart("ide", pragmas.excludeIdeData);
+$globals.StratFirstNotReachedMore.comment="Likre not reached but by testing too more boxes for first hint if set at first position.\x0aExample: 2|??X => |-?X first cell should be space";
+//>>excludeEnd("ide");
+$core.addMethod(
+$core.method({
+selector: "analyse:",
+protocol: 'as yet unclassified',
+fn: function(line){
+var self=this;
+var first;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $2,$1,$3,$4;
+$2=$recv(line)._hint();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["hint"]=1;
+//>>excludeEnd("ctx");
+$1=$recv($2)._isEmpty();
+if($core.assert($1)){
+$3=self._none();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["none"]=1;
+//>>excludeEnd("ctx");
+return $3;
+};
+first=$recv($recv(line)._cells())._firstBox();
+$4=$recv($recv(first)._at_("pos")).__eq($recv($recv($recv(line)._hint())._first()).__plus((1)));
+if(!$core.assert($4)){
+return self._none();
+};
+return $recv($recv($globals.Cells)._new())._addSpaces_((1));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line,first:first},$globals.StratFirstNotReachedMore)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["line"],
+source: "analyse: line\x0a\x09\x22analyse a line to detect if a box just after the first hint\x22\x0a\x09| first |\x0a\x09\x22check if one hint min\x22\x0a\x09line hint isEmpty ifTrue: [ ^ self none ].\x0a\x09\x22test first box\x22\x0a\x09first := line cells firstBox.\x0a\x09\x22test if first box just after hint\x22\x0a\x09(first at: #pos) = (line hint first + 1) ifFalse: [ ^ self none ].\x0a\x09^ Cells new addSpaces: 1",
+referencedClasses: ["Cells"],
+//>>excludeEnd("ide");
+messageSends: ["ifTrue:", "isEmpty", "hint", "none", "firstBox", "cells", "ifFalse:", "=", "at:", "+", "first", "addSpaces:", "new"]
+}),
+$globals.StratFirstNotReachedMore);
+
+$core.addMethod(
+$core.method({
+selector: "isBidirectional",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+return false;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "isBidirectional\x0a\x09^ false",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.StratFirstNotReachedMore);
+
+
+
+$core.addClass('StratFirstPosMore', $globals.Strategy, [], 'Logimage');
+//>>excludeStart("ide", pragmas.excludeIdeData);
+$globals.StratFirstPosMore.comment="I try to set a box next to the first hint at first position, if the new first box number is too big for the first hint, I have a solution for at least one space at.\x0aIf it is more than first hint, I could place the the hint exactly.\x0aExamples:\x0a- 2|??TX =>|??-XX\x0a- 2|??TXXX =>|XX-XX";
+//>>excludeEnd("ide");
+$core.addMethod(
+$core.method({
+selector: "analyse:",
+protocol: 'as yet unclassified',
+fn: function(line){
+var self=this;
+var first,hint,sol;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $2,$1,$3,$5,$4,$6,$8,$7,$9;
+$2=$recv(line)._hint();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["hint"]=1;
+//>>excludeEnd("ctx");
+$1=$recv($2)._isEmpty();
+if($core.assert($1)){
+$3=self._none();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["none"]=1;
+//>>excludeEnd("ctx");
+return $3;
+};
+hint=$recv($recv(line)._hint())._first();
+first=$recv($recv(line)._cells())._firstBox();
+$5=$recv(first)._at_("pos");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["at:"]=1;
+//>>excludeEnd("ctx");
+$4=$recv($5).__eq($recv(hint).__plus((2)));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["="]=1;
+//>>excludeEnd("ctx");
+if(!$core.assert($4)){
+$6=self._none();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["none"]=2;
+//>>excludeEnd("ctx");
+return $6;
+};
+$8=$recv(first)._at_("size");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["at:"]=2;
+//>>excludeEnd("ctx");
+$7=$recv($8).__gt_eq(hint);
+if(!$core.assert($7)){
+return self._none();
+};
+sol=$recv($globals.Cells)._new();
+$9=$recv($recv(first)._at_("size")).__eq(hint);
+if($core.assert($9)){
+$recv(sol)._addUnknowns_(hint);
+} else {
+$recv(sol)._addBoxes_(hint);
+};
+$recv(sol)._addSpaces_((1));
+return sol;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line,first:first,hint:hint,sol:sol},$globals.StratFirstPosMore)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["line"],
+source: "analyse: line\x0a\x09\x22analyse a line to detect if a box just after the first hint\x22\x0a\x09| first hint sol |\x0a\x09\x22check if one hint min\x22\x0a\x09line hint isEmpty ifTrue: [ ^ self none ].\x0a\x09hint := line hint first.\x0a\x09\x22test first box\x22\x0a\x09first := line cells firstBox.\x0a\x09\x22test if first box just after hint\x22\x0a\x09(first at: #pos) = (hint + 2)\x0a\x09\x09ifFalse: [ ^ self none ].\x0a\x09\x22it should be at least same size as first hint\x22\x0a\x09(first at: #size) >= hint\x0a\x09\x09ifFalse: [ ^ self none ].\x0a\x09\x22OK, one solution\x22\x0a\x09sol := Cells new.\x0a\x09(first at: #size) = hint\x0a\x09\x09ifTrue: [ sol addUnknowns: hint ]\x0a\x09\x09ifFalse: [ sol addBoxes: hint ].\x0a\x09sol addSpaces: 1.\x0a\x09^ sol",
+referencedClasses: ["Cells"],
+//>>excludeEnd("ide");
+messageSends: ["ifTrue:", "isEmpty", "hint", "none", "first", "firstBox", "cells", "ifFalse:", "=", "at:", "+", ">=", "new", "ifTrue:ifFalse:", "addUnknowns:", "addBoxes:", "addSpaces:"]
+}),
+$globals.StratFirstPosMore);
+
+$core.addMethod(
+$core.method({
+selector: "isBidirectional",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+return false;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "isBidirectional\x0a\x09^ false",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.StratFirstPosMore);
 
 
 
@@ -7040,6 +7203,60 @@ $globals.StratLastMore);
 
 
 
+$core.addClass('StratLastNotReachedMore', $globals.StratReverted, ['strategy'], 'Logimage');
+$core.addMethod(
+$core.method({
+selector: "initialize",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+self["@strategy"]=$recv($globals.StratFirstNotReachedMore)._new();
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"initialize",{},$globals.StratLastNotReachedMore)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "initialize\x0a\x09strategy := StratFirstNotReachedMore new",
+referencedClasses: ["StratFirstNotReachedMore"],
+//>>excludeEnd("ide");
+messageSends: ["new"]
+}),
+$globals.StratLastNotReachedMore);
+
+
+
+$core.addClass('StratLastPosMore', $globals.StratReverted, ['strategy'], 'Logimage');
+$core.addMethod(
+$core.method({
+selector: "initialize",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+self["@strategy"]=$recv($globals.StratFirstPosMore)._new();
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"initialize",{},$globals.StratLastPosMore)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "initialize\x0a\x09strategy := StratFirstPosMore new",
+referencedClasses: ["StratFirstPosMore"],
+//>>excludeEnd("ide");
+messageSends: ["new"]
+}),
+$globals.StratLastPosMore);
+
+
+
 $core.addClass('StratSpacesOnly', $globals.Strategy, [], 'Logimage');
 //>>excludeStart("ide", pragmas.excludeIdeData);
 $globals.StratSpacesOnly.comment="I fill spaces if no hints.";
@@ -7201,6 +7418,35 @@ $globals.WidgetCell);
 
 $core.addMethod(
 $core.method({
+selector: "limit",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $1;
+$1=$recv(self["@div"])._element();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["element"]=1;
+//>>excludeEnd("ctx");
+$recv($1)._className_($recv($recv($recv(self["@div"])._element())._className()).__comma(" limit"));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"limit",{},$globals.WidgetCell)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "limit\x0a\x09div element className: (div element className), ' limit'",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["className:", "element", ",", "className"]
+}),
+$globals.WidgetCell);
+
+$core.addMethod(
+$core.method({
 selector: "renderOnSilk:",
 protocol: 'as yet unclassified',
 fn: function (silk){
@@ -7327,13 +7573,13 @@ $core.addMethod(
 $core.method({
 selector: "show:",
 protocol: 'as yet unclassified',
-fn: function (grid){
+fn: function(grid){
 var self=this;
 var y;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-var $1,$6,$5,$4,$3,$2;
+var $1,$7,$6,$5,$4,$3,$2,$8;
 y=(0);
 $recv(self["@div"])._resetContents();
 $recv(grid)._rowDo_((function(row){
@@ -7349,7 +7595,14 @@ $ctx2.sendIdx["+"]=1;
 //>>excludeEnd("ctx");
 y;
 $1=self["@div"];
-$6=$recv($recv(y).__backslash_backslash((5))).__eq((0));
+$7=$recv(y).__backslash_backslash((5));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["\x5c\x5c"]=1;
+//>>excludeEnd("ctx");
+$6=$recv($7).__eq((0));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["="]=1;
+//>>excludeEnd("ctx");
 if($core.assert($6)){
 $5=" gras";
 } else {
@@ -7361,14 +7614,21 @@ $2=[$3];
 line=$recv($1)._DIV_($2);
 line;
 return $recv(row)._do_((function(cell){
+var w;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx3) {
 //>>excludeEnd("ctx");
 x=$recv(x).__plus((1));
 x;
-return $recv(line).__lt_lt($recv($recv($globals.WidgetCell)._new())._show_(cell));
+w=$recv($recv($globals.WidgetCell)._new())._show_(cell);
+w;
+$8=$recv($recv(x).__backslash_backslash((5))).__eq((0));
+if($core.assert($8)){
+$recv(w)._limit();
+};
+return $recv(line).__lt_lt(w);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx3) {$ctx3.fillBlock({cell:cell},$ctx2,4)});
+}, function($ctx3) {$ctx3.fillBlock({cell:cell,w:w},$ctx2,4)});
 //>>excludeEnd("ctx");
 }));
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -7382,10 +7642,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["grid"],
-source: "show: grid\x0a\x09| y |\x0a\x09y := 0.\x0a\x09div resetContents.\x0a\x09grid rowDo: [ :row | | line x |\x0a\x09\x09x := 0.\x0a\x09\x09y := y+1.\x0a\x09\x09line := div DIV: { #class -> ('line',(y\x5c\x5c5=0 ifTrue: [' gras'] ifFalse: [''])) }.\x0a\x09\x09row do: [ :cell |\x0a\x09\x09\x09x := x + 1.\x0a\x09\x09\x09line << (WidgetCell new show: cell)\x0a\x09\x09]\x0a\x09]",
+source: "show: grid\x0a\x09| y |\x0a\x09y := 0.\x0a\x09div resetContents.\x0a\x09grid rowDo: [ :row | | line x |\x0a\x09\x09x := 0.\x0a\x09\x09y := y+1.\x0a\x09\x09line := div DIV: {\x0a\x09\x09\x09#class -> ('line',(y\x5c\x5c5=0\x0a\x09\x09\x09\x09ifTrue: [' gras']\x0a\x09\x09\x09\x09ifFalse: [''])) }.\x0a\x09\x09row do: [ :cell | | w |\x0a\x09\x09\x09x := x + 1.\x0a\x09\x09\x09w := WidgetCell new show: cell.\x0a\x09\x09\x09x\x5c\x5c5=0 ifTrue: [ w limit ].\x0a\x09\x09\x09line << w\x0a\x09\x09]\x0a\x09]",
 referencedClasses: ["WidgetCell"],
 //>>excludeEnd("ide");
-messageSends: ["resetContents", "rowDo:", "+", "DIV:", "->", ",", "ifTrue:ifFalse:", "=", "\x5c\x5c", "do:", "<<", "show:", "new"]
+messageSends: ["resetContents", "rowDo:", "+", "DIV:", "->", ",", "ifTrue:ifFalse:", "=", "\x5c\x5c", "do:", "show:", "new", "ifTrue:", "limit", "<<"]
 }),
 $globals.WidgetGrid);
 
