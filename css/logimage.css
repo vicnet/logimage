@@ -13,6 +13,10 @@
     margin-bottom: -1px;
     margin-left: -1px;
 }
+.cols .hint.limit {
+    border-right-width: 2px;
+}
+
 .cols .hint {
     display: inline-block;    
     width: 18px;
@@ -20,6 +24,9 @@
 .rows .hint {
     text-align: right;
     height: 18px;
+}
+.rows .hint.limit {
+    border-bottom-width: 2px;
 }
 .rows .number {
     display: inline-block;
@@ -73,6 +80,7 @@
     display: inline-block;
     font-size: 16px;
     border-radius: 4px;
+    margin: 3px;
 }
 .logimage {
     display: inline-block;

@@ -146,122 +146,19 @@ $globals.Application);
 
 $core.addMethod(
 $core.method({
-selector: "renderOnSilk:",
+selector: "renderMenuOn:",
 protocol: 'as yet unclassified',
 fn: function(silk){
 var self=this;
-var menu,btn,list;
+var menu,list;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-var $5,$4,$3,$2,$8,$7,$6,$1,$10,$9,$12,$11,$13,$15,$14,$16,$19,$21,$20,$18,$24,$25,$26,$23,$22,$17,$27,$29,$28;
-$recv(silk)._resetContents();
-$5="class".__minus_gt("logimage");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["->"]=1;
-//>>excludeEnd("ctx");
-$4=[$5];
-$3=$recv(silk)._DIV_($4);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["DIV:"]=1;
-//>>excludeEnd("ctx");
-$2=$recv($3)._TABLE();
-$8=$recv($globals.Silk)._TR();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["TR"]=1;
-//>>excludeEnd("ctx");
-$7=$recv($8).__lt_lt($recv($globals.Silk)._TD());
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["<<"]=4;
-//>>excludeEnd("ctx");
-$6=$recv($7).__lt_lt(self["@cols"]);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["<<"]=3;
-//>>excludeEnd("ctx");
-$1=$recv($2).__lt_lt($6);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["<<"]=2;
-//>>excludeEnd("ctx");
-$10=$recv($recv($globals.Silk)._TR()).__lt_lt(self["@rows"]);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["<<"]=6;
-//>>excludeEnd("ctx");
-$9=$recv($10).__lt_lt(self["@grid"]);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["<<"]=5;
-//>>excludeEnd("ctx");
-$recv($1).__lt_lt($9);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["<<"]=1;
-//>>excludeEnd("ctx");
-$12="class".__minus_gt("menu");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["->"]=2;
-//>>excludeEnd("ctx");
-$11=[$12];
-menu=$recv(silk)._DIV_($11);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["DIV:"]=2;
-//>>excludeEnd("ctx");
-$13=menu;
-$15="class".__minus_gt("checkboxes");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["->"]=3;
-//>>excludeEnd("ctx");
-$14=[$15];
-list=$recv($13)._DIV_($14);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["DIV:"]=3;
-//>>excludeEnd("ctx");
-$16=$recv($globals.Strategies)._instance();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["instance"]=1;
-//>>excludeEnd("ctx");
-$recv($16)._do_((function(strategy){
-var name;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-name=$recv(strategy)._id();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["id"]=1;
-//>>excludeEnd("ctx");
-name;
-$19=list;
-$21="class".__minus_gt("checkbox");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["->"]=4;
-//>>excludeEnd("ctx");
-$20=[$21];
-$18=$recv($19)._DIV_($20);
-$24="type".__minus_gt("checkbox");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["->"]=5;
-//>>excludeEnd("ctx");
-$25="id".__minus_gt(name);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["->"]=6;
-//>>excludeEnd("ctx");
-$26="checked".__minus_gt("checked");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["->"]=7;
-//>>excludeEnd("ctx");
-$23=[$24,$25,$26];
-$22=$recv($globals.Silk)._INPUT_($23);
-$17=$recv($18).__lt_lt($22);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["<<"]=8;
-//>>excludeEnd("ctx");
-return $recv($17).__lt_lt($recv($globals.Silk)._LABEL_(["for".__minus_gt(name),name]));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["<<"]=7;
-//>>excludeEnd("ctx");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({strategy:strategy,name:name},$ctx1,1)});
-//>>excludeEnd("ctx");
-}));
-$27=menu;
-$28=self._newButton_onClick_("Step",(function(){
+var $1,$3,$2,$4,$5;
+menu=$recv(silk)._DIV_(["class".__minus_gt("menu")]);
+list=self._renderStratsOn_(menu);
+$1=menu;
+$2=self._newButton_onClick_("Step",(function(){
 var selected;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
@@ -270,13 +167,13 @@ selected=$recv($recv(list)._allAt_(".checkbox>input"))._select_thenCollect_((fun
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx3) {
 //>>excludeEnd("ctx");
-$29=$recv(cb)._element();
+$3=$recv(cb)._element();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx3.sendIdx["element"]=1;
 //>>excludeEnd("ctx");
-return $recv($29)._checked();
+return $recv($3)._checked();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx3) {$ctx3.fillBlock({cb:cb},$ctx2,3)});
+}, function($ctx3) {$ctx3.fillBlock({cb:cb},$ctx2,2)});
 //>>excludeEnd("ctx");
 }),(function(cb){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -284,42 +181,227 @@ return $core.withContext(function($ctx3) {
 //>>excludeEnd("ctx");
 return $recv($recv($globals.Strategies)._instance())._at_($recv($recv(cb)._element())._id());
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx3) {$ctx3.fillBlock({cb:cb},$ctx2,4)});
+}, function($ctx3) {$ctx3.fillBlock({cb:cb},$ctx2,3)});
 //>>excludeEnd("ctx");
 }));
 selected;
 return self._stepWith_(selected);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({selected:selected},$ctx1,2)});
+}, function($ctx2) {$ctx2.fillBlock({selected:selected},$ctx1,1)});
 //>>excludeEnd("ctx");
 }));
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["newButton:onClick:"]=1;
 //>>excludeEnd("ctx");
-$recv($27).__lt_lt($28);
+$recv($1).__lt_lt($2);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["<<"]=9;
+$ctx1.sendIdx["<<"]=1;
 //>>excludeEnd("ctx");
-$recv(menu).__lt_lt(self._newButton_onClick_("Reset",(function(){
+$4=menu;
+$5=self._newButton_onClick_("Reset",(function(){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
 return self._reset();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,4)});
+//>>excludeEnd("ctx");
+}));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["newButton:onClick:"]=2;
+//>>excludeEnd("ctx");
+$recv($4).__lt_lt($5);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["<<"]=2;
+//>>excludeEnd("ctx");
+$recv(menu).__lt_lt(self._newButton_onClick_("Oldify",(function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv(self["@logimage"])._toOld();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1,5)});
 //>>excludeEnd("ctx");
 })));
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"renderOnSilk:",{silk:silk,menu:menu,btn:btn,list:list},$globals.Application)});
+}, function($ctx1) {$ctx1.fill(self,"renderMenuOn:",{silk:silk,menu:menu,list:list},$globals.Application)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["silk"],
-source: "renderOnSilk: silk\x0a\x09| menu btn list |\x0a\x09silk resetContents.\x0a\x09(silk DIV: { #class -> 'logimage' })\x0a\x09\x09TABLE\x0a\x09\x09\x09<< (Silk TR << (Silk TD) << cols)\x0a\x09\x09\x09<< (Silk TR << rows << grid).\x0a\x09menu := silk DIV: { #class -> 'menu' }.\x0a\x09list := menu DIV: { #class -> 'checkboxes' }.\x0a\x09Strategies instance do: [ :strategy | | name |\x0a\x09\x09name := strategy id.\x0a\x09\x09(list DIV: { #class -> 'checkbox' })\x0a\x09\x09\x09<< (Silk INPUT: { #type -> 'checkbox'.\x0a\x09\x09\x09\x09\x09\x09\x09  #id -> name.\x0a\x09\x09\x09\x09\x09\x09\x09  #checked -> 'checked' })\x0a\x09\x09\x09<< (Silk LABEL: { #for -> name. name })\x0a\x09\x09].\x0a\x09 menu << (self newButton: 'Step' onClick: [ | selected |\x0a\x09\x09selected :=\x09(list allAt: '.checkbox>input')\x0a\x09\x09\x09select: [ :cb | cb element checked ]\x0a\x09\x09\x09thenCollect: [ :cb | Strategies instance at: (cb element id) ].\x0a\x09\x09self stepWith: selected\x09]).\x0a\x09 menu << (self newButton: 'Reset' onClick: [\x0a\x09\x09 self reset ])",
-referencedClasses: ["Silk", "Strategies"],
+source: "renderMenuOn: silk\x0a\x09| menu list |\x0a\x09menu := silk DIV: { #class -> 'menu' }.\x0a\x0a\x09list := self renderStratsOn: menu.\x0a\x09\x0a\x09menu << (self newButton: 'Step' onClick: [ | selected |\x0a\x09\x09selected :=\x09(list allAt: '.checkbox>input')\x0a\x09\x09\x09select: [ :cb | cb element checked ]\x0a\x09\x09\x09thenCollect: [ :cb | Strategies instance at: (cb element id) ].\x0a\x09\x09self stepWith: selected\x09]).\x0a\x09 menu << (self newButton: 'Reset' onClick: [\x0a\x09\x09 self reset ]).\x0a\x09 menu << (self newButton: 'Oldify' onClick: [\x0a\x09\x09 logimage toOld ])",
+referencedClasses: ["Strategies"],
 //>>excludeEnd("ide");
-messageSends: ["resetContents", "<<", "TABLE", "DIV:", "->", "TR", "TD", "do:", "instance", "id", "INPUT:", "LABEL:", "newButton:onClick:", "select:thenCollect:", "allAt:", "checked", "element", "at:", "stepWith:", "reset"]
+messageSends: ["DIV:", "->", "renderStratsOn:", "<<", "newButton:onClick:", "select:thenCollect:", "allAt:", "checked", "element", "at:", "instance", "id", "stepWith:", "reset", "toOld"]
+}),
+$globals.Application);
+
+$core.addMethod(
+$core.method({
+selector: "renderOnSilk:",
+protocol: 'as yet unclassified',
+fn: function(silk){
+var self=this;
+var menu;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $2,$5,$4,$3,$1,$6;
+$recv(silk)._resetContents();
+$2=$recv($recv(silk)._DIV_(["class".__minus_gt("logimage")]))._TABLE();
+$5=$recv($globals.Silk)._TR();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["TR"]=1;
+//>>excludeEnd("ctx");
+$4=$recv($5).__lt_lt($recv($globals.Silk)._TD());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["<<"]=4;
+//>>excludeEnd("ctx");
+$3=$recv($4).__lt_lt(self["@cols"]);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["<<"]=3;
+//>>excludeEnd("ctx");
+$1=$recv($2).__lt_lt($3);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["<<"]=2;
+//>>excludeEnd("ctx");
+$6=$recv($recv($recv($globals.Silk)._TR()).__lt_lt(self["@rows"])).__lt_lt(self["@grid"]);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["<<"]=5;
+//>>excludeEnd("ctx");
+$recv($1).__lt_lt($6);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["<<"]=1;
+//>>excludeEnd("ctx");
+self._renderMenuOn_(silk);
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"renderOnSilk:",{silk:silk,menu:menu},$globals.Application)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["silk"],
+source: "renderOnSilk: silk\x0a\x09| menu |\x0a\x09silk resetContents.\x0a\x09(silk DIV: { #class -> 'logimage' })\x0a\x09\x09TABLE\x0a\x09\x09\x09<< (Silk TR << (Silk TD) << cols)\x0a\x09\x09\x09<< (Silk TR << rows << grid).\x0a\x0a\x09self renderMenuOn: silk",
+referencedClasses: ["Silk"],
+//>>excludeEnd("ide");
+messageSends: ["resetContents", "<<", "TABLE", "DIV:", "->", "TR", "TD", "renderMenuOn:"]
+}),
+$globals.Application);
+
+$core.addMethod(
+$core.method({
+selector: "renderStratsOn:",
+protocol: 'as yet unclassified',
+fn: function(menu){
+var self=this;
+var btn,list;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $2,$1,$5,$7,$6,$4,$10,$11,$12,$9,$8,$3,$15,$16,$14,$17,$13;
+$2="class".__minus_gt("strategies");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["->"]=1;
+//>>excludeEnd("ctx");
+$1=[$2];
+list=$recv(menu)._DIV_($1);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["DIV:"]=1;
+//>>excludeEnd("ctx");
+$recv($recv($globals.Strategies)._instance())._do_((function(strategy){
+var name;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+name=$recv(strategy)._id();
+name;
+$5=list;
+$7="class".__minus_gt("checkbox");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["->"]=2;
+//>>excludeEnd("ctx");
+$6=[$7];
+$4=$recv($5)._DIV_($6);
+$10="type".__minus_gt("checkbox");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["->"]=3;
+//>>excludeEnd("ctx");
+$11="id".__minus_gt(name);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["->"]=4;
+//>>excludeEnd("ctx");
+$12="checked".__minus_gt("checked");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["->"]=5;
+//>>excludeEnd("ctx");
+$9=[$10,$11,$12];
+$8=$recv($globals.Silk)._INPUT_($9);
+$3=$recv($4).__lt_lt($8);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["<<"]=2;
+//>>excludeEnd("ctx");
+return $recv($3).__lt_lt($recv($globals.Silk)._LABEL_(["for".__minus_gt(name),name]));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["<<"]=1;
+//>>excludeEnd("ctx");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({strategy:strategy,name:name},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+$15=$recv(list)._DIV();
+$16=self._newButton_onClick_("Unselect All",(function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return self._unselect_(list);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,2)});
+//>>excludeEnd("ctx");
+}));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["newButton:onClick:"]=1;
+//>>excludeEnd("ctx");
+$14=$recv($15).__lt_lt($16);
+$17=self._newButton_onClick_("Select All",(function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return self._select_(list);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,3)});
+//>>excludeEnd("ctx");
+}));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["newButton:onClick:"]=2;
+//>>excludeEnd("ctx");
+$13=$recv($14).__lt_lt($17);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["<<"]=4;
+//>>excludeEnd("ctx");
+$recv($13).__lt_lt(self._newButton_onClick_("Toggle All",(function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return self._toggle_(list);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,4)});
+//>>excludeEnd("ctx");
+})));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["<<"]=3;
+//>>excludeEnd("ctx");
+return list;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"renderStratsOn:",{menu:menu,btn:btn,list:list},$globals.Application)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["menu"],
+source: "renderStratsOn: menu\x0a\x09| btn list |\x0a\x09list := menu DIV: { #class -> 'strategies' }.\x0a\x09Strategies instance do: [ :strategy | | name |\x0a\x09\x09name := strategy id.\x0a\x09\x09(list DIV: { #class -> 'checkbox' })\x0a\x09\x09\x09<< (Silk INPUT: { #type -> 'checkbox'.\x0a\x09\x09\x09\x09\x09\x09\x09  #id -> name.\x0a\x09\x09\x09\x09\x09\x09\x09  #checked -> 'checked' })\x0a\x09\x09\x09<< (Silk LABEL: { #for -> name. name })\x0a\x09\x09].\x0a\x09list DIV\x0a\x09\x09<< (self newButton: 'Unselect All' onClick: [\x0a\x09\x09 \x09self unselect: list ])\x0a\x09\x09<< (self newButton: 'Select All' onClick: [\x0a\x09\x09\x09self select: list ])\x0a\x09\x09<< (self newButton: 'Toggle All' onClick: [\x0a\x09\x09 \x09self toggle: list ]).\x0a\x09^ list",
+referencedClasses: ["Strategies", "Silk"],
+//>>excludeEnd("ide");
+messageSends: ["DIV:", "->", "do:", "instance", "id", "<<", "INPUT:", "LABEL:", "DIV", "newButton:onClick:", "unselect:", "select:", "toggle:"]
 }),
 $globals.Application);
 
@@ -345,6 +427,38 @@ source: "reset\x0a\x09logimage reset.\x0a\x09self refresh",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["reset", "refresh"]
+}),
+$globals.Application);
+
+$core.addMethod(
+$core.method({
+selector: "select:",
+protocol: 'as yet unclassified',
+fn: function(list){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$recv($recv(list)._allAt_(".checkbox>input"))._select_((function(cb){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv($recv(cb)._element())._checked_(true);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({cb:cb},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"select:",{list:list},$globals.Application)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["list"],
+source: "select: list\x0a\x09(list allAt: '.checkbox>input')\x0a\x09\x09\x09select: [ :cb | cb element checked: true ]",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["select:", "allAt:", "checked:", "element"]
 }),
 $globals.Application);
 
@@ -467,6 +581,75 @@ source: "stepWith: strategies\x0a\x09| strategist |\x0a\x09strategist := Strateg
 referencedClasses: ["Strategist"],
 //>>excludeEnd("ide");
 messageSends: ["new", "toOld", "do:", "apply:on:", "refresh"]
+}),
+$globals.Application);
+
+$core.addMethod(
+$core.method({
+selector: "toggle:",
+protocol: 'as yet unclassified',
+fn: function(list){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $1;
+$recv($recv(list)._allAt_(".checkbox>input"))._select_((function(cb){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+$1=$recv(cb)._element();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["element"]=1;
+//>>excludeEnd("ctx");
+return $recv($1)._checked_($recv($recv($recv(cb)._element())._checked())._not());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({cb:cb},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"toggle:",{list:list},$globals.Application)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["list"],
+source: "toggle: list\x0a\x09(list allAt: '.checkbox>input')\x0a\x09\x09\x09select: [ :cb | cb element checked: (cb element checked not) ]",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["select:", "allAt:", "checked:", "element", "not", "checked"]
+}),
+$globals.Application);
+
+$core.addMethod(
+$core.method({
+selector: "unselect:",
+protocol: 'as yet unclassified',
+fn: function(list){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$recv($recv(list)._allAt_(".checkbox>input"))._select_((function(cb){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv($recv(cb)._element())._checked_(false);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({cb:cb},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"unselect:",{list:list},$globals.Application)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["list"],
+source: "unselect: list\x0a\x09(list allAt: '.checkbox>input')\x0a\x09\x09\x09select: [ :cb | cb element checked: false ]",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["select:", "allAt:", "checked:", "element"]
 }),
 $globals.Application);
 
@@ -7438,7 +7621,7 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "limit\x0a\x09div element className: (div element className), ' limit'",
+source: "limit\x0a\x09div element\x0a\x09\x09className: (div element className), ' limit'",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["className:", "element", ",", "className"]
@@ -7678,6 +7861,35 @@ $globals.WidgetHint);
 
 $core.addMethod(
 $core.method({
+selector: "limit",
+protocol: 'as yet unclassified',
+fn: function(){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $1;
+$1=$recv(self["@div"])._element();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["element"]=1;
+//>>excludeEnd("ctx");
+$recv($1)._className_($recv($recv($recv(self["@div"])._element())._className()).__comma(" limit"));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"limit",{},$globals.WidgetHint)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "limit\x0a\x09div element\x0a\x09\x09className: (div element className), ' limit'",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["className:", "element", ",", "className"]
+}),
+$globals.WidgetHint);
+
+$core.addMethod(
+$core.method({
 selector: "renderOnSilk:",
 protocol: 'as yet unclassified',
 fn: function (silk){
@@ -7740,7 +7952,7 @@ $core.addMethod(
 $core.method({
 selector: "initialize",
 protocol: 'as yet unclassified',
-fn: function (){
+fn: function(){
 var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
@@ -7788,32 +8000,45 @@ $core.addMethod(
 $core.method({
 selector: "show:",
 protocol: 'as yet unclassified',
-fn: function (hints){
+fn: function(hints){
 var self=this;
+var i;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
+var $1;
 $recv(self["@div"])._resetContents();
+i=(1);
 $recv(hints)._do_((function(hint){
+var w;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
-return $recv(self["@div"]).__lt_lt($recv($recv($globals.WidgetHint)._new())._show_(hint));
+w=$recv($globals.WidgetHint)._new();
+w;
+$recv(w)._show_(hint);
+$1=$recv($recv(i).__backslash_backslash((5))).__eq((0));
+if($core.assert($1)){
+$recv(w)._limit();
+};
+$recv(self["@div"]).__lt_lt(w);
+i=$recv(i).__plus((1));
+return i;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({hint:hint},$ctx1,1)});
+}, function($ctx2) {$ctx2.fillBlock({hint:hint,w:w},$ctx1,1)});
 //>>excludeEnd("ctx");
 }));
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"show:",{hints:hints},$globals.WidgetHints)});
+}, function($ctx1) {$ctx1.fill(self,"show:",{hints:hints,i:i},$globals.WidgetHints)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["hints"],
-source: "show: hints\x0a\x09div resetContents.\x0a\x09hints do: [ :hint |\x0a\x09\x09div << (WidgetHint new show: hint) ]",
+source: "show: hints\x0a\x09| i |\x0a\x09div resetContents.\x0a\x09i := 1.\x0a\x09hints do: [ :hint | | w |\x0a\x09\x09w := WidgetHint new.\x0a\x09\x09w show: hint.\x0a\x09\x09i\x5c\x5c5=0 ifTrue: [ w limit ].\x0a\x09\x09div << w.\x0a\x09\x09i := i +1 ]",
 referencedClasses: ["WidgetHint"],
 //>>excludeEnd("ide");
-messageSends: ["resetContents", "do:", "<<", "show:", "new"]
+messageSends: ["resetContents", "do:", "new", "show:", "ifTrue:", "=", "\x5c\x5c", "limit", "<<", "+"]
 }),
 $globals.WidgetHints);
 

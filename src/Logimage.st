@@ -31,15 +31,37 @@ refresh
 	grid << (WidgetGrid new show: logimage grid)
 !
 
+renderMenuOn: silk
+	| menu list |
+	menu := silk DIV: { #class -> 'menu' }.
+
+	list := self renderStratsOn: menu.
+	
+	menu << (self newButton: 'Step' onClick: [ | selected |
+		selected :=	(list allAt: '.checkbox>input')
+			select: [ :cb | cb element checked ]
+			thenCollect: [ :cb | Strategies instance at: (cb element id) ].
+		self stepWith: selected	]).
+	 menu << (self newButton: 'Reset' onClick: [
+		 self reset ]).
+	 menu << (self newButton: 'Oldify' onClick: [
+		 logimage toOld ])
+!
+
 renderOnSilk: silk
-	| menu btn list |
+	| menu |
 	silk resetContents.
 	(silk DIV: { #class -> 'logimage' })
 		TABLE
 			<< (Silk TR << (Silk TD) << cols)
 			<< (Silk TR << rows << grid).
-	menu := silk DIV: { #class -> 'menu' }.
-	list := menu DIV: { #class -> 'checkboxes' }.
+
+	self renderMenuOn: silk
+!
+
+renderStratsOn: menu
+	| btn list |
+	list := menu DIV: { #class -> 'strategies' }.
 	Strategies instance do: [ :strategy | | name |
 		name := strategy id.
 		(list DIV: { #class -> 'checkbox' })
@@ -48,18 +70,24 @@ renderOnSilk: silk
 							  #checked -> 'checked' })
 			<< (Silk LABEL: { #for -> name. name })
 		].
-	 menu << (self newButton: 'Step' onClick: [ | selected |
-		selected :=	(list allAt: '.checkbox>input')
-			select: [ :cb | cb element checked ]
-			thenCollect: [ :cb | Strategies instance at: (cb element id) ].
-		self stepWith: selected	]).
-	 menu << (self newButton: 'Reset' onClick: [
-		 self reset ])
+	list DIV
+		<< (self newButton: 'Unselect All' onClick: [
+		 	self unselect: list ])
+		<< (self newButton: 'Select All' onClick: [
+			self select: list ])
+		<< (self newButton: 'Toggle All' onClick: [
+		 	self toggle: list ]).
+	^ list
 !
 
 reset
 	logimage reset.
 	self refresh
+!
+
+select: list
+	(list allAt: '.checkbox>input')
+			select: [ :cb | cb element checked: true ]
 !
 
 show: aLogimage
@@ -88,6 +116,16 @@ stepWith: strategies
 	strategies do: [ :strategy |
 		strategist apply: strategy on: logimage ].
 	self refresh
+!
+
+toggle: list
+	(list allAt: '.checkbox>input')
+			select: [ :cb | cb element checked: (cb element checked not) ]
+!
+
+unselect: list
+	(list allAt: '.checkbox>input')
+			select: [ :cb | cb element checked: false ]
 ! !
 
 !Application class methodsFor: 'as yet unclassified'!
@@ -2014,7 +2052,8 @@ initialize
 !
 
 limit
-	div element className: (div element className), ' limit'
+	div element
+		className: (div element className), ' limit'
 !
 
 renderOnSilk: silk
@@ -2075,6 +2114,11 @@ initialize
 	div := Silk DIV: { #class -> 'hint' }
 !
 
+limit
+	div element
+		className: (div element className), ' limit'
+!
+
 renderOnSilk: silk
 	silk << div
 !
@@ -2100,8 +2144,14 @@ renderOnSilk: silk
 !
 
 show: hints
+	| i |
 	div resetContents.
-	hints do: [ :hint |
-		div << (WidgetHint new show: hint) ]
+	i := 1.
+	hints do: [ :hint | | w |
+		w := WidgetHint new.
+		w show: hint.
+		i\\5=0 ifTrue: [ w limit ].
+		div << w.
+		i := i +1 ]
 ! !
 
