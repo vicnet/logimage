@@ -1,21 +1,18 @@
 # Logimage
 
-Jeux de rélflexion Logimage
+Jeux de réflexion Logimage
 
-## Getting Started
+## Use Logimage library in your project
 
-Install Amber and create an Amber project,
-as shown in [Amber Instructions](https://lolg.it/amber/amber#prerequisites).
+**DELETE THIS PARAGRAPH, IF Logimage IS A LIBRARY. DELETE WHOLE THIS SECTION IF Logimage IS AN APP, NOT A LIBRARY.**
 
-## Use Logimage as a library in a client project
+If not already done, install Amber and create an Amber project with `amber init`,
+as shown in [Amber Instructions](https://lolg.it/amber/amber#prerequisities).
 
-If not already present, create a client project
-in an empty directory with `amber init`.
-
-In a client project, run
+In a project, run
 
 ```sh
-bower install Logimage --save
+npm install Logimage --save
 grunt devel
 amber serve
 ```
@@ -27,30 +24,8 @@ save the change and commit the package. Reload.
 
 ## Contributing
 
-To bring project alive (for example after `git clone`):
+  1. Have amber cli tooling installed. If you don't, see first box in these [instructions](https://lolg.it/amber/amber#getting-amber-and-setting-up-an-initial-project).
 
-```sh
-npm install
-bower install
-grunt devel
-```
+  1. Fork and/or clone the project, then bring it alive by: `npm run init`.
 
-Developing the project (after brought alive):
- 
-Start server with `amber serve` and go to `http://localhost:4000/` in your browser and follow the instructions
-
-## How to use
-
-* Resolve a logimage
-|l| l = Logimage question. Strategist new solve: l. Application new show: l
-
-* Create quickly some objects to test:
-** Line new: '1 1|   |'
-** Line hint: '1 1' cells: '   '
-** Cells new: '   '
-** Hint new: #(1 1)
-** Hint new: '1 1'
-** ...
-
-* Test a strategy
-StratAllDone analyse: '1 1|   |'
+  1. Developing the project: Start server with `amber serve` and go to `http://localhost:4000/` in your browser. Overlay with buttons to open IDE should appear shortly.

@@ -1,7 +1,7 @@
 {
   "name": "logimage",
   "title": "Logimage",
-  "description": "Jeux de rélflexion Logimage",
+  "description": "Jeux de réflexion Logimage",
   "version": "0.1.0",
   "homepage": "https://github.com/vicnet/logimage",
   "author": {
@@ -22,18 +22,32 @@
     }
   ],
   "engines": {
-    "node": "0.10.x || 0.12.x || >=4.0.0"
+    "node": ">=4.0.0"
   },
   "scripts": {
+    "reset": "npm run clean && npm run init",
+    "clean": "(rm -rf node_modules || rd /s/q node_modules)",
+    "init": "npm install && grunt default devel",
     "test": "grunt test"
   },
+  "dependencies": {
+    "@ambers/contrib-jquery": "^0.6.0",
+    "@ambers/contrib-web": "^0.8.2",
+    "@ambers/domite": "^0.9.0",
+    "@ambers/lang": "^0.29.2",
+    "@ambers/silk": "^0.6.0",
+    "es6-promise": "^4.2.6"
+  },
   "devDependencies": {
-    "amber-dev": "^0.8.2",
-    "grunt": "^0.4.5",
-    "grunt-contrib-clean": "^0.7.0",
-    "grunt-contrib-requirejs": "^0.4.4",
-    "grunt-execute": "^0.2.2",
-    "requirejs": "^2.1.15"
+    "@ambers/contrib-legacy": "^0.10.1",
+    "@ambers/helios": "^0.13.0",
+    "@ambers/ide-starter-modal": "^0.2.0",
+    "@ambers/sdk": "^0.12.1",
+    "grunt": "^1.0.3",
+    "grunt-contrib-clean": "^1.1.0",
+    "grunt-contrib-requirejs": "^1.0.0",
+    "grunt-exec": "^3.0.0",
+    "requirejs": "^2.3.5"
   },
   "keywords": [
     "Amber",

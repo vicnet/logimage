@@ -1,7 +1,7 @@
 Smalltalk createPackage: 'Logimage'!
-(Smalltalk packageAt: 'Logimage') imports: {'silk/Silk'}!
+(Smalltalk packageAt: 'Logimage' ifAbsent: [ self error: 'Package not created: Logimage' ]) imports: {'amber/web/Web'. 'amber/web/Web-JQuery'. 'silk/Silk'}!
 Object subclass: #Application
-	instanceVariableNames: 'rows cols grid logimage'
+	slots: {#rows. #cols. #grid. #logimage}
 	package: 'Logimage'!
 
 !Application methodsFor: 'as yet unclassified'!
@@ -95,9 +95,9 @@ show: aLogimage
 	self refresh
 !
 
-solve: logimage
-	Strategist new solve: logimage.
-	self show: logimage
+solve: alogimage
+	Strategist new solve: alogimage.
+	self show: alogimage
 !
 
 step
@@ -135,7 +135,7 @@ start
 ! !
 
 Object subclass: #Cell
-	instanceVariableNames: ''
+	slots: { }
 	package: 'Logimage'!
 !Cell commentStamp!
 A simple cell or pixel.!
@@ -227,7 +227,7 @@ unknown
 ! !
 
 Cell subclass: #CellBox
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 
 !CellBox methodsFor: 'as yet unclassified'!
@@ -255,7 +255,7 @@ printOn: stream
 ! !
 
 CellBox subclass: #CellBoxNew
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 
 !CellBoxNew methodsFor: 'as yet unclassified'!
@@ -277,7 +277,7 @@ toOld
 ! !
 
 Cell subclass: #CellSpace
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 
 !CellSpace methodsFor: 'printing'!
@@ -303,7 +303,7 @@ toNew
 ! !
 
 CellSpace subclass: #CellSpaceNew
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 
 !CellSpaceNew methodsFor: 'as yet unclassified'!
@@ -325,7 +325,7 @@ toOld
 ! !
 
 Cell subclass: #CellUnknown
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 
 !CellUnknown methodsFor: 'printing'!
@@ -347,7 +347,7 @@ printOn: stream
 ! !
 
 Object subclass: #Cells
-	instanceVariableNames: 'cells pos'
+	slots: {#cells. #pos}
 	package: 'Logimage'!
 !Cells commentStamp!
 A line or a column of cells!
@@ -441,10 +441,10 @@ firstFreeSpace
 	| space size |
 	size := 0.
 	space := true.
-	cells withIndexDo: [ :c :pos |
+	cells withIndexDo: [ :c :apos |
 		c isSpace ifTrue: [
 			space := true.
-			size > 0 ifTrue: [ ^ #{ #pos -> (pos-size). #size -> size } ]
+			size > 0 ifTrue: [ ^ #{ #pos -> (apos-size). #size -> size } ]
 			].
 		c isBox ifTrue: [
 			space := false.
@@ -653,7 +653,7 @@ unknowns: n
 ! !
 
 Object subclass: #Grid
-	instanceVariableNames: 'cells size'
+	slots: {#cells. #size}
 	package: 'Logimage'!
 !Grid commentStamp!
 Image, with Cells!
@@ -739,7 +739,7 @@ toOld
 ! !
 
 Object subclass: #Hint
-	instanceVariableNames: 'numbers'
+	slots: {#numbers}
 	package: 'Logimage'!
 !Hint commentStamp!
 List of numbers!
@@ -826,7 +826,7 @@ new: numbers
 ! !
 
 Object subclass: #Hints
-	instanceVariableNames: 'hints'
+	slots: {#hints}
 	package: 'Logimage'!
 
 !Hints methodsFor: 'as yet unclassified'!
@@ -865,7 +865,7 @@ size
 ! !
 
 Object subclass: #Line
-	instanceVariableNames: 'hint cells'
+	slots: {#hint. #cells}
 	package: 'Logimage'!
 
 !Line methodsFor: 'accessing'!
@@ -965,7 +965,7 @@ new: line
 ! !
 
 Object subclass: #Logimage
-	instanceVariableNames: 'row col grid'
+	slots: {#row. #col. #grid}
 	package: 'Logimage'!
 
 !Logimage methodsFor: 'accessing'!
@@ -1343,7 +1343,7 @@ vainqueur
 ! !
 
 Object subclass: #Strategies
-	instanceVariableNames: 'list'
+	slots: {#list}
 	package: 'Logimage'!
 !Strategies commentStamp!
 List of strategy!
@@ -1409,7 +1409,7 @@ reset
 ! !
 
 Object subclass: #Strategist
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 !Strategist commentStamp!
 I apply (analyse, get a solution then apply) one or more strategies on a logimage, or a line.!
@@ -1471,7 +1471,7 @@ solve: logimage
 ! !
 
 Object subclass: #Strategy
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 !Strategy commentStamp!
 I analyse a line and returns a solution with spaces and boxes.!
@@ -1511,7 +1511,7 @@ id
 ! !
 
 Strategy subclass: #StratAllHintDone
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 
 !StratAllHintDone methodsFor: 'as yet unclassified'!
@@ -1534,7 +1534,7 @@ isBidirectional
 ! !
 
 Strategy subclass: #StratCount
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 !StratCount commentStamp!
 I am a helper to implement strategy.
@@ -1563,7 +1563,7 @@ sum: hint
 ! !
 
 StratCount subclass: #StratCountAllDone
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 !StratCountAllDone commentStamp!
 I try to detect if a line is filled with boxes and spaces, ie no more rooms.!
@@ -1589,7 +1589,7 @@ isBidirectional
 ! !
 
 StratCount subclass: #StratRecover
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 !StratRecover commentStamp!
 I calculate free available moves. I add box on hint that are bigger then free, then recovers.
@@ -1617,7 +1617,7 @@ isBidirectional
 ! !
 
 Strategy subclass: #StratFirstBox
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 !StratFirstBox commentStamp!
 I am a base for strategy base on first box inside the first hint.!
@@ -1643,7 +1643,7 @@ isBidirectional
 ! !
 
 StratFirstBox subclass: #StratFirstCover
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 !StratFirstCover commentStamp!
 If a first hint crosses a box from the begining, all over crossed space are boxes until hint.
@@ -1665,7 +1665,7 @@ analyse: line
 ! !
 
 StratFirstBox subclass: #StratFirstDone
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 !StratFirstDone commentStamp!
 I add a space after first boxes done (corresponding to first hint).!
@@ -1687,7 +1687,7 @@ analyse: line
 ! !
 
 StratFirstBox subclass: #StratFirstMore
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 !StratFirstMore commentStamp!
 If the first hint is over the first box, I test if first hint should be restrict to the left due to overlap on a more boxes for next hint.!
@@ -1716,7 +1716,7 @@ analyse: line
 ! !
 
 Strategy subclass: #StratFirstCutSpace
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 !StratFirstCutSpace commentStamp!
 If a line contains a space, I cut in two parts and check if the first hint must be alone in the first part.
@@ -1793,7 +1793,7 @@ testStrategies: line
 ! !
 
 Strategy subclass: #StratFirstNotReachedMore
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 !StratFirstNotReachedMore commentStamp!
 Likre not reached but by testing too more boxes for first hint if set at first position.
@@ -1818,7 +1818,7 @@ isBidirectional
 ! !
 
 Strategy subclass: #StratFirstPosMore
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 !StratFirstPosMore commentStamp!
 I try to set a box next to the first hint at first position, if the new first box number is too big for the first hint, I have a solution for at least one space at.
@@ -1857,7 +1857,7 @@ isBidirectional
 ! !
 
 Strategy subclass: #StratMinSpace
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 !StratMinSpace commentStamp!
 I fill first cells with spaces when min hint are bigger than first holes.!
@@ -1883,7 +1883,7 @@ isBidirectional
 ! !
 
 Strategy subclass: #StratNotReached
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 !StratNotReached commentStamp!
 I fill with spaces, cells that can not be reached by boxes.
@@ -1914,7 +1914,7 @@ isBidirectional
 ! !
 
 Strategy subclass: #StratReverted
-	instanceVariableNames: 'strategy'
+	slots: {#strategy}
 	package: 'Logimage'!
 
 !StratReverted methodsFor: 'as yet unclassified'!
@@ -1935,7 +1935,7 @@ isBidirectional
 ! !
 
 StratReverted subclass: #StratLastCover
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 !StratLastCover commentStamp!
 Same as first cover but by other side (invert).!
@@ -1947,7 +1947,7 @@ initialize
 ! !
 
 StratReverted subclass: #StratLastCutSpace
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 
 !StratLastCutSpace methodsFor: 'as yet unclassified'!
@@ -1957,7 +1957,7 @@ initialize
 ! !
 
 StratReverted subclass: #StratLastDone
-	instanceVariableNames: 'strategy'
+	slots: {#strategy}
 	package: 'Logimage'!
 
 !StratLastDone methodsFor: 'as yet unclassified'!
@@ -1967,7 +1967,7 @@ initialize
 ! !
 
 StratReverted subclass: #StratLastMore
-	instanceVariableNames: 'strategy'
+	slots: {#strategy}
 	package: 'Logimage'!
 
 !StratLastMore methodsFor: 'as yet unclassified'!
@@ -1977,7 +1977,7 @@ initialize
 ! !
 
 StratReverted subclass: #StratLastNotReachedMore
-	instanceVariableNames: 'strategy'
+	slots: {#strategy}
 	package: 'Logimage'!
 
 !StratLastNotReachedMore methodsFor: 'as yet unclassified'!
@@ -1987,7 +1987,7 @@ initialize
 ! !
 
 StratReverted subclass: #StratLastPosMore
-	instanceVariableNames: 'strategy'
+	slots: {#strategy}
 	package: 'Logimage'!
 
 !StratLastPosMore methodsFor: 'as yet unclassified'!
@@ -1997,7 +1997,7 @@ initialize
 ! !
 
 Strategy subclass: #StratSpacesOnly
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 !StratSpacesOnly commentStamp!
 I fill spaces if no hints.!
@@ -2016,7 +2016,7 @@ isBidirectional
 ! !
 
 Strategy subclass: #StratTestBox
-	instanceVariableNames: ''
+	slots: {}
 	package: 'Logimage'!
 !StratTestBox commentStamp!
 I test one box at each position, try to detect if it is possible, regarding if the number of contigus boxes are greater than hints.
@@ -2042,7 +2042,7 @@ isBidirectional
 ! !
 
 Object subclass: #WidgetCell
-	instanceVariableNames: 'div'
+	slots: {#div}
 	package: 'Logimage'!
 
 !WidgetCell methodsFor: 'as yet unclassified'!
@@ -2071,7 +2071,7 @@ show: cell
 ! !
 
 Object subclass: #WidgetGrid
-	instanceVariableNames: 'div'
+	slots: {#div}
 	package: 'Logimage'!
 
 !WidgetGrid methodsFor: 'as yet unclassified'!
@@ -2105,7 +2105,7 @@ show: grid
 ! !
 
 Object subclass: #WidgetHint
-	instanceVariableNames: 'div'
+	slots: {#div}
 	package: 'Logimage'!
 
 !WidgetHint methodsFor: 'as yet unclassified'!
@@ -2130,7 +2130,7 @@ show: hint
 ! !
 
 Object subclass: #WidgetHints
-	instanceVariableNames: 'div'
+	slots: {#div}
 	package: 'Logimage'!
 
 !WidgetHints methodsFor: 'as yet unclassified'!
