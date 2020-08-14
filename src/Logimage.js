@@ -644,17 +644,17 @@ selector: "start",
 protocol: "as yet unclassified",
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "start\x0a\x09^ Application new show: Logimage chat",
+source: "start\x0a\x09^ Application new show: Logimage coureur",
 referencedClasses: ["Application", "Logimage"],
 //>>excludeEnd("ide");
 pragmas: [],
-messageSends: ["show:", "new", "chat"]
+messageSends: ["show:", "new", "coureur"]
 }, function ($methodClass){ return function (){
 var self=this,$self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-return $recv($recv($globals.Application)._new())._show_($recv($globals.Logimage)._chat());
+return $recv($recv($globals.Application)._new())._show_($recv($globals.Logimage)._coureur());
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"start",{})});
 //>>excludeEnd("ctx");
@@ -3106,11 +3106,11 @@ selector: "newSpace:",
 protocol: "as yet unclassified",
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["point"],
-source: "newSpace: point\x0a\x09(self at: point) isSpace ifTrue: [ ^ self ].\x0a\x09(self at: point) isUnknown ifFalse: [ self error: 'try to set new cell on already set' ].\x0a\x09self at: point put: Cell newSpace",
+source: "newSpace: point\x0a\x09(self at: point) isSpace ifTrue: [ ^ self ].\x0a\x09(self at: point) isUnknown ifFalse: [ self error: 'try to set new cell on already set at ', point printString ].\x0a\x09self at: point put: Cell newSpace",
 referencedClasses: ["Cell"],
 //>>excludeEnd("ide");
 pragmas: [],
-messageSends: ["ifTrue:", "isSpace", "at:", "ifFalse:", "isUnknown", "error:", "at:put:", "newSpace"]
+messageSends: ["ifTrue:", "isSpace", "at:", "ifFalse:", "isUnknown", "error:", ",", "printString", "at:put:", "newSpace"]
 }, function ($methodClass){ return function (point){
 var self=this,$self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -3124,7 +3124,7 @@ if($core.assert($recv([$self._at_(point)
 return self;
 }
 if(!$core.assert($recv($self._at_(point))._isUnknown())){
-$self._error_("try to set new cell on already set");
+$self._error_("try to set new cell on already set at ".__comma($recv(point)._printString()));
 }
 $self._at_put_(point,$recv($globals.Cell)._newSpace());
 return self;
@@ -4950,6 +4950,52 @@ $globals.Logimage.a$cls);
 
 $core.addMethod(
 $core.method({
+selector: "coureur",
+protocol: "examples",
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "coureur\x0a\x09^ self\x0a\x09\x09rows: #(\x0a\x09\x09\x09#( 11 3 )\x0a\x09\x09\x09#( 3 3 2 3 3 4 )\x0a\x09\x09\x09#( 2 1 2 1 2 1 3 2 4 )\x0a\x09\x09\x09#( 3 3 3 2 10 )\x0a\x09\x09\x09#( 3 2 1 1 2 7 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#( 1 5 2 2 6 )\x0a\x09\x09\x09#( 1 2 2 2 4 )\x0a\x09\x09\x09#( 1 3 2 3 2 1 2 )\x0a\x09\x09\x09#( 3 1 2 2 1 1 2 )\x0a\x09\x09\x09#( 4 1 3 3 4 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#( 4 1 5 2 11 )\x0a\x09\x09\x09#( 2 1 1 3 5 2 5 )\x0a\x09\x09\x09#( 2 2 1 2 3 2 3 3 )\x0a\x09\x09\x09#( 2 1 3 2 2 3 2 2 2 2 )\x0a\x09\x09\x09#( 3 4 1 1 1 2 1 2 3 1 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#( 3 5 1 2 2 2 4 1 )\x0a\x09\x09\x09#( 4 5 5 3 1 4 1 )\x0a\x09\x09\x09#( 4 2 8 1 2 2 3 1 )\x0a\x09\x09\x09#( 2 1 1 3 4 2 2 2 3 1 )\x0a\x09\x09\x09#( 3 3 3 2 2 2 3 1 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#( 2 2 2 2 4 2 1 2 1 )\x0a\x09\x09\x09#( 2 1 2 5 1 1 3 2 )\x0a\x09\x09\x09#( 4 2 6 1 2 2 1 )\x0a\x09\x09\x09#( 2 2 2 3 4 2 2 2 1 )\x0a\x09\x09\x09#( 3 1 2 4 2 2 2 2 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#( 5 2 2 4 9 3 )\x0a\x09\x09\x09#( 4 1 4 10 3 )\x0a\x09\x09\x09#( 6 2 6 5 2 )\x0a\x09\x09\x09#( 5 3 9 5 2 )\x0a\x09\x09\x09#( 4 1 6 5 5 1 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#( 3 1 4 4 3 1 )\x0a\x09\x09\x09#( 4 4 3 1 1 )\x0a\x09\x09\x09#( 4 4 1 1 1 2 )\x0a\x09\x09\x09#( 1 4 4 1 1 1 1 1 )\x0a\x09\x09\x09#( 2 1 4 4 1 1 1 1 1 1 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#( 1 2 4 2 1 1 1 1 1 1 2 )\x0a\x09\x09\x09#( 3 4 1 1 2 1 1 1 2 2 )\x0a\x09\x09\x09#( 1 4 1 1 1 1 2 1 1 2 )\x0a\x09\x09\x09#( 1 3 1 1 2 2 1 1 2 2 )\x0a\x09\x09\x09#( 1 1 1 1 1 3 2 2 1 1 1 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#( 1 2 1 1 1 5 5 1 2 )\x0a\x09\x09\x09#( 2 2 1 2 5 5 2 )\x0a\x09\x09\x09#( 1 2 2 2 2 4 1 2 )\x0a\x09\x09\x09#( 1 5 5 3 2 )\x0a\x09\x09\x09#( 1 5 5 2 15 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09)\x0a\x09\x09cols: #(\x0a\x09\x09\x09#( 12 2 2 )\x0a\x09\x09\x09#( 3 9 6 3 4 )\x0a\x09\x09\x09#( 10 14 6 )\x0a\x09\x09\x09#( 1 3 4 5 1 5 2 1 1 )\x0a\x09\x09\x09#( 6 2 2 2 2 2 5 2 2 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#( 1 3 3 1 2 1 1 6 3 )\x0a\x09\x09\x09#( 4 3 3 6 4 )\x0a\x09\x09\x09#( 3 4 2 15 2 )\x0a\x09\x09\x09#( 2 1 2 4 2 2 8 2 )\x0a\x09\x09\x09#( 1 2 2 1 3 2 18 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#( 4 1 1 2 2 2 5 )\x0a\x09\x09\x09#( 2 2 2 1 7 1 2 1 )\x0a\x09\x09\x09#( 1 2 1 2 1 1 5 2 1 1 3 )\x0a\x09\x09\x09#( 3 3 2 3 2 2 7 4 )\x0a\x09\x09\x09#( 2 2 2 1 1 1 2 2 14 2 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#( 3 3 1 1 4 1 1 7 3 )\x0a\x09\x09\x09#( 1 2 4 2 19 )\x0a\x09\x09\x09#( 2 1 4 1 5 3 1 )\x0a\x09\x09\x09#( 1 2 3 9 4 2 )\x0a\x09\x09\x09#( 1 6 6 4 3 2 1 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#( 3 14 11 3 2 )\x0a\x09\x09\x09#( 1 1 4 6 7 2 1 )\x0a\x09\x09\x09#( 4 2 2 2 3 11 2 1 )\x0a\x09\x09\x09#( 4 2 5 4 4 1 )\x0a\x09\x09\x09#( 3 3 2 8 6 6 1 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#( 5 4 3 14 3 1 )\x0a\x09\x09\x09#( 4 4 2 9 2 1 )\x0a\x09\x09\x09#( 6 1 11 5 9 1 )\x0a\x09\x09\x09#( 6 1 2 3 9 1 )\x0a\x09\x09\x09#( 3 3 2 6 2 1 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#( 3 14 3 1 1 )\x0a\x09\x09\x09#( 3 2 9 5 3 2 )\x0a\x09\x09\x09#( 2 2 6 5 2 4 )\x0a\x09\x09\x09#( 3 6 8 1 )\x0a\x09\x09\x09#( 10 2 3 1 1 )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09)",
+referencedClasses: [],
+//>>excludeEnd("ide");
+pragmas: [],
+messageSends: ["rows:cols:"]
+}, function ($methodClass){ return function (){
+var self=this,$self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+return $self._rows_cols_([[(11), (3)], [(3), (3), (2), (3), (3), (4)], [(2), (1), (2), (1), (2), (1), (3), (2), (4)], [(3), (3), (3), (2), (10)], [(3), (2), (1), (1), (2), (7)], [(1), (5), (2), (2), (6)], [(1), (2), (2), (2), (4)], [(1), (3), (2), (3), (2), (1), (2)], [(3), (1), (2), (2), (1), (1), (2)], [(4), (1), (3), (3), (4)], [(4), (1), (5), (2), (11)], [(2), (1), (1), (3), (5), (2), (5)], [(2), (2), (1), (2), (3), (2), (3), (3)], [(2), (1), (3), (2), (2), (3), (2), (2), (2), (2)], [(3), (4), (1), (1), (1), (2), (1), (2), (3), (1)], [(3), (5), (1), (2), (2), (2), (4), (1)], [(4), (5), (5), (3), (1), (4), (1)], [(4), (2), (8), (1), (2), (2), (3), (1)], [(2), (1), (1), (3), (4), (2), (2), (2), (3), (1)], [(3), (3), (3), (2), (2), (2), (3), (1)], [(2), (2), (2), (2), (4), (2), (1), (2), (1)], [(2), (1), (2), (5), (1), (1), (3), (2)], [(4), (2), (6), (1), (2), (2), (1)], [(2), (2), (2), (3), (4), (2), (2), (2), (1)], [(3), (1), (2), (4), (2), (2), (2), (2)], [(5), (2), (2), (4), (9), (3)], [(4), (1), (4), (10), (3)], [(6), (2), (6), (5), (2)], [(5), (3), (9), (5), (2)], [(4), (1), (6), (5), (5), (1)], [(3), (1), (4), (4), (3), (1)], [(4), (4), (3), (1), (1)], [(4), (4), (1), (1), (1), (2)], [(1), (4), (4), (1), (1), (1), (1), (1)], [(2), (1), (4), (4), (1), (1), (1), (1), (1), (1)], [(1), (2), (4), (2), (1), (1), (1), (1), (1), (1), (2)], [(3), (4), (1), (1), (2), (1), (1), (1), (2), (2)], [(1), (4), (1), (1), (1), (1), (2), (1), (1), (2)], [(1), (3), (1), (1), (2), (2), (1), (1), (2), (2)], [(1), (1), (1), (1), (1), (3), (2), (2), (1), (1), (1)], [(1), (2), (1), (1), (1), (5), (5), (1), (2)], [(2), (2), (1), (2), (5), (5), (2)], [(1), (2), (2), (2), (2), (4), (1), (2)], [(1), (5), (5), (3), (2)], [(1), (5), (5), (2), (15)]],[[(12), (2), (2)], [(3), (9), (6), (3), (4)], [(10), (14), (6)], [(1), (3), (4), (5), (1), (5), (2), (1), (1)], [(6), (2), (2), (2), (2), (2), (5), (2), (2)], [(1), (3), (3), (1), (2), (1), (1), (6), (3)], [(4), (3), (3), (6), (4)], [(3), (4), (2), (15), (2)], [(2), (1), (2), (4), (2), (2), (8), (2)], [(1), (2), (2), (1), (3), (2), (18)], [(4), (1), (1), (2), (2), (2), (5)], [(2), (2), (2), (1), (7), (1), (2), (1)], [(1), (2), (1), (2), (1), (1), (5), (2), (1), (1), (3)], [(3), (3), (2), (3), (2), (2), (7), (4)], [(2), (2), (2), (1), (1), (1), (2), (2), (14), (2)], [(3), (3), (1), (1), (4), (1), (1), (7), (3)], [(1), (2), (4), (2), (19)], [(2), (1), (4), (1), (5), (3), (1)], [(1), (2), (3), (9), (4), (2)], [(1), (6), (6), (4), (3), (2), (1)], [(3), (14), (11), (3), (2)], [(1), (1), (4), (6), (7), (2), (1)], [(4), (2), (2), (2), (3), (11), (2), (1)], [(4), (2), (5), (4), (4), (1)], [(3), (3), (2), (8), (6), (6), (1)], [(5), (4), (3), (14), (3), (1)], [(4), (4), (2), (9), (2), (1)], [(6), (1), (11), (5), (9), (1)], [(6), (1), (2), (3), (9), (1)], [(3), (3), (2), (6), (2), (1)], [(3), (14), (3), (1), (1)], [(3), (2), (9), (5), (3), (2)], [(2), (2), (6), (5), (2), (4)], [(3), (6), (8), (1)], [(10), (2), (3), (1), (1)]]);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"coureur",{})});
+//>>excludeEnd("ctx");
+}; }),
+$globals.Logimage.a$cls);
+
+$core.addMethod(
+$core.method({
+selector: "grandVide",
+protocol: "examples",
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "grandVide\x0a\x09^ self\x0a\x09\x09rows: #(\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09)\x0a\x09\x09cols: #(\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x09#(  )\x0a\x09\x09\x22--------------------------------\x22\x0a\x09\x09)",
+referencedClasses: [],
+//>>excludeEnd("ide");
+pragmas: [],
+messageSends: ["rows:cols:"]
+}, function ($methodClass){ return function (){
+var self=this,$self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+return $self._rows_cols_([[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []],[[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []]);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"grandVide",{})});
+//>>excludeEnd("ctx");
+}; }),
+$globals.Logimage.a$cls);
+
+$core.addMethod(
+$core.method({
 selector: "joconde",
 protocol: "examples",
 //>>excludeStart("ide", pragmas.excludeIdeData);
@@ -6364,7 +6410,7 @@ selector: "analyse:",
 protocol: "as yet unclassified",
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["line"],
-source: "analyse: line\x0a\x09| firstcells firstline othercells otherline firstres otherres |\x0a\x09\x22check min hint size\x22\x0a\x09line hint isEmpty ifTrue: [ ^ self none ].\x0a\x0a\x09\x22get first cells and check some rules\x22\x0a\x09firstcells := line cells firstNotSpace.\x0a\x09\x22if no space, already done by other firstXXX\x22\x0a\x09firstcells isEmpty ifTrue: [ ^ self none ].\x0a\x09firstcells size = line cells size ifTrue: [ ^ self none ].\x0a\x0a\x09\x22check if only first number forced to be inside first cells\x22\x0a\x09(self isFirstForced: line hint on: firstcells)\x0a\x09\x09ifFalse: [ ^ self none ].\x0a\x0a\x09\x22analyse first cells\x22\x0a\x09firstline := Line\x0a\x09\x09hint: (Hint new: { line hint first })\x0a\x09\x09cells: firstcells.\x0a\x09firstres := self testStrategies: firstline.\x0a\x0a\x09\x22 complete first res if needed to the first cells size\x22\x0a\x09firstres addUnknowns: (firstcells size - firstres size).\x0a\x09\x0a\x09othercells := (line cells copyFrom: firstcells size + 1) trimFirst.\x0a\x09otherline := Line\x0a\x09\x09hint: (line hint firstRemoved: 1)\x0a\x09\x09cells: othercells.\x0a\x09otherres := self testStrategies: otherline.\x0a\x09firstres addSpaces: (othercells pos - firstcells size - 1).\x0a\x09firstres addAll: otherres.\x0a\x0a\x09^ firstres",
+source: "analyse: line\x0a\x09| firstcells firstline othercells otherline firstres otherres |\x0a\x09\x22check min hint size\x22\x0a\x09line hint isEmpty ifTrue: [ ^ self none ].\x0a\x0a\x09\x22get first cells and check some rules\x22\x0a\x09firstcells := line cells firstNotSpace.\x0a\x09\x22if no space, already done by other firstXXX\x22\x0a\x09firstcells isEmpty ifTrue: [ ^ self none ].\x0a\x09firstcells size = line cells size ifTrue: [ ^ self none ].\x0a\x0a\x09\x22check if only first number forced to be inside first cells\x22\x0a\x09(self isFirstForced: line hint on: firstcells)\x0a\x09\x09ifFalse: [ ^ self none ].\x0a\x0a\x09\x22analyse first cells\x22\x0a\x09firstline := Line\x0a\x09\x09hint: (Hint new: { line hint first })\x0a\x09\x09cells: firstcells.\x0a\x09firstres := self testStrategies: firstline.\x0a\x22Transcript show: 'first line:', firstline printString, ' first res', firstres printString; cr.\x22\x0a\x09\x22 complete first res if needed to the first cells size\x22\x0a\x09firstres addUnknowns: (firstcells size - firstres size).\x0a\x0a\x09othercells := (line cells copyFrom: firstcells size + 1) trimFirst.\x0a\x09otherline := Line\x0a\x09\x09hint: (line hint firstRemoved: 1)\x0a\x09\x09cells: othercells.\x0a\x09otherres := self testStrategies: otherline.\x0a\x09firstres addSpaces: (othercells pos - firstcells size - 1).\x0a\x09firstres addAll: otherres.\x0a\x0a\x09^ firstres",
 referencedClasses: ["Line", "Hint"],
 //>>excludeEnd("ide");
 pragmas: [],
@@ -6552,7 +6598,7 @@ selector: "testStrategies:",
 protocol: "as yet unclassified",
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["line"],
-source: "testStrategies: line\x0a\x09Strategies instance do: [ :strategy | | res |\x0a\x09\x09res := strategy analyse: line.\x0a\x09\x09res isEmpty ifFalse: [ ^ res] ].\x0a\x09^ self none",
+source: "testStrategies: line\x0a\x09Strategies instance do: [ :strategy | | res |\x0a\x09\x09res := strategy analyse: line.\x0a\x22Transcript show: ' - test strat: ', strategy printString, ' => ', res printString; cr.\x22\x0a\x09\x09res isEmpty ifFalse: [ ^ res] ].\x0a\x09^ self none",
 referencedClasses: ["Strategies"],
 //>>excludeEnd("ide");
 pragmas: [],
@@ -6841,11 +6887,11 @@ selector: "analyse:",
 protocol: "as yet unclassified",
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["line"],
-source: "analyse: line\x0a\x09\x22only one hint is tested yet\x22\x0a\x09| n box sol |\x0a\x09\x22If only one hint and at least one box,returns other empty spaces\x22\x0a\x09(line hint size == 1)\x0a\x09\x09ifFalse: [ ^ self none ].\x0a\x09\x22get informations\x22\x0a\x09box := line cells firstBox.\x0a\x09(box at: #pos) = 0 ifTrue: [ ^ self none ].\x0a\x09n := line hint first.\x0a\x09\x22create solution\x22\x0a\x09sol := Cells new\x0a\x09\x09addSpaces: (0 max: ((box at: #pos)+(box at: #size)-1-n));\x0a\x09\x09addUnknowns: (2*n-(box at: #size));\x0a\x09\x09addSpaces: (0 max: (line cells size - (box at: #pos)-n+1)).\x0a\x09^ sol",
+source: "analyse: line\x0a\x09\x22only one hint is tested yet\x22\x0a\x09| n box sol |\x0a\x09\x22If only one hint and at least one box,returns other empty spaces\x22\x0a\x09(line hint size == 1)\x0a\x09\x09ifFalse: [ ^ self none ].\x0a\x09\x22get informations\x22\x0a\x09box := line cells firstBox.\x0a\x09(box at: #pos) = 0 ifTrue: [ ^ self none ].\x0a\x09n := line hint first.\x0a\x09\x22create solution\x22\x0a\x09sol := Cells new\x0a\x09\x09addSpaces: (0 max: ((box at: #pos)+(box at: #size)-1-n));\x0a\x09\x09addUnknowns: (2*n-(box at: #size));\x0a\x09\x09addSpaces: (0 max: (line cells size - (box at: #pos)-n+1)).\x0a\x09^ sol size: (line cells size)",
 referencedClasses: ["Cells"],
 //>>excludeEnd("ide");
 pragmas: [],
-messageSends: ["ifFalse:", "==", "size", "hint", "none", "firstBox", "cells", "ifTrue:", "=", "at:", "first", "addSpaces:", "new", "max:", "-", "+", "addUnknowns:", "*"]
+messageSends: ["ifFalse:", "==", "size", "hint", "none", "firstBox", "cells", "ifTrue:", "=", "at:", "first", "addSpaces:", "new", "max:", "-", "+", "addUnknowns:", "*", "size:"]
 }, function ($methodClass){ return function (line){
 var self=this,$self=this;
 var n,box,sol;
@@ -6920,12 +6966,20 @@ $recv($1)._addUnknowns_([$recv((2).__star(n)).__minus([$recv(box)._at_("size")
 ,$ctx1.sendIdx["-"]=3
 //>>excludeEnd("ctx");
 ][0]);
-sol=$recv($1)._addSpaces_((0)._max_($recv([$recv($recv($recv($recv(line)._cells())._size()).__minus($recv(box)._at_("pos"))).__minus(n)
+sol=$recv($1)._addSpaces_((0)._max_($recv([$recv($recv([$recv([$recv(line)._cells()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["cells"]=2
+//>>excludeEnd("ctx");
+][0])._size()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["size"]=2
+//>>excludeEnd("ctx");
+][0]).__minus($recv(box)._at_("pos"))).__minus(n)
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 ,$ctx1.sendIdx["-"]=4
 //>>excludeEnd("ctx");
 ][0]).__plus((1))));
-return sol;
+return $recv(sol)._size_($recv($recv(line)._cells())._size());
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line,n:n,box:box,sol:sol})});
 //>>excludeEnd("ctx");

@@ -131,11 +131,11 @@ unselect: list
 !Application class methodsFor: 'as yet unclassified'!
 
 start
-	^ Application new show: Logimage chat
+	^ Application new show: Logimage coureur
 ! !
 
 Object subclass: #Cell
-	slots: { }
+	slots: {}
 	package: 'Logimage'!
 !Cell commentStamp!
 A simple cell or pixel.!
@@ -179,7 +179,7 @@ toOld
 	^ self
 ! !
 
-Cell class instanceVariableNames: 'cells'!
+Cell class slots: {#cells}!
 
 !Cell class methodsFor: 'instance creation'!
 
@@ -694,7 +694,7 @@ newBox: point
 
 newSpace: point
 	(self at: point) isSpace ifTrue: [ ^ self ].
-	(self at: point) isUnknown ifFalse: [ self error: 'try to set new cell on already set' ].
+	(self at: point) isUnknown ifFalse: [ self error: 'try to set new cell on already set at ', point printString ].
 	self at: point put: Cell newSpace
 !
 
@@ -1175,6 +1175,214 @@ chat
 		)
 !
 
+coureur
+	^ self
+		rows: #(
+			#( 11 3 )
+			#( 3 3 2 3 3 4 )
+			#( 2 1 2 1 2 1 3 2 4 )
+			#( 3 3 3 2 10 )
+			#( 3 2 1 1 2 7 )
+		"--------------------------------"
+			#( 1 5 2 2 6 )
+			#( 1 2 2 2 4 )
+			#( 1 3 2 3 2 1 2 )
+			#( 3 1 2 2 1 1 2 )
+			#( 4 1 3 3 4 )
+		"--------------------------------"
+			#( 4 1 5 2 11 )
+			#( 2 1 1 3 5 2 5 )
+			#( 2 2 1 2 3 2 3 3 )
+			#( 2 1 3 2 2 3 2 2 2 2 )
+			#( 3 4 1 1 1 2 1 2 3 1 )
+		"--------------------------------"
+			#( 3 5 1 2 2 2 4 1 )
+			#( 4 5 5 3 1 4 1 )
+			#( 4 2 8 1 2 2 3 1 )
+			#( 2 1 1 3 4 2 2 2 3 1 )
+			#( 3 3 3 2 2 2 3 1 )
+		"--------------------------------"
+			#( 2 2 2 2 4 2 1 2 1 )
+			#( 2 1 2 5 1 1 3 2 )
+			#( 4 2 6 1 2 2 1 )
+			#( 2 2 2 3 4 2 2 2 1 )
+			#( 3 1 2 4 2 2 2 2 )
+		"--------------------------------"
+			#( 5 2 2 4 9 3 )
+			#( 4 1 4 10 3 )
+			#( 6 2 6 5 2 )
+			#( 5 3 9 5 2 )
+			#( 4 1 6 5 5 1 )
+		"--------------------------------"
+			#( 3 1 4 4 3 1 )
+			#( 4 4 3 1 1 )
+			#( 4 4 1 1 1 2 )
+			#( 1 4 4 1 1 1 1 1 )
+			#( 2 1 4 4 1 1 1 1 1 1 )
+		"--------------------------------"
+			#( 1 2 4 2 1 1 1 1 1 1 2 )
+			#( 3 4 1 1 2 1 1 1 2 2 )
+			#( 1 4 1 1 1 1 2 1 1 2 )
+			#( 1 3 1 1 2 2 1 1 2 2 )
+			#( 1 1 1 1 1 3 2 2 1 1 1 )
+		"--------------------------------"
+			#( 1 2 1 1 1 5 5 1 2 )
+			#( 2 2 1 2 5 5 2 )
+			#( 1 2 2 2 2 4 1 2 )
+			#( 1 5 5 3 2 )
+			#( 1 5 5 2 15 )
+		"--------------------------------"
+		)
+		cols: #(
+			#( 12 2 2 )
+			#( 3 9 6 3 4 )
+			#( 10 14 6 )
+			#( 1 3 4 5 1 5 2 1 1 )
+			#( 6 2 2 2 2 2 5 2 2 )
+		"--------------------------------"
+			#( 1 3 3 1 2 1 1 6 3 )
+			#( 4 3 3 6 4 )
+			#( 3 4 2 15 2 )
+			#( 2 1 2 4 2 2 8 2 )
+			#( 1 2 2 1 3 2 18 )
+		"--------------------------------"
+			#( 4 1 1 2 2 2 5 )
+			#( 2 2 2 1 7 1 2 1 )
+			#( 1 2 1 2 1 1 5 2 1 1 3 )
+			#( 3 3 2 3 2 2 7 4 )
+			#( 2 2 2 1 1 1 2 2 14 2 )
+		"--------------------------------"
+			#( 3 3 1 1 4 1 1 7 3 )
+			#( 1 2 4 2 19 )
+			#( 2 1 4 1 5 3 1 )
+			#( 1 2 3 9 4 2 )
+			#( 1 6 6 4 3 2 1 )
+		"--------------------------------"
+			#( 3 14 11 3 2 )
+			#( 1 1 4 6 7 2 1 )
+			#( 4 2 2 2 3 11 2 1 )
+			#( 4 2 5 4 4 1 )
+			#( 3 3 2 8 6 6 1 )
+		"--------------------------------"
+			#( 5 4 3 14 3 1 )
+			#( 4 4 2 9 2 1 )
+			#( 6 1 11 5 9 1 )
+			#( 6 1 2 3 9 1 )
+			#( 3 3 2 6 2 1 )
+		"--------------------------------"
+			#( 3 14 3 1 1 )
+			#( 3 2 9 5 3 2 )
+			#( 2 2 6 5 2 4 )
+			#( 3 6 8 1 )
+			#( 10 2 3 1 1 )
+		"--------------------------------"
+		)
+!
+
+grandVide
+	^ self
+		rows: #(
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+		"--------------------------------"
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+		"--------------------------------"
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+		"--------------------------------"
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+		"--------------------------------"
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+		"--------------------------------"
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+		"--------------------------------"
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+		"--------------------------------"
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+		"--------------------------------"
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+		"--------------------------------"
+		)
+		cols: #(
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+		"--------------------------------"
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+		"--------------------------------"
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+		"--------------------------------"
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+		"--------------------------------"
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+		"--------------------------------"
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+		"--------------------------------"
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+			#(  )
+		"--------------------------------"
+		)
+!
+
 joconde
 	^ self
 		rows: #(
@@ -1392,7 +1600,7 @@ keysAndValuesDo: aBlock
 	list keysAndValuesDo: aBlock
 ! !
 
-Strategies class instanceVariableNames: 'instance'!
+Strategies class slots: {#instance}!
 
 !Strategies class methodsFor: 'as yet unclassified'!
 
@@ -1744,10 +1952,10 @@ analyse: line
 		hint: (Hint new: { line hint first })
 		cells: firstcells.
 	firstres := self testStrategies: firstline.
-
+"Transcript show: 'first line:', firstline printString, ' first res', firstres printString; cr."
 	" complete first res if needed to the first cells size"
 	firstres addUnknowns: (firstcells size - firstres size).
-	
+
 	othercells := (line cells copyFrom: firstcells size + 1) trimFirst.
 	otherline := Line
 		hint: (line hint firstRemoved: 1)
@@ -1788,6 +1996,7 @@ isFirstForced: hint on: firstcells
 testStrategies: line
 	Strategies instance do: [ :strategy | | res |
 		res := strategy analyse: line.
+"Transcript show: ' - test strat: ', strategy printString, ' => ', res printString; cr."
 		res isEmpty ifFalse: [ ^ res] ].
 	^ self none
 ! !
@@ -1906,7 +2115,7 @@ analyse: line
 		addSpaces: (0 max: ((box at: #pos)+(box at: #size)-1-n));
 		addUnknowns: (2*n-(box at: #size));
 		addSpaces: (0 max: (line cells size - (box at: #pos)-n+1)).
-	^ sol
+	^ sol size: (line cells size)
 !
 
 isBidirectional
