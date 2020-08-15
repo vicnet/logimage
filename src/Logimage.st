@@ -64,7 +64,7 @@ renderStratsOn: menu
 	list := menu DIV: { #class -> 'strategies' }.
 	Strategies instance do: [ :strategy | | name |
 		name := strategy id.
-		(list DIV: { #class -> 'checkbox' })
+		(list DIV: { #class -> 'checkbox'. 'title'-> strategy class comment })
 			<< (Silk INPUT: { #type -> 'checkbox'.
 							  #id -> name.
 							  #checked -> 'checked' })
@@ -473,6 +473,14 @@ firstNotSpace
 		].
 	size>0 ifTrue: [ ^ self copyFrom: cells size-size+1 ].
 	^ Cells new
+!
+
+firstSpace
+	"Returns position of first space, 0 if no spaces"
+	cells withIndexDo: [ :c :i |
+		c isSpace ifTrue: [ ^ i ]
+		].
+	^ 0
 !
 
 initialize
@@ -1592,6 +1600,10 @@ initialize
 		#lastnotreachedmore -> StratLastNotReachedMore.
 		#firstposmore -> StratFirstPosMore.
 		#lastposmore -> StratLastPosMore.
+		#firstones -> StratFirstOnes.
+		#lastones -> StratLastOnes.
+		#firstspacesifnotfit -> StratFirstSpacesIfNotFit.
+		#lastspacesifnotfit -> StratLastSpacesIfNotFit.
 		}
 		collect: [ :strat | strat new ]
 !
@@ -1721,6 +1733,8 @@ id
 Strategy subclass: #StratAllHintDone
 	slots: {}
 	package: 'Logimage'!
+!StratAllHintDone commentStamp!
+If all hints are resolved, all cell are filled!
 
 !StratAllHintDone methodsFor: 'as yet unclassified'!
 
@@ -1828,7 +1842,7 @@ Strategy subclass: #StratFirstBox
 	slots: {}
 	package: 'Logimage'!
 !StratFirstBox commentStamp!
-I am a base for strategy base on first box inside the first hint.!
+I am a base for strategy based on first box inside the first hint.!
 
 !StratFirstBox methodsFor: 'as yet unclassified'!
 
@@ -2005,7 +2019,7 @@ Strategy subclass: #StratFirstNotReachedMore
 	slots: {}
 	package: 'Logimage'!
 !StratFirstNotReachedMore commentStamp!
-Likre not reached but by testing too more boxes for first hint if set at first position.
+Like not reached but by testing too more boxes for first hint if set at first position.
 Example: 2|??X => |-?X first cell should be space!
 
 !StratFirstNotReachedMore methodsFor: 'as yet unclassified'!
@@ -2024,6 +2038,44 @@ analyse: line
 
 isBidirectional
 	^ false
+! !
+
+Strategy subclass: #StratFirstOnes
+	slots: {}
+	package: 'Logimage'!
+!StratFirstOnes commentStamp!
+I try to detect ones at fist position to force spaces before and after it.!
+
+!StratFirstOnes methodsFor: 'as yet unclassified'!
+
+analyse: line
+	| n sol |
+	n := self nbOnesFor: line hint.
+	n=0 ifTrue: [ ^ self none ].
+	sol := Cells new size: ( n*2+1 min: (line cells size) ).
+	line cells withIndexDo: [ :c :i |
+		i>(sol size) ifTrue: [ ^ sol ].
+		c isBox ifTrue: [
+			i>1 ifTrue: [ sol at: (i-1) put: (Cell space) ].
+			sol at: (i+1) put: (Cell space)
+			]
+		].
+	^ sol
+!
+
+isBidirectional
+	^ false
+!
+
+nbOnesFor: hint
+	"I return the number of consecutive 1 in hint"
+	| count |
+	count := 0.
+	hint do: [ :n |
+		n=1 ifFalse: [ ^ count ].
+		count := count + 1
+	].
+	^ count
 ! !
 
 Strategy subclass: #StratFirstPosMore
@@ -2063,6 +2115,24 @@ analyse: line
 
 isBidirectional
 	^ false
+! !
+
+Strategy subclass: #StratFirstSpacesIfNotFit
+	slots: {}
+	package: 'Logimage'!
+!StratFirstSpacesIfNotFit commentStamp!
+If first hint dont fit into first part delimited by a space, fill this part with spaces.!
+
+!StratFirstSpacesIfNotFit methodsFor: 'as yet unclassified'!
+
+analyse: line
+	| n |
+	"get the first space position"
+	n := line cells firstSpace.
+	n < 2 ifTrue: [ ^ self none ].
+	"test if first hint could be set before this space"
+	line hint first < n ifTrue: [ ^ self none ].
+	^ Cells new addSpaces: n-1
 ! !
 
 Strategy subclass: #StratMinSpace
@@ -2166,7 +2236,7 @@ initialize
 ! !
 
 StratReverted subclass: #StratLastDone
-	slots: {#strategy}
+	slots: {}
 	package: 'Logimage'!
 
 !StratLastDone methodsFor: 'as yet unclassified'!
@@ -2176,7 +2246,7 @@ initialize
 ! !
 
 StratReverted subclass: #StratLastMore
-	slots: {#strategy}
+	slots: {}
 	package: 'Logimage'!
 
 !StratLastMore methodsFor: 'as yet unclassified'!
@@ -2186,7 +2256,7 @@ initialize
 ! !
 
 StratReverted subclass: #StratLastNotReachedMore
-	slots: {#strategy}
+	slots: {}
 	package: 'Logimage'!
 
 !StratLastNotReachedMore methodsFor: 'as yet unclassified'!
@@ -2195,14 +2265,34 @@ initialize
 	strategy := StratFirstNotReachedMore new
 ! !
 
+StratReverted subclass: #StratLastOnes
+	slots: {}
+	package: 'Logimage'!
+
+!StratLastOnes methodsFor: 'as yet unclassified'!
+
+initialize
+	strategy := StratFirstOnes new
+! !
+
 StratReverted subclass: #StratLastPosMore
-	slots: {#strategy}
+	slots: {}
 	package: 'Logimage'!
 
 !StratLastPosMore methodsFor: 'as yet unclassified'!
 
 initialize
 	strategy := StratFirstPosMore new
+! !
+
+StratReverted subclass: #StratLastSpacesIfNotFit
+	slots: {}
+	package: 'Logimage'!
+
+!StratLastSpacesIfNotFit methodsFor: 'as yet unclassified'!
+
+initialize
+	strategy := StratFirstSpacesIfNotFit new
 ! !
 
 Strategy subclass: #StratSpacesOnly

@@ -287,11 +287,11 @@ selector: "renderStratsOn:",
 protocol: "as yet unclassified",
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["menu"],
-source: "renderStratsOn: menu\x0a\x09| btn list |\x0a\x09list := menu DIV: { #class -> 'strategies' }.\x0a\x09Strategies instance do: [ :strategy | | name |\x0a\x09\x09name := strategy id.\x0a\x09\x09(list DIV: { #class -> 'checkbox' })\x0a\x09\x09\x09<< (Silk INPUT: { #type -> 'checkbox'.\x0a\x09\x09\x09\x09\x09\x09\x09  #id -> name.\x0a\x09\x09\x09\x09\x09\x09\x09  #checked -> 'checked' })\x0a\x09\x09\x09<< (Silk LABEL: { #for -> name. name })\x0a\x09\x09].\x0a\x09list DIV\x0a\x09\x09<< (self newButton: 'Unselect All' onClick: [\x0a\x09\x09 \x09self unselect: list ])\x0a\x09\x09<< (self newButton: 'Select All' onClick: [\x0a\x09\x09\x09self select: list ])\x0a\x09\x09<< (self newButton: 'Toggle All' onClick: [\x0a\x09\x09 \x09self toggle: list ]).\x0a\x09^ list",
+source: "renderStratsOn: menu\x0a\x09| btn list |\x0a\x09list := menu DIV: { #class -> 'strategies' }.\x0a\x09Strategies instance do: [ :strategy | | name |\x0a\x09\x09name := strategy id.\x0a\x09\x09(list DIV: { #class -> 'checkbox'. 'title'-> strategy class comment })\x0a\x09\x09\x09<< (Silk INPUT: { #type -> 'checkbox'.\x0a\x09\x09\x09\x09\x09\x09\x09  #id -> name.\x0a\x09\x09\x09\x09\x09\x09\x09  #checked -> 'checked' })\x0a\x09\x09\x09<< (Silk LABEL: { #for -> name. name })\x0a\x09\x09].\x0a\x09list DIV\x0a\x09\x09<< (self newButton: 'Unselect All' onClick: [\x0a\x09\x09 \x09self unselect: list ])\x0a\x09\x09<< (self newButton: 'Select All' onClick: [\x0a\x09\x09\x09self select: list ])\x0a\x09\x09<< (self newButton: 'Toggle All' onClick: [\x0a\x09\x09 \x09self toggle: list ]).\x0a\x09^ list",
 referencedClasses: ["Strategies", "Silk"],
 //>>excludeEnd("ide");
 pragmas: [],
-messageSends: ["DIV:", "->", "do:", "instance", "id", "<<", "INPUT:", "LABEL:", "DIV", "newButton:onClick:", "unselect:", "select:", "toggle:"]
+messageSends: ["DIV:", "->", "do:", "instance", "id", "<<", "comment", "class", "INPUT:", "LABEL:", "DIV", "newButton:onClick:", "unselect:", "select:", "toggle:"]
 }, function ($methodClass){ return function (menu){
 var self=this,$self=this;
 var btn,list;
@@ -317,17 +317,21 @@ return [$recv([$recv($recv(list)._DIV_([["class".__minus_gt("checkbox")
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 ,$ctx2.sendIdx["->"]=2
 //>>excludeEnd("ctx");
-][0]])).__lt_lt($recv($globals.Silk)._INPUT_([["type".__minus_gt("checkbox")
+][0],["title".__minus_gt($recv($recv(strategy)._class())._comment())
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 ,$ctx2.sendIdx["->"]=3
 //>>excludeEnd("ctx");
-][0],["id".__minus_gt(name)
+][0]])).__lt_lt($recv($globals.Silk)._INPUT_([["type".__minus_gt("checkbox")
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 ,$ctx2.sendIdx["->"]=4
 //>>excludeEnd("ctx");
-][0],["checked".__minus_gt("checked")
+][0],["id".__minus_gt(name)
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 ,$ctx2.sendIdx["->"]=5
+//>>excludeEnd("ctx");
+][0],["checked".__minus_gt("checked")
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx2.sendIdx["->"]=6
 //>>excludeEnd("ctx");
 ][0]]))
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -2221,6 +2225,44 @@ return $recv($globals.Cells)._new();
 catch(e) {if(e===$early)return e[0]; throw e}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"firstNotSpace",{size:size})});
+//>>excludeEnd("ctx");
+}; }),
+$globals.Cells);
+
+$core.addMethod(
+$core.method({
+selector: "firstSpace",
+protocol: "as yet unclassified",
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "firstSpace\x0a\x09\x22Returns position of first space, 0 if no spaces\x22\x0a\x09cells withIndexDo: [ :c :i |\x0a\x09\x09c isSpace ifTrue: [ ^ i ]\x0a\x09\x09].\x0a\x09^ 0",
+referencedClasses: [],
+//>>excludeEnd("ide");
+pragmas: [],
+messageSends: ["withIndexDo:", "ifTrue:", "isSpace"]
+}, function ($methodClass){ return function (){
+var self=this,$self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $early={};
+try {
+$recv($self.cells)._withIndexDo_((function(c,i){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+if($core.assert($recv(c)._isSpace())){
+throw $early=[i];
+}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({c:c,i:i},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+return (0);
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"firstSpace",{})});
 //>>excludeEnd("ctx");
 }; }),
 $globals.Cells);
@@ -5215,8 +5257,8 @@ selector: "initialize",
 protocol: "as yet unclassified",
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "initialize\x0a\x09\x22TODO should be autodeclared by each instance !\x22\x0a\x09list := #{\x0a\x09\x09#spacesonly -> StratSpacesOnly.\x0a\x09\x09#allhintdone -> StratAllHintDone.\x0a\x09\x09#countalldone -> StratCountAllDone.\x0a\x09\x09#recover -> StratRecover.\x0a\x09\x09#notreached -> StratNotReached.\x0a\x09\x09#firstcover -> StratFirstCover.\x0a\x09\x09#lastcover -> StratLastCover.\x0a\x09\x09#minspace -> StratMinSpace.\x0a\x09\x09#firstdone -> StratFirstDone.\x0a\x09\x09#lastdone -> StratLastDone.\x0a\x09\x09#testbox -> StratTestBox.\x0a\x09\x09#firstcutspace -> StratFirstCutSpace.\x0a\x09\x09#lastcutspace -> StratLastCutSpace.\x0a\x09\x09#firstmore -> StratFirstMore.\x0a\x09\x09#lastmore -> StratLastMore.\x0a\x09\x09#firstnotreachedmore -> StratFirstNotReachedMore.\x0a\x09\x09#lastnotreachedmore -> StratLastNotReachedMore.\x0a\x09\x09#firstposmore -> StratFirstPosMore.\x0a\x09\x09#lastposmore -> StratLastPosMore.\x0a\x09\x09}\x0a\x09\x09collect: [ :strat | strat new ]",
-referencedClasses: ["StratSpacesOnly", "StratAllHintDone", "StratCountAllDone", "StratRecover", "StratNotReached", "StratFirstCover", "StratLastCover", "StratMinSpace", "StratFirstDone", "StratLastDone", "StratTestBox", "StratFirstCutSpace", "StratLastCutSpace", "StratFirstMore", "StratLastMore", "StratFirstNotReachedMore", "StratLastNotReachedMore", "StratFirstPosMore", "StratLastPosMore"],
+source: "initialize\x0a\x09\x22TODO should be autodeclared by each instance !\x22\x0a\x09list := #{\x0a\x09\x09#spacesonly -> StratSpacesOnly.\x0a\x09\x09#allhintdone -> StratAllHintDone.\x0a\x09\x09#countalldone -> StratCountAllDone.\x0a\x09\x09#recover -> StratRecover.\x0a\x09\x09#notreached -> StratNotReached.\x0a\x09\x09#firstcover -> StratFirstCover.\x0a\x09\x09#lastcover -> StratLastCover.\x0a\x09\x09#minspace -> StratMinSpace.\x0a\x09\x09#firstdone -> StratFirstDone.\x0a\x09\x09#lastdone -> StratLastDone.\x0a\x09\x09#testbox -> StratTestBox.\x0a\x09\x09#firstcutspace -> StratFirstCutSpace.\x0a\x09\x09#lastcutspace -> StratLastCutSpace.\x0a\x09\x09#firstmore -> StratFirstMore.\x0a\x09\x09#lastmore -> StratLastMore.\x0a\x09\x09#firstnotreachedmore -> StratFirstNotReachedMore.\x0a\x09\x09#lastnotreachedmore -> StratLastNotReachedMore.\x0a\x09\x09#firstposmore -> StratFirstPosMore.\x0a\x09\x09#lastposmore -> StratLastPosMore.\x0a\x09\x09#firstones -> StratFirstOnes.\x0a\x09\x09#lastones -> StratLastOnes.\x0a\x09\x09#firstspacesifnotfit -> StratFirstSpacesIfNotFit.\x0a\x09\x09#lastspacesifnotfit -> StratLastSpacesIfNotFit.\x0a\x09\x09}\x0a\x09\x09collect: [ :strat | strat new ]",
+referencedClasses: ["StratSpacesOnly", "StratAllHintDone", "StratCountAllDone", "StratRecover", "StratNotReached", "StratFirstCover", "StratLastCover", "StratMinSpace", "StratFirstDone", "StratLastDone", "StratTestBox", "StratFirstCutSpace", "StratLastCutSpace", "StratFirstMore", "StratLastMore", "StratFirstNotReachedMore", "StratLastNotReachedMore", "StratFirstPosMore", "StratLastPosMore", "StratFirstOnes", "StratLastOnes", "StratFirstSpacesIfNotFit", "StratLastSpacesIfNotFit"],
 //>>excludeEnd("ide");
 pragmas: [],
 messageSends: ["collect:", "new"]
@@ -5225,7 +5267,7 @@ var self=this,$self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-$self.list=$recv($globals.HashedCollection._newFromPairs_(["spacesonly",$globals.StratSpacesOnly,"allhintdone",$globals.StratAllHintDone,"countalldone",$globals.StratCountAllDone,"recover",$globals.StratRecover,"notreached",$globals.StratNotReached,"firstcover",$globals.StratFirstCover,"lastcover",$globals.StratLastCover,"minspace",$globals.StratMinSpace,"firstdone",$globals.StratFirstDone,"lastdone",$globals.StratLastDone,"testbox",$globals.StratTestBox,"firstcutspace",$globals.StratFirstCutSpace,"lastcutspace",$globals.StratLastCutSpace,"firstmore",$globals.StratFirstMore,"lastmore",$globals.StratLastMore,"firstnotreachedmore",$globals.StratFirstNotReachedMore,"lastnotreachedmore",$globals.StratLastNotReachedMore,"firstposmore",$globals.StratFirstPosMore,"lastposmore",$globals.StratLastPosMore]))._collect_((function(strat){
+$self.list=$recv($globals.HashedCollection._newFromPairs_(["spacesonly",$globals.StratSpacesOnly,"allhintdone",$globals.StratAllHintDone,"countalldone",$globals.StratCountAllDone,"recover",$globals.StratRecover,"notreached",$globals.StratNotReached,"firstcover",$globals.StratFirstCover,"lastcover",$globals.StratLastCover,"minspace",$globals.StratMinSpace,"firstdone",$globals.StratFirstDone,"lastdone",$globals.StratLastDone,"testbox",$globals.StratTestBox,"firstcutspace",$globals.StratFirstCutSpace,"lastcutspace",$globals.StratLastCutSpace,"firstmore",$globals.StratFirstMore,"lastmore",$globals.StratLastMore,"firstnotreachedmore",$globals.StratFirstNotReachedMore,"lastnotreachedmore",$globals.StratLastNotReachedMore,"firstposmore",$globals.StratFirstPosMore,"lastposmore",$globals.StratLastPosMore,"firstones",$globals.StratFirstOnes,"lastones",$globals.StratLastOnes,"firstspacesifnotfit",$globals.StratFirstSpacesIfNotFit,"lastspacesifnotfit",$globals.StratLastSpacesIfNotFit]))._collect_((function(strat){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
@@ -5801,6 +5843,9 @@ $globals.Strategy.a$cls);
 
 
 $core.addClass("StratAllHintDone", $globals.Strategy, "Logimage");
+//>>excludeStart("ide", pragmas.excludeIdeData);
+$globals.StratAllHintDone.comment="If all hints are resolved, all cell are filled";
+//>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
 selector: "analyse:",
@@ -6108,7 +6153,7 @@ $globals.StratRecover);
 
 $core.addClass("StratFirstBox", $globals.Strategy, "Logimage");
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.StratFirstBox.comment="I am a base for strategy base on first box inside the first hint.";
+$globals.StratFirstBox.comment="I am a base for strategy based on first box inside the first hint.";
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
@@ -6636,7 +6681,7 @@ $globals.StratFirstCutSpace);
 
 $core.addClass("StratFirstNotReachedMore", $globals.Strategy, "Logimage");
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.StratFirstNotReachedMore.comment="Likre not reached but by testing too more boxes for first hint if set at first position.\x0aExample: 2|??X => |-?X first cell should be space";
+$globals.StratFirstNotReachedMore.comment="Like not reached but by testing too more boxes for first hint if set at first position.\x0aExample: 2|??X => |-?X first cell should be space";
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
@@ -6694,6 +6739,146 @@ return false;
 
 }; }),
 $globals.StratFirstNotReachedMore);
+
+
+
+$core.addClass("StratFirstOnes", $globals.Strategy, "Logimage");
+//>>excludeStart("ide", pragmas.excludeIdeData);
+$globals.StratFirstOnes.comment="I try to detect ones at fist position to force spaces before and after it.";
+//>>excludeEnd("ide");
+$core.addMethod(
+$core.method({
+selector: "analyse:",
+protocol: "as yet unclassified",
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["line"],
+source: "analyse: line\x0a\x09| n sol |\x0a\x09n := self nbOnesFor: line hint.\x0a\x09n=0 ifTrue: [ ^ self none ].\x0a\x09sol := Cells new size: ( n*2+1 min: (line cells size) ).\x0a\x09line cells withIndexDo: [ :c :i |\x0a\x09\x09i>(sol size) ifTrue: [ ^ sol ].\x0a\x09\x09c isBox ifTrue: [\x0a\x09\x09\x09i>1 ifTrue: [ sol at: (i-1) put: (Cell space) ].\x0a\x09\x09\x09sol at: (i+1) put: (Cell space)\x0a\x09\x09\x09]\x0a\x09\x09].\x0a\x09^ sol",
+referencedClasses: ["Cells", "Cell"],
+//>>excludeEnd("ide");
+pragmas: [],
+messageSends: ["nbOnesFor:", "hint", "ifTrue:", "=", "none", "size:", "new", "min:", "+", "*", "size", "cells", "withIndexDo:", ">", "isBox", "at:put:", "-", "space"]
+}, function ($methodClass){ return function (line){
+var self=this,$self=this;
+var n,sol;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $early={};
+try {
+n=$self._nbOnesFor_($recv(line)._hint());
+if($core.assert($recv(n).__eq((0)))){
+return $self._none();
+}
+sol=$recv($recv($globals.Cells)._new())._size_($recv([$recv($recv(n).__star((2))).__plus((1))
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["+"]=1
+//>>excludeEnd("ctx");
+][0])._min_([$recv([$recv(line)._cells()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["cells"]=1
+//>>excludeEnd("ctx");
+][0])._size()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["size"]=1
+//>>excludeEnd("ctx");
+][0]));
+$recv($recv(line)._cells())._withIndexDo_((function(c,i){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+if($core.assert([$recv(i).__gt($recv(sol)._size())
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx2.sendIdx[">"]=1
+//>>excludeEnd("ctx");
+][0])){
+throw $early=[sol];
+}
+if($core.assert($recv(c)._isBox())){
+if($core.assert($recv(i).__gt((1)))){
+[$recv(sol)._at_put_($recv(i).__minus((1)),[$recv($globals.Cell)._space()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx2.sendIdx["space"]=1
+//>>excludeEnd("ctx");
+][0])
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx2.sendIdx["at:put:"]=1
+//>>excludeEnd("ctx");
+][0];
+}
+return $recv(sol)._at_put_($recv(i).__plus((1)),$recv($globals.Cell)._space());
+}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({c:c,i:i},$ctx1,2)});
+//>>excludeEnd("ctx");
+}));
+return sol;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line,n:n,sol:sol})});
+//>>excludeEnd("ctx");
+}; }),
+$globals.StratFirstOnes);
+
+$core.addMethod(
+$core.method({
+selector: "isBidirectional",
+protocol: "as yet unclassified",
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "isBidirectional\x0a\x09^ false",
+referencedClasses: [],
+//>>excludeEnd("ide");
+pragmas: [],
+messageSends: []
+}, function ($methodClass){ return function (){
+var self=this,$self=this;
+return false;
+
+}; }),
+$globals.StratFirstOnes);
+
+$core.addMethod(
+$core.method({
+selector: "nbOnesFor:",
+protocol: "as yet unclassified",
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["hint"],
+source: "nbOnesFor: hint\x0a\x09\x22I return the number of consecutive 1 in hint\x22\x0a\x09| count |\x0a\x09count := 0.\x0a\x09hint do: [ :n |\x0a\x09\x09n=1 ifFalse: [ ^ count ].\x0a\x09\x09count := count + 1\x0a\x09].\x0a\x09^ count",
+referencedClasses: [],
+//>>excludeEnd("ide");
+pragmas: [],
+messageSends: ["do:", "ifFalse:", "=", "+"]
+}, function ($methodClass){ return function (hint){
+var self=this,$self=this;
+var count;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $early={};
+try {
+count=(0);
+$recv(hint)._do_((function(n){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+if(!$core.assert($recv(n).__eq((1)))){
+throw $early=[count];
+}
+count=$recv(count).__plus((1));
+return count;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({n:n},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+return count;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"nbOnesFor:",{hint:hint,count:count})});
+//>>excludeEnd("ctx");
+}; }),
+$globals.StratFirstOnes);
 
 
 
@@ -6784,6 +6969,51 @@ return false;
 
 }; }),
 $globals.StratFirstPosMore);
+
+
+
+$core.addClass("StratFirstSpacesIfNotFit", $globals.Strategy, "Logimage");
+//>>excludeStart("ide", pragmas.excludeIdeData);
+$globals.StratFirstSpacesIfNotFit.comment="If first hint dont fit into first part delimited by a space, fill this part with spaces.";
+//>>excludeEnd("ide");
+$core.addMethod(
+$core.method({
+selector: "analyse:",
+protocol: "as yet unclassified",
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["line"],
+source: "analyse: line\x0a\x09| n |\x0a\x09\x22get the first space position\x22\x0a\x09n := line cells firstSpace.\x0a\x09n < 2 ifTrue: [ ^ self none ].\x0a\x09\x22test if first hint could be set before this space\x22\x0a\x09line hint first < n ifTrue: [ ^ self none ].\x0a\x09^ Cells new addSpaces: n-1",
+referencedClasses: ["Cells"],
+//>>excludeEnd("ide");
+pragmas: [],
+messageSends: ["firstSpace", "cells", "ifTrue:", "<", "none", "first", "hint", "addSpaces:", "new", "-"]
+}, function ($methodClass){ return function (line){
+var self=this,$self=this;
+var n;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+n=$recv($recv(line)._cells())._firstSpace();
+if($core.assert([$recv(n).__lt((2))
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["<"]=1
+//>>excludeEnd("ctx");
+][0])){
+return [$self._none()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["none"]=1
+//>>excludeEnd("ctx");
+][0];
+}
+if($core.assert($recv($recv($recv(line)._hint())._first()).__lt(n))){
+return $self._none();
+}
+return $recv($recv($globals.Cells)._new())._addSpaces_($recv(n).__minus((1)));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line,n:n})});
+//>>excludeEnd("ctx");
+}; }),
+$globals.StratFirstSpacesIfNotFit);
 
 
 
@@ -7129,7 +7359,6 @@ $globals.StratLastCutSpace);
 
 
 $core.addClass("StratLastDone", $globals.StratReverted, "Logimage");
-$core.setSlots($globals.StratLastDone, ["strategy"]);
 $core.addMethod(
 $core.method({
 selector: "initialize",
@@ -7157,7 +7386,6 @@ $globals.StratLastDone);
 
 
 $core.addClass("StratLastMore", $globals.StratReverted, "Logimage");
-$core.setSlots($globals.StratLastMore, ["strategy"]);
 $core.addMethod(
 $core.method({
 selector: "initialize",
@@ -7185,7 +7413,6 @@ $globals.StratLastMore);
 
 
 $core.addClass("StratLastNotReachedMore", $globals.StratReverted, "Logimage");
-$core.setSlots($globals.StratLastNotReachedMore, ["strategy"]);
 $core.addMethod(
 $core.method({
 selector: "initialize",
@@ -7212,8 +7439,34 @@ $globals.StratLastNotReachedMore);
 
 
 
+$core.addClass("StratLastOnes", $globals.StratReverted, "Logimage");
+$core.addMethod(
+$core.method({
+selector: "initialize",
+protocol: "as yet unclassified",
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "initialize\x0a\x09strategy := StratFirstOnes new",
+referencedClasses: ["StratFirstOnes"],
+//>>excludeEnd("ide");
+pragmas: [],
+messageSends: ["new"]
+}, function ($methodClass){ return function (){
+var self=this,$self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$self.strategy=$recv($globals.StratFirstOnes)._new();
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"initialize",{})});
+//>>excludeEnd("ctx");
+}; }),
+$globals.StratLastOnes);
+
+
+
 $core.addClass("StratLastPosMore", $globals.StratReverted, "Logimage");
-$core.setSlots($globals.StratLastPosMore, ["strategy"]);
 $core.addMethod(
 $core.method({
 selector: "initialize",
@@ -7237,6 +7490,33 @@ return self;
 //>>excludeEnd("ctx");
 }; }),
 $globals.StratLastPosMore);
+
+
+
+$core.addClass("StratLastSpacesIfNotFit", $globals.StratReverted, "Logimage");
+$core.addMethod(
+$core.method({
+selector: "initialize",
+protocol: "as yet unclassified",
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "initialize\x0a\x09strategy := StratFirstSpacesIfNotFit new",
+referencedClasses: ["StratFirstSpacesIfNotFit"],
+//>>excludeEnd("ide");
+pragmas: [],
+messageSends: ["new"]
+}, function ($methodClass){ return function (){
+var self=this,$self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$self.strategy=$recv($globals.StratFirstSpacesIfNotFit)._new();
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"initialize",{})});
+//>>excludeEnd("ctx");
+}; }),
+$globals.StratLastSpacesIfNotFit);
 
 
 

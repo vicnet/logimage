@@ -1,28 +1,9 @@
 Smalltalk createPackage: 'Logimage-Tests'!
-TestCase subclass: #LogimageTest
-	slots: {#logimage}
+TestCase subclass: #LogimageCellsTest
+	slots: {}
 	package: 'Logimage-Tests'!
 
-!LogimageTest methodsFor: 'running'!
-
-setUp
-	logimage := Logimage simple
-! !
-
-!LogimageTest methodsFor: 'tests'!
-
-testCellAccesses
-	self assert: (Cell at: #box) equals: (Cell at: #box).
-	self assert: (Cell at: #box) equals: (Cell at: #boxnew).
-	self assert: (Cell at: #space) equals: (Cell at: #space).
-	self assert: (Cell at: #space) equals: (Cell at: #spacenew).
-	self assert: (Cell at: #unknown) equals: (Cell at: #unknown).
-	self assert: (Cell at: #box) = (Cell at: #box).
-	self assert: (Cell at: #box) = (Cell at: #boxnew).
-	self assert: (Cell at: #box) == (Cell at: #box).
-	self assert: (Cell at: #box) ~~ (Cell at: #boxnew).
-	self assert: (Cell at: #box) ~= (Cell at: #space).
-!
+!LogimageCellsTest methodsFor: 'tests'!
 
 testCellsAccesses
 	| c |
@@ -62,6 +43,34 @@ testCellsAccesses
 	self assert: ((Cells new s;u;s;u;b) firstNotSpace) = #{ #pos -> 2. #size -> 1 }.
 	self assert: ((Cells new s;b;u;s;u;u) firstNotSpace) = #{ #pos -> 2. #size -> 2 }."
 	self assert: (Cells new: '  X') firstBox equals: #{ #pos -> 3. #size -> 1 }.
+	
+	self assert: (Cells new: '  X') firstSpace equals: 0.
+	self assert: (Cells new: ' - X') firstSpace equals: 2.
+! !
+
+TestCase subclass: #LogimageTest
+	slots: {#logimage}
+	package: 'Logimage-Tests'!
+
+!LogimageTest methodsFor: 'running'!
+
+setUp
+	logimage := Logimage simple
+! !
+
+!LogimageTest methodsFor: 'tests'!
+
+testCellAccesses
+	self assert: (Cell at: #box) equals: (Cell at: #box).
+	self assert: (Cell at: #box) equals: (Cell at: #boxnew).
+	self assert: (Cell at: #space) equals: (Cell at: #space).
+	self assert: (Cell at: #space) equals: (Cell at: #spacenew).
+	self assert: (Cell at: #unknown) equals: (Cell at: #unknown).
+	self assert: (Cell at: #box) = (Cell at: #box).
+	self assert: (Cell at: #box) = (Cell at: #boxnew).
+	self assert: (Cell at: #box) == (Cell at: #box).
+	self assert: (Cell at: #box) ~~ (Cell at: #boxnew).
+	self assert: (Cell at: #box) ~= (Cell at: #space).
 !
 
 testLineAccesses
