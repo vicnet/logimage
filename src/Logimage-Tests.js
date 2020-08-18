@@ -1025,6 +1025,200 @@ $globals.LogimageCellsTest);
 
 
 
+$core.addClass("LogimageStratTests", $globals.TestCase, "Logimage-Tests");
+$core.addMethod(
+$core.method({
+selector: "testStratFirstCut",
+protocol: "tests",
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "testStratFirstCut\x0a\x09| l |\x0a\x09l := Line new: '2 3|-- X-XX '. l:=l trimFirst.\x0a\x09self assert: (StratFirstCut new firstCut: l at: 3)\x0a\x09\x09 equals: (Line new: '3| X').\x0a\x09\x0a\x09l := Line new: '2 3 1|-- X-XX  '. l:=l trimFirst.\x0a\x09self assert: (StratFirstCut new lastCut: l at: 3)\x0a\x09\x09 equals: (Line new: '3 1|-XX  ')",
+referencedClasses: ["Line", "StratFirstCut"],
+//>>excludeEnd("ide");
+pragmas: [],
+messageSends: ["new:", "trimFirst", "assert:equals:", "firstCut:at:", "new", "lastCut:at:"]
+}, function ($methodClass){ return function (){
+var self=this,$self=this;
+var l;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+l=[$recv($globals.Line)._new_("2 3|-- X-XX ")
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["new:"]=1
+//>>excludeEnd("ctx");
+][0];
+l=[$recv(l)._trimFirst()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["trimFirst"]=1
+//>>excludeEnd("ctx");
+][0];
+[$self._assert_equals_($recv([$recv($globals.StratFirstCut)._new()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["new"]=1
+//>>excludeEnd("ctx");
+][0])._firstCut_at_(l,(3)),[$recv($globals.Line)._new_("3| X")
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["new:"]=2
+//>>excludeEnd("ctx");
+][0])
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["assert:equals:"]=1
+//>>excludeEnd("ctx");
+][0];
+l=[$recv($globals.Line)._new_("2 3 1|-- X-XX  ")
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["new:"]=3
+//>>excludeEnd("ctx");
+][0];
+l=$recv(l)._trimFirst();
+$self._assert_equals_($recv($recv($globals.StratFirstCut)._new())._lastCut_at_(l,(3)),$recv($globals.Line)._new_("3 1|-XX  "));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"testStratFirstCut",{l:l})});
+//>>excludeEnd("ctx");
+}; }),
+$globals.LogimageStratTests);
+
+$core.addMethod(
+$core.method({
+selector: "testStratXDone",
+protocol: "tests",
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "testStratXDone\x0a\x09| l |\x0a\x09l := Line new\x0a\x09\x09hint: (Hint new: {1. 2});\x0a\x09\x09cells: (Cells new b;u;b;b).\x0a\x09self assert: (StratFirstDone new analyse: l) \x0a\x09\x09 equals: (Cells new b;s).\x0a\x09self assert: (StratLastDone new analyse: l)\x0a\x09\x09 equals: (Cells new u;s;b;b).\x0a\x09self assert: (StratFirstDone analyse: '2|XX')\x0a\x09\x09 equals: (Cells new: 'XX').\x0a\x09self assert: (StratFirstDone analyse: '2|XX ')\x0a\x09\x09 equals: (Cells new: 'XX-').\x0a\x09self assert: (StratFirstDone analyse: '2|XX  ')\x0a\x09\x09 equals: (Cells new: 'XX-').",
+referencedClasses: ["Line", "Hint", "Cells", "StratFirstDone", "StratLastDone"],
+//>>excludeEnd("ide");
+pragmas: [],
+messageSends: ["hint:", "new", "new:", "cells:", "b", "u", "assert:equals:", "analyse:", "s"]
+}, function ($methodClass){ return function (){
+var self=this,$self=this;
+var l;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $1,$2,$3,$4,$5,$6;
+$1=[$recv($globals.Line)._new()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["new"]=1
+//>>excludeEnd("ctx");
+][0];
+$recv($1)._hint_([$recv($globals.Hint)._new_([(1),(2)])
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["new:"]=1
+//>>excludeEnd("ctx");
+][0]);
+$2=[$recv($globals.Cells)._new()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["new"]=2
+//>>excludeEnd("ctx");
+][0];
+[$recv($2)._b()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["b"]=1
+//>>excludeEnd("ctx");
+][0];
+[$recv($2)._u()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["u"]=1
+//>>excludeEnd("ctx");
+][0];
+[$recv($2)._b()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["b"]=2
+//>>excludeEnd("ctx");
+][0];
+l=$recv($1)._cells_([$recv($2)._b()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["b"]=3
+//>>excludeEnd("ctx");
+][0]);
+$3=[$recv([$recv($globals.StratFirstDone)._new()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["new"]=3
+//>>excludeEnd("ctx");
+][0])._analyse_(l)
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["analyse:"]=1
+//>>excludeEnd("ctx");
+][0];
+$4=[$recv($globals.Cells)._new()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["new"]=4
+//>>excludeEnd("ctx");
+][0];
+[$recv($4)._b()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["b"]=4
+//>>excludeEnd("ctx");
+][0];
+[$self._assert_equals_($3,[$recv($4)._s()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["s"]=1
+//>>excludeEnd("ctx");
+][0])
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["assert:equals:"]=1
+//>>excludeEnd("ctx");
+][0];
+$5=[$recv([$recv($globals.StratLastDone)._new()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["new"]=5
+//>>excludeEnd("ctx");
+][0])._analyse_(l)
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["analyse:"]=2
+//>>excludeEnd("ctx");
+][0];
+$6=$recv($globals.Cells)._new();
+$recv($6)._u();
+$recv($6)._s();
+[$recv($6)._b()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["b"]=5
+//>>excludeEnd("ctx");
+][0];
+[$self._assert_equals_($5,$recv($6)._b())
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["assert:equals:"]=2
+//>>excludeEnd("ctx");
+][0];
+[$self._assert_equals_([$recv($globals.StratFirstDone)._analyse_("2|XX")
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["analyse:"]=3
+//>>excludeEnd("ctx");
+][0],[$recv($globals.Cells)._new_("XX")
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["new:"]=2
+//>>excludeEnd("ctx");
+][0])
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["assert:equals:"]=3
+//>>excludeEnd("ctx");
+][0];
+[$self._assert_equals_([$recv($globals.StratFirstDone)._analyse_("2|XX ")
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["analyse:"]=4
+//>>excludeEnd("ctx");
+][0],[$recv($globals.Cells)._new_("XX-")
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["new:"]=3
+//>>excludeEnd("ctx");
+][0])
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["assert:equals:"]=4
+//>>excludeEnd("ctx");
+][0];
+$self._assert_equals_($recv($globals.StratFirstDone)._analyse_("2|XX  "),$recv($globals.Cells)._new_("XX-"));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"testStratXDone",{l:l})});
+//>>excludeEnd("ctx");
+}; }),
+$globals.LogimageStratTests);
+
+
+
 $core.addClass("LogimageTest", $globals.TestCase, "Logimage-Tests");
 $core.setSlots($globals.LogimageTest, ["logimage"]);
 $core.addMethod(
@@ -1754,104 +1948,6 @@ $self._assert_equals_($recv($recv($globals.StratFirstCover)._new())._analyse_([$
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"testStratXCover",{})});
-//>>excludeEnd("ctx");
-}; }),
-$globals.LogimageTest);
-
-$core.addMethod(
-$core.method({
-selector: "testStratXDone",
-protocol: "tests",
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "testStratXDone\x0a\x09| l |\x0a\x09l := Line new\x0a\x09\x09hint: (Hint new: {1. 2});\x0a\x09\x09cells: (Cells new b;u;b;b).\x0a\x09self assert: (StratFirstDone new analyse: l) \x0a\x09\x09 equals: (Cells new b;s).\x0a\x09self assert: (StratLastDone new analyse: l)\x0a\x09\x09 equals: (Cells new u;s;b;b)",
-referencedClasses: ["Line", "Hint", "Cells", "StratFirstDone", "StratLastDone"],
-//>>excludeEnd("ide");
-pragmas: [],
-messageSends: ["hint:", "new", "new:", "cells:", "b", "u", "assert:equals:", "analyse:", "s"]
-}, function ($methodClass){ return function (){
-var self=this,$self=this;
-var l;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $1,$2,$3,$4,$5,$6;
-$1=[$recv($globals.Line)._new()
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["new"]=1
-//>>excludeEnd("ctx");
-][0];
-$recv($1)._hint_($recv($globals.Hint)._new_([(1),(2)]));
-$2=[$recv($globals.Cells)._new()
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["new"]=2
-//>>excludeEnd("ctx");
-][0];
-[$recv($2)._b()
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["b"]=1
-//>>excludeEnd("ctx");
-][0];
-[$recv($2)._u()
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["u"]=1
-//>>excludeEnd("ctx");
-][0];
-[$recv($2)._b()
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["b"]=2
-//>>excludeEnd("ctx");
-][0];
-l=$recv($1)._cells_([$recv($2)._b()
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["b"]=3
-//>>excludeEnd("ctx");
-][0]);
-$3=[$recv([$recv($globals.StratFirstDone)._new()
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["new"]=3
-//>>excludeEnd("ctx");
-][0])._analyse_(l)
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["analyse:"]=1
-//>>excludeEnd("ctx");
-][0];
-$4=[$recv($globals.Cells)._new()
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["new"]=4
-//>>excludeEnd("ctx");
-][0];
-[$recv($4)._b()
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["b"]=4
-//>>excludeEnd("ctx");
-][0];
-[$self._assert_equals_($3,[$recv($4)._s()
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["s"]=1
-//>>excludeEnd("ctx");
-][0])
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["assert:equals:"]=1
-//>>excludeEnd("ctx");
-][0];
-$5=$recv([$recv($globals.StratLastDone)._new()
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["new"]=5
-//>>excludeEnd("ctx");
-][0])._analyse_(l);
-$6=$recv($globals.Cells)._new();
-$recv($6)._u();
-$recv($6)._s();
-[$recv($6)._b()
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["b"]=5
-//>>excludeEnd("ctx");
-][0];
-$self._assert_equals_($5,$recv($6)._b());
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"testStratXDone",{l:l})});
 //>>excludeEnd("ctx");
 }; }),
 $globals.LogimageTest);

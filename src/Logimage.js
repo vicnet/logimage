@@ -1772,7 +1772,7 @@ selector: "at:",
 protocol: "as yet unclassified",
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["index"],
-source: "at: index\x0a\x09^ cells at: index",
+source: "at: index\x0a    \x22I return cell value at index. pos is not used\x22\x0a\x09^ cells at: index",
 referencedClasses: [],
 //>>excludeEnd("ide");
 pragmas: [],
@@ -2235,7 +2235,7 @@ selector: "firstSpace",
 protocol: "as yet unclassified",
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "firstSpace\x0a\x09\x22Returns position of first space, 0 if no spaces\x22\x0a\x09cells withIndexDo: [ :c :i |\x0a\x09\x09c isSpace ifTrue: [ ^ i ]\x0a\x09\x09].\x0a\x09^ 0",
+source: "firstSpace\x0a\x09\x22I return the position of first space, 0 if no spaces\x22\x0a\x09cells withIndexDo: [ :c :i |\x0a\x09\x09c isSpace ifTrue: [ ^ i ]\x0a\x09\x09].\x0a\x09^ 0",
 referencedClasses: [],
 //>>excludeEnd("ide");
 pragmas: [],
@@ -4099,18 +4099,26 @@ selector: "hint:",
 protocol: "accessing",
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["anObject"],
-source: "hint: anObject\x0a\x09anObject isString ifTrue: [\x0a\x09\x09hint := Hint new: anObject.\x0a\x09\x09^ self ].\x0a\x09hint := anObject",
+source: "hint: anObject\x0a\x09anObject isString ifTrue: [\x0a\x09\x09hint := Hint new: anObject.\x0a\x09\x09^ self ].\x0a\x09anObject isNumber ifTrue: [\x0a\x09\x09hint := Hint new: { anObject }.\x0a\x09\x09^ self ].\x0a\x09hint := anObject",
 referencedClasses: ["Hint"],
 //>>excludeEnd("ide");
 pragmas: [],
-messageSends: ["ifTrue:", "isString", "new:"]
+messageSends: ["ifTrue:", "isString", "new:", "isNumber"]
 }, function ($methodClass){ return function (anObject){
 var self=this,$self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
 if($core.assert($recv(anObject)._isString())){
-$self.hint=$recv($globals.Hint)._new_(anObject);
+$self.hint=[$recv($globals.Hint)._new_(anObject)
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["new:"]=1
+//>>excludeEnd("ctx");
+][0];
+return self;
+}
+if($core.assert($recv(anObject)._isNumber())){
+$self.hint=$recv($globals.Hint)._new_([anObject]);
 return self;
 }
 $self.hint=anObject;
@@ -5257,8 +5265,8 @@ selector: "initialize",
 protocol: "as yet unclassified",
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "initialize\x0a\x09\x22TODO should be autodeclared by each instance !\x22\x0a\x09list := #{\x0a\x09\x09#spacesonly -> StratSpacesOnly.\x0a\x09\x09#allhintdone -> StratAllHintDone.\x0a\x09\x09#countalldone -> StratCountAllDone.\x0a\x09\x09#recover -> StratRecover.\x0a\x09\x09#notreached -> StratNotReached.\x0a\x09\x09#firstcover -> StratFirstCover.\x0a\x09\x09#lastcover -> StratLastCover.\x0a\x09\x09#minspace -> StratMinSpace.\x0a\x09\x09#firstdone -> StratFirstDone.\x0a\x09\x09#lastdone -> StratLastDone.\x0a\x09\x09#testbox -> StratTestBox.\x0a\x09\x09#firstcutspace -> StratFirstCutSpace.\x0a\x09\x09#lastcutspace -> StratLastCutSpace.\x0a\x09\x09#firstmore -> StratFirstMore.\x0a\x09\x09#lastmore -> StratLastMore.\x0a\x09\x09#firstnotreachedmore -> StratFirstNotReachedMore.\x0a\x09\x09#lastnotreachedmore -> StratLastNotReachedMore.\x0a\x09\x09#firstposmore -> StratFirstPosMore.\x0a\x09\x09#lastposmore -> StratLastPosMore.\x0a\x09\x09#firstones -> StratFirstOnes.\x0a\x09\x09#lastones -> StratLastOnes.\x0a\x09\x09#firstspacesifnotfit -> StratFirstSpacesIfNotFit.\x0a\x09\x09#lastspacesifnotfit -> StratLastSpacesIfNotFit.\x0a\x09\x09}\x0a\x09\x09collect: [ :strat | strat new ]",
-referencedClasses: ["StratSpacesOnly", "StratAllHintDone", "StratCountAllDone", "StratRecover", "StratNotReached", "StratFirstCover", "StratLastCover", "StratMinSpace", "StratFirstDone", "StratLastDone", "StratTestBox", "StratFirstCutSpace", "StratLastCutSpace", "StratFirstMore", "StratLastMore", "StratFirstNotReachedMore", "StratLastNotReachedMore", "StratFirstPosMore", "StratLastPosMore", "StratFirstOnes", "StratLastOnes", "StratFirstSpacesIfNotFit", "StratLastSpacesIfNotFit"],
+source: "initialize\x0a\x09\x22TODO should be autodeclared by each instance !\x22\x0a\x09list := #{\x0a\x09\x09#spacesonly -> StratSpacesOnly.\x0a\x09\x09#allhintdone -> StratAllHintDone.\x0a\x09\x09#countalldone -> StratCountAllDone.\x0a\x09\x09#recover -> StratRecover.\x0a\x09\x09#notreached -> StratNotReached.\x0a\x09\x09#firstcover -> StratFirstCover.\x0a\x09\x09#lastcover -> StratLastCover.\x0a\x09\x09#minspace -> StratMinSpace.\x0a\x09\x09#firstdone -> StratFirstDone.\x0a\x09\x09#lastdone -> StratLastDone.\x0a\x09\x09#testbox -> StratTestBox.\x0a\x09\x09#firstcutspace -> StratFirstCutSpace.\x0a\x09\x09#lastcutspace -> StratLastCutSpace.\x0a\x09\x09#firstmore -> StratFirstMore.\x0a\x09\x09#lastmore -> StratLastMore.\x0a\x09\x09#firstnotreachedmore -> StratFirstNotReachedMore.\x0a\x09\x09#lastnotreachedmore -> StratLastNotReachedMore.\x0a\x09\x09#firstposmore -> StratFirstPosMore.\x0a\x09\x09#lastposmore -> StratLastPosMore.\x0a\x09\x09#firstones -> StratFirstOnes.\x0a\x09\x09#lastones -> StratLastOnes.\x0a\x09\x09#firstspacesifnotfit -> StratFirstSpacesIfNotFit.\x0a\x09\x09#lastspacesifnotfit -> StratLastSpacesIfNotFit.\x0a\x09\x09#firstcuthint -> StratFirstCutHint.\x0a\x09\x09#lastcuthint -> StratLastCutHint.\x0a\x09\x09}\x0a\x09\x09collect: [ :strat | strat new ]",
+referencedClasses: ["StratSpacesOnly", "StratAllHintDone", "StratCountAllDone", "StratRecover", "StratNotReached", "StratFirstCover", "StratLastCover", "StratMinSpace", "StratFirstDone", "StratLastDone", "StratTestBox", "StratFirstCutSpace", "StratLastCutSpace", "StratFirstMore", "StratLastMore", "StratFirstNotReachedMore", "StratLastNotReachedMore", "StratFirstPosMore", "StratLastPosMore", "StratFirstOnes", "StratLastOnes", "StratFirstSpacesIfNotFit", "StratLastSpacesIfNotFit", "StratFirstCutHint", "StratLastCutHint"],
 //>>excludeEnd("ide");
 pragmas: [],
 messageSends: ["collect:", "new"]
@@ -5267,7 +5275,7 @@ var self=this,$self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-$self.list=$recv($globals.HashedCollection._newFromPairs_(["spacesonly",$globals.StratSpacesOnly,"allhintdone",$globals.StratAllHintDone,"countalldone",$globals.StratCountAllDone,"recover",$globals.StratRecover,"notreached",$globals.StratNotReached,"firstcover",$globals.StratFirstCover,"lastcover",$globals.StratLastCover,"minspace",$globals.StratMinSpace,"firstdone",$globals.StratFirstDone,"lastdone",$globals.StratLastDone,"testbox",$globals.StratTestBox,"firstcutspace",$globals.StratFirstCutSpace,"lastcutspace",$globals.StratLastCutSpace,"firstmore",$globals.StratFirstMore,"lastmore",$globals.StratLastMore,"firstnotreachedmore",$globals.StratFirstNotReachedMore,"lastnotreachedmore",$globals.StratLastNotReachedMore,"firstposmore",$globals.StratFirstPosMore,"lastposmore",$globals.StratLastPosMore,"firstones",$globals.StratFirstOnes,"lastones",$globals.StratLastOnes,"firstspacesifnotfit",$globals.StratFirstSpacesIfNotFit,"lastspacesifnotfit",$globals.StratLastSpacesIfNotFit]))._collect_((function(strat){
+$self.list=$recv($globals.HashedCollection._newFromPairs_(["spacesonly",$globals.StratSpacesOnly,"allhintdone",$globals.StratAllHintDone,"countalldone",$globals.StratCountAllDone,"recover",$globals.StratRecover,"notreached",$globals.StratNotReached,"firstcover",$globals.StratFirstCover,"lastcover",$globals.StratLastCover,"minspace",$globals.StratMinSpace,"firstdone",$globals.StratFirstDone,"lastdone",$globals.StratLastDone,"testbox",$globals.StratTestBox,"firstcutspace",$globals.StratFirstCutSpace,"lastcutspace",$globals.StratLastCutSpace,"firstmore",$globals.StratFirstMore,"lastmore",$globals.StratLastMore,"firstnotreachedmore",$globals.StratFirstNotReachedMore,"lastnotreachedmore",$globals.StratLastNotReachedMore,"firstposmore",$globals.StratFirstPosMore,"lastposmore",$globals.StratLastPosMore,"firstones",$globals.StratFirstOnes,"lastones",$globals.StratLastOnes,"firstspacesifnotfit",$globals.StratFirstSpacesIfNotFit,"lastspacesifnotfit",$globals.StratLastSpacesIfNotFit,"firstcuthint",$globals.StratFirstCutHint,"lastcuthint",$globals.StratLastCutHint]))._collect_((function(strat){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
@@ -6280,14 +6288,14 @@ selector: "analyse:",
 protocol: "as yet unclassified",
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["line"],
-source: "analyse: line\x0a\x09| first |\x0a\x09first := self firstBox: line.\x0a\x09first ifNil: [ ^ self none ].\x0a\x09\x22check that it is the first place\x22\x0a\x09(first at: #pos) = 1 ifFalse: [ ^ self none ].\x0a\x09\x22test if first hint is same as box\x22\x0a\x09line hint first = (first at: #size) ifFalse: [ ^ self none ].\x0a\x09\x22get solution, without space\x22\x0a\x09^ Cells new\x0a\x09\x09addBoxes: (first at: #size);\x0a\x09\x09addSpaces: 1",
+source: "analyse: line\x0a\x09| first size |\x0a\x09first := self firstBox: line.\x0a\x09first ifNil: [ ^ self none ].\x0a\x09\x22check that it is the first place\x22\x0a\x09(first at: #pos) = 1 ifFalse: [ ^ self none ].\x0a\x09\x22test if first hint is same as box\x22\x0a\x09line hint first = (first at: #size) ifFalse: [ ^ self none ].\x0a\x09\x22get solution, without space\x22\x0a\x09size := first at: #size.\x0a\x09^ Cells new\x0a\x09\x09addBoxes: size;\x0a\x09\x09addSpaces: 1;\x0a\x09\x09size: (line cells size min: size+1)",
 referencedClasses: ["Cells"],
 //>>excludeEnd("ide");
 pragmas: [],
-messageSends: ["firstBox:", "ifNil:", "none", "ifFalse:", "=", "at:", "first", "hint", "addBoxes:", "new", "addSpaces:"]
+messageSends: ["firstBox:", "ifNil:", "none", "ifFalse:", "=", "at:", "first", "hint", "addBoxes:", "new", "addSpaces:", "size:", "min:", "size", "cells", "+"]
 }, function ($methodClass){ return function (line){
 var self=this,$self=this;
-var first;
+var first,size;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
@@ -6325,11 +6333,13 @@ if(!$core.assert($recv($recv($recv(line)._hint())._first()).__eq([$recv(first)._
 ][0]))){
 return $self._none();
 }
+size=$recv(first)._at_("size");
 $2=$recv($globals.Cells)._new();
-$recv($2)._addBoxes_($recv(first)._at_("size"));
-return $recv($2)._addSpaces_((1));
+$recv($2)._addBoxes_(size);
+$recv($2)._addSpaces_((1));
+return $recv($2)._size_($recv($recv($recv(line)._cells())._size())._min_($recv(size).__plus((1))));
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line,first:first})});
+}, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line,first:first,size:size})});
 //>>excludeEnd("ctx");
 }; }),
 $globals.StratFirstDone);
@@ -6445,9 +6455,179 @@ $globals.StratFirstMore);
 
 
 
-$core.addClass("StratFirstCutSpace", $globals.Strategy, "Logimage");
+$core.addClass("StratFirstCut", $globals.Strategy, "Logimage");
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.StratFirstCutSpace.comment="If a line contains a space, I cut in two parts and check if the first hint must be alone in the first part.\x0aIf so, try strategies on this part with first hint.";
+$globals.StratFirstCut.comment="I am a base class for strategies that test ifa line could be cut in two part. If I test strategies on the last part.";
+//>>excludeEnd("ide");
+$core.addMethod(
+$core.method({
+selector: "adjust:for:",
+protocol: "as yet unclassified",
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["sol", "n"],
+source: "adjust: sol for: n\x0a\x09\x22I adjust sol cells, adding n unknowns if needed\x22\x0a\x09n<=0 ifTrue: [ ^ sol ].\x0a\x09^ Cells new\x0a\x09\x09\x09addUnknowns: n;\x0a\x09\x09\x09addAll: sol",
+referencedClasses: ["Cells"],
+//>>excludeEnd("ide");
+pragmas: [],
+messageSends: ["ifTrue:", "<=", "addUnknowns:", "new", "addAll:"]
+}, function ($methodClass){ return function (sol,n){
+var self=this,$self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $1;
+if($core.assert($recv(n).__lt_eq((0)))){
+return sol;
+}
+$1=$recv($globals.Cells)._new();
+$recv($1)._addUnknowns_(n);
+return $recv($1)._addAll_(sol);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"adjust:for:",{sol:sol,n:n})});
+//>>excludeEnd("ctx");
+}; }),
+$globals.StratFirstCut);
+
+$core.addMethod(
+$core.method({
+selector: "firstCut:at:",
+protocol: "as yet unclassified",
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["line", "pos"],
+source: "firstCut: line at: pos\x0a\x09\x22I cut line until #pos, without cell at #pos, ignoring line cells pos (trim)\x0a\x09 and I return fist part.\x0a\x09'Example: 2 3|.. X-XX ' cut at 3 => '2|.. X'\x22\x0a\x09^ Line\x0a\x09\x09hint: line hint first\x0a\x09\x09cells: (line cells copyFrom: 1 to: (pos-1))",
+referencedClasses: ["Line"],
+//>>excludeEnd("ide");
+pragmas: [],
+messageSends: ["hint:cells:", "first", "hint", "copyFrom:to:", "cells", "-"]
+}, function ($methodClass){ return function (line,pos){
+var self=this,$self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+return $recv($globals.Line)._hint_cells_($recv($recv(line)._hint())._first(),$recv($recv(line)._cells())._copyFrom_to_((1),$recv(pos).__minus((1))));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"firstCut:at:",{line:line,pos:pos})});
+//>>excludeEnd("ctx");
+}; }),
+$globals.StratFirstCut);
+
+$core.addMethod(
+$core.method({
+selector: "lastCut:at:",
+protocol: "as yet unclassified",
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["line", "pos"],
+source: "lastCut: line at: pos\x0a\x09\x22I cut line until pos, without cell at pos, ignoring line pos (trim)\x0a\x09and I return last part.\x0a\x09'Example: 2 3|.. X-XX ' cut at 3 => '3|....-XX '\x22\x0a\x09^ Line\x0a\x09\x09hint: (line hint firstRemoved: 1)\x0a\x09\x09cells: (line cells copyFrom: pos)",
+referencedClasses: ["Line"],
+//>>excludeEnd("ide");
+pragmas: [],
+messageSends: ["hint:cells:", "firstRemoved:", "hint", "copyFrom:", "cells"]
+}, function ($methodClass){ return function (line,pos){
+var self=this,$self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+return $recv($globals.Line)._hint_cells_($recv($recv(line)._hint())._firstRemoved_((1)),$recv($recv(line)._cells())._copyFrom_(pos));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"lastCut:at:",{line:line,pos:pos})});
+//>>excludeEnd("ctx");
+}; }),
+$globals.StratFirstCut);
+
+$core.addMethod(
+$core.method({
+selector: "test:on:",
+protocol: "as yet unclassified",
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["strategy", "line"],
+source: "test: strategy on: line\x0a\x09| trim sol |\x0a\x09trim := line trim.\x0a\x09sol := strategy analyse: trim.\x0a\x22Transcript show: ' - test strat: ', strategy asString, ' => ', sol asString; cr.\x22\x0a\x09sol isEmpty ifTrue: [ ^ self none ].\x0a\x09\x22adjust sol if needed\x22\x0a\x09sol := self adjust: sol for: (trim cells pos) - (line cells pos).\x0a\x09\x22returns sol only if bring something new\x22\x0a\x09(line cells isBetter: sol) ifTrue: [ ^ sol ].\x0a\x09^ self none",
+referencedClasses: [],
+//>>excludeEnd("ide");
+pragmas: [],
+messageSends: ["trim", "analyse:", "ifTrue:", "isEmpty", "none", "adjust:for:", "-", "pos", "cells", "isBetter:"]
+}, function ($methodClass){ return function (strategy,line){
+var self=this,$self=this;
+var trim,sol;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+trim=$recv(line)._trim();
+sol=$recv(strategy)._analyse_(trim);
+if($core.assert($recv(sol)._isEmpty())){
+return [$self._none()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["none"]=1
+//>>excludeEnd("ctx");
+][0];
+}
+sol=$self._adjust_for_(sol,$recv([$recv([$recv(trim)._cells()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["cells"]=1
+//>>excludeEnd("ctx");
+][0])._pos()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["pos"]=1
+//>>excludeEnd("ctx");
+][0]).__minus($recv([$recv(line)._cells()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["cells"]=2
+//>>excludeEnd("ctx");
+][0])._pos()));
+if($core.assert($recv($recv(line)._cells())._isBetter_(sol))){
+return sol;
+}
+return $self._none();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"test:on:",{strategy:strategy,line:line,trim:trim,sol:sol})});
+//>>excludeEnd("ctx");
+}; }),
+$globals.StratFirstCut);
+
+$core.addMethod(
+$core.method({
+selector: "testStrategies:",
+protocol: "as yet unclassified",
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["line"],
+source: "testStrategies: line\x0a\x09Strategies instance do: [ :strategy | | sol |\x0a\x09\x09sol := self test: strategy on: line.\x0a\x09\x09sol isEmpty ifFalse: [ ^ sol ]\x0a\x09\x09].\x0a\x09^ self none",
+referencedClasses: ["Strategies"],
+//>>excludeEnd("ide");
+pragmas: [],
+messageSends: ["do:", "instance", "test:on:", "ifFalse:", "isEmpty", "none"]
+}, function ($methodClass){ return function (line){
+var self=this,$self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $early={};
+try {
+$recv($recv($globals.Strategies)._instance())._do_((function(strategy){
+var sol;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+sol=$self._test_on_(strategy,line);
+if(!$core.assert($recv(sol)._isEmpty())){
+throw $early=[sol];
+}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({strategy:strategy,sol:sol},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+return $self._none();
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"testStrategies:",{line:line})});
+//>>excludeEnd("ctx");
+}; }),
+$globals.StratFirstCut);
+
+
+
+$core.addClass("StratFirstCutHint", $globals.StratFirstCut, "Logimage");
+//>>excludeStart("ide", pragmas.excludeIdeData);
+$globals.StratFirstCutHint.comment="I test if first hint has to match the first box, if so cut the line in 2 and test strategies on the last part.";
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
@@ -6455,17 +6635,18 @@ selector: "analyse:",
 protocol: "as yet unclassified",
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["line"],
-source: "analyse: line\x0a\x09| firstcells firstline othercells otherline firstres otherres |\x0a\x09\x22check min hint size\x22\x0a\x09line hint isEmpty ifTrue: [ ^ self none ].\x0a\x0a\x09\x22get first cells and check some rules\x22\x0a\x09firstcells := line cells firstNotSpace.\x0a\x09\x22if no space, already done by other firstXXX\x22\x0a\x09firstcells isEmpty ifTrue: [ ^ self none ].\x0a\x09firstcells size = line cells size ifTrue: [ ^ self none ].\x0a\x0a\x09\x22check if only first number forced to be inside first cells\x22\x0a\x09(self isFirstForced: line hint on: firstcells)\x0a\x09\x09ifFalse: [ ^ self none ].\x0a\x0a\x09\x22analyse first cells\x22\x0a\x09firstline := Line\x0a\x09\x09hint: (Hint new: { line hint first })\x0a\x09\x09cells: firstcells.\x0a\x09firstres := self testStrategies: firstline.\x0a\x22Transcript show: 'first line:', firstline printString, ' first res', firstres printString; cr.\x22\x0a\x09\x22 complete first res if needed to the first cells size\x22\x0a\x09firstres addUnknowns: (firstcells size - firstres size).\x0a\x0a\x09othercells := (line cells copyFrom: firstcells size + 1) trimFirst.\x0a\x09otherline := Line\x0a\x09\x09hint: (line hint firstRemoved: 1)\x0a\x09\x09cells: othercells.\x0a\x09otherres := self testStrategies: otherline.\x0a\x09firstres addSpaces: (othercells pos - firstcells size - 1).\x0a\x09firstres addAll: otherres.\x0a\x0a\x09^ firstres",
-referencedClasses: ["Line", "Hint"],
+source: "analyse: line\x0a\x09| first n newline sol |\x0a\x09\x22check min hint size\x22\x0a\x09line hint isEmpty ifTrue: [ ^ self none ].\x0a\x09\x0a\x09\x22get first box and test if match first hint\x22\x0a\x09first := self firstBox: line.\x0a\x09first ifNil: [ ^ self none ].\x0a\x09\x22cut line in two\x22\x0a\x09n := line hint first.\x0a\x09newline := self lastCut: line at: n+2. \x22+1 for space, +1 for cut\x22\x0a\x09\x22test if this part contains box under n-2\x0a\x09if so, box could belong to the first part or last part so ambiguous\x22\x0a\x09first := newline cells firstBox at: #pos.\x0a\x09(first~=0 and: (first<=(n-2))) ifTrue: [ ^ self none ].\x0a\x0a\x09\x22test strategies on this part\x22\x0a\x22Transcript show: 'CutHint: Test strats on ', newline asString; cr.\x22\x0a\x09sol := self testStrategies: newline.\x0a\x09sol isEmpty ifTrue: [ ^ self none ].\x0a\x091 to: (n-2) do: [ :i |\x0a\x09\x09(sol at: i) isSpace ifTrue: [\x0a\x09\x09\x09sol at: i put: Cell unknown\x0a\x09\x09\x09]\x0a\x09\x09].\x0a\x09\x22adjust sol and return it\x22\x0a\x09^ self adjust: sol for: n+1",
+referencedClasses: ["Cell"],
 //>>excludeEnd("ide");
 pragmas: [],
-messageSends: ["ifTrue:", "isEmpty", "hint", "none", "firstNotSpace", "cells", "=", "size", "ifFalse:", "isFirstForced:on:", "hint:cells:", "new:", "first", "testStrategies:", "addUnknowns:", "-", "trimFirst", "copyFrom:", "+", "firstRemoved:", "addSpaces:", "pos", "addAll:"]
+messageSends: ["ifTrue:", "isEmpty", "hint", "none", "firstBox:", "ifNil:", "first", "lastCut:at:", "+", "at:", "firstBox", "cells", "and:", "~=", "<=", "-", "testStrategies:", "to:do:", "isSpace", "at:put:", "unknown", "adjust:for:"]
 }, function ($methodClass){ return function (line){
 var self=this,$self=this;
-var firstcells,firstline,othercells,otherline,firstres,otherres;
+var first,n,newline,sol;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
+var $1,$2;
 if($core.assert([$recv([$recv(line)._hint()
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 ,$ctx1.sendIdx["hint"]=1
@@ -6481,87 +6662,194 @@ return [$self._none()
 //>>excludeEnd("ctx");
 ][0];
 }
-firstcells=$recv([$recv(line)._cells()
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["cells"]=1
-//>>excludeEnd("ctx");
-][0])._firstNotSpace();
-if($core.assert($recv(firstcells)._isEmpty())){
+first=$self._firstBox_(line);
+$1=first;
+if($1 == null || $1.a$nil){
 return [$self._none()
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 ,$ctx1.sendIdx["none"]=2
 //>>excludeEnd("ctx");
 ][0];
+} else {
+$1;
 }
-if($core.assert($recv([$recv(firstcells)._size()
+n=$recv($recv(line)._hint())._first();
+newline=$self._lastCut_at_(line,[$recv(n).__plus((2))
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["size"]=1
+,$ctx1.sendIdx["+"]=1
 //>>excludeEnd("ctx");
-][0]).__eq([$recv([$recv(line)._cells()
+][0]);
+first=[$recv($recv($recv(newline)._cells())._firstBox())._at_("pos")
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["cells"]=2
+,$ctx1.sendIdx["at:"]=1
 //>>excludeEnd("ctx");
-][0])._size()
+][0];
+$2=$recv($recv(first).__tild_eq((0)))._and_($recv(first).__lt_eq([$recv(n).__minus((2))
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["size"]=2
+,$ctx1.sendIdx["-"]=1
 //>>excludeEnd("ctx");
-][0]))){
+][0]));
+if($core.assert($2)){
 return [$self._none()
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 ,$ctx1.sendIdx["none"]=3
 //>>excludeEnd("ctx");
 ][0];
 }
-if(!$core.assert($self._isFirstForced_on_([$recv(line)._hint()
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["hint"]=2
-//>>excludeEnd("ctx");
-][0],firstcells))){
+sol=$self._testStrategies_(newline);
+if($core.assert($recv(sol)._isEmpty())){
 return $self._none();
 }
-firstline=[$recv($globals.Line)._hint_cells_($recv($globals.Hint)._new_([$recv([$recv(line)._hint()
+(1)._to_do_($recv(n).__minus((2)),(function(i){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["hint"]=3
+return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
-][0])._first()]),firstcells)
+if($core.assert($recv($recv(sol)._at_(i))._isSpace())){
+return $recv(sol)._at_put_(i,$recv($globals.Cell)._unknown());
+}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["hint:cells:"]=1
+}, function($ctx2) {$ctx2.fillBlock({i:i},$ctx1,5)});
+//>>excludeEnd("ctx");
+}));
+return $self._adjust_for_(sol,$recv(n).__plus((1)));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line,first:first,n:n,newline:newline,sol:sol})});
+//>>excludeEnd("ctx");
+}; }),
+$globals.StratFirstCutHint);
+
+$core.addMethod(
+$core.method({
+selector: "firstBox:",
+protocol: "as yet unclassified",
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["line"],
+source: "firstBox: line\x0a\x09\x22I analyse a line to detect if a box is inside the first hint.\x0a\x09I return nil if no match, tupplet with pos and size if not\x22\x0a\x09| first |\x0a\x09\x22check if one hint min\x22\x0a\x09line hint isEmpty ifTrue: [ ^ nil ].\x0a\x09\x22get first box\x22\x0a\x09first := line cells firstBox.\x0a\x09\x22no box, no sol\x22\x0a\x09(first at: #pos) > 0 ifFalse: [ ^ nil ].\x0a\x09\x22test hint over first box\x22\x0a\x09line hint first >= (first at: #pos) ifFalse: [ ^ nil ].\x0a\x09^ first",
+referencedClasses: [],
+//>>excludeEnd("ide");
+pragmas: [],
+messageSends: ["ifTrue:", "isEmpty", "hint", "firstBox", "cells", "ifFalse:", ">", "at:", ">=", "first"]
+}, function ($methodClass){ return function (line){
+var self=this,$self=this;
+var first;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+if($core.assert($recv([$recv(line)._hint()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["hint"]=1
+//>>excludeEnd("ctx");
+][0])._isEmpty())){
+return nil;
+}
+first=$recv($recv(line)._cells())._firstBox();
+if(!$core.assert($recv([$recv(first)._at_("pos")
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["at:"]=1
+//>>excludeEnd("ctx");
+][0]).__gt((0)))){
+return nil;
+}
+if(!$core.assert($recv($recv($recv(line)._hint())._first()).__gt_eq($recv(first)._at_("pos")))){
+return nil;
+}
+return first;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"firstBox:",{line:line,first:first})});
+//>>excludeEnd("ctx");
+}; }),
+$globals.StratFirstCutHint);
+
+
+
+$core.addClass("StratFirstCutSpace", $globals.StratFirstCut, "Logimage");
+//>>excludeStart("ide", pragmas.excludeIdeData);
+$globals.StratFirstCutSpace.comment="If a line contains a space, I cut in two parts and check if the first hint must be alone in the first part.\x0aIf so, try strategies on this part with first hint.";
+//>>excludeEnd("ide");
+$core.addMethod(
+$core.method({
+selector: "analyse:",
+protocol: "as yet unclassified",
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["line"],
+source: "analyse: line\x0a\x09| n first firstsol last lastsol |\x0a\x09\x22check min hint size\x22\x0a\x09line hint isEmpty ifTrue: [ ^ self none ].\x0a\x0a\x09\x22get first space pos and check some rules\x22\x0a\x09n := line cells firstSpace.\x0a\x09\x22if no space, nothing to do\x22\x0a\x09n=0 ifTrue: [ ^ self none ].\x0a\x09\x22space at end, already done by other firstXXX\x22\x0a\x09n = line cells size ifTrue: [ ^ self none ].\x0a\x0a\x09\x22cut line in two\x22\x0a\x09first := self firstCut: line at: n.\x0a\x0a\x09\x22check if only first number forced to be inside first cells\x22\x0a\x09(self isFirstForced: line hint on: first cells)\x0a\x09\x09ifFalse: [ ^ self none ].\x0a\x0a\x09\x22test strategies on this part\x22\x0a\x22Transcript show: 'CutSpace: Test strats on first ', first asString; cr.\x22\x0a\x09firstsol := self testStrategies: first.\x0a\x22Transcript show: ' => first sol', firstsol asString; cr.\x22\x0a\x0a\x09last := self lastCut: line at: n.\x0a\x22Transcript show: 'CutSpace: Test strats on last ', last asString; cr.\x22\x0a\x09lastsol := self testStrategies: last.\x0a\x22Transcript show: ' => last sol', lastsol asString; cr.\x22\x0a\x0a\x22lastsol := self adjust: lastsol for: (last cells pos - 1).\x22\x0a\x09lastsol isEmpty\x09ifTrue: [ ^ firstsol ].\x0a\x09\x0a\x09firstsol size: n-1.\x0a\x09^ Cells new\x0a\x09\x09addAll: firstsol;\x0a\x09    addAll: lastsol",
+referencedClasses: ["Cells"],
+//>>excludeEnd("ide");
+pragmas: [],
+messageSends: ["ifTrue:", "isEmpty", "hint", "none", "firstSpace", "cells", "=", "size", "firstCut:at:", "ifFalse:", "isFirstForced:on:", "testStrategies:", "lastCut:at:", "size:", "-", "addAll:", "new"]
+}, function ($methodClass){ return function (line){
+var self=this,$self=this;
+var n,first,firstsol,last,lastsol;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $1;
+if($core.assert([$recv([$recv(line)._hint()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["hint"]=1
+//>>excludeEnd("ctx");
+][0])._isEmpty()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["isEmpty"]=1
+//>>excludeEnd("ctx");
+][0])){
+return [$self._none()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["none"]=1
 //>>excludeEnd("ctx");
 ][0];
-firstres=[$self._testStrategies_(firstline)
+}
+n=$recv([$recv(line)._cells()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["cells"]=1
+//>>excludeEnd("ctx");
+][0])._firstSpace();
+if($core.assert([$recv(n).__eq((0))
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["="]=1
+//>>excludeEnd("ctx");
+][0])){
+return [$self._none()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["none"]=2
+//>>excludeEnd("ctx");
+][0];
+}
+if($core.assert($recv(n).__eq($recv([$recv(line)._cells()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["cells"]=2
+//>>excludeEnd("ctx");
+][0])._size()))){
+return [$self._none()
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+,$ctx1.sendIdx["none"]=3
+//>>excludeEnd("ctx");
+][0];
+}
+first=$self._firstCut_at_(line,n);
+if(!$core.assert($self._isFirstForced_on_($recv(line)._hint(),$recv(first)._cells()))){
+return $self._none();
+}
+firstsol=[$self._testStrategies_(first)
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 ,$ctx1.sendIdx["testStrategies:"]=1
 //>>excludeEnd("ctx");
 ][0];
-$recv(firstres)._addUnknowns_([$recv([$recv(firstcells)._size()
+last=$self._lastCut_at_(line,n);
+lastsol=$self._testStrategies_(last);
+if($core.assert($recv(lastsol)._isEmpty())){
+return firstsol;
+}
+$recv(firstsol)._size_($recv(n).__minus((1)));
+$1=$recv($globals.Cells)._new();
+[$recv($1)._addAll_(firstsol)
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["size"]=3
+,$ctx1.sendIdx["addAll:"]=1
 //>>excludeEnd("ctx");
-][0]).__minus([$recv(firstres)._size()
+][0];
+return $recv($1)._addAll_(lastsol);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["size"]=4
-//>>excludeEnd("ctx");
-][0])
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["-"]=1
-//>>excludeEnd("ctx");
-][0]);
-othercells=$recv($recv($recv(line)._cells())._copyFrom_($recv([$recv(firstcells)._size()
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["size"]=5
-//>>excludeEnd("ctx");
-][0]).__plus((1))))._trimFirst();
-otherline=$recv($globals.Line)._hint_cells_($recv($recv(line)._hint())._firstRemoved_((1)),othercells);
-otherres=$self._testStrategies_(otherline);
-$recv(firstres)._addSpaces_([$recv($recv($recv(othercells)._pos()).__minus($recv(firstcells)._size())).__minus((1))
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-,$ctx1.sendIdx["-"]=2
-//>>excludeEnd("ctx");
-][0]);
-$recv(firstres)._addAll_(otherres);
-return firstres;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line,firstcells:firstcells,firstline:firstline,othercells:othercells,otherline:otherline,firstres:firstres,otherres:otherres})});
+}, function($ctx1) {$ctx1.fill(self,"analyse:",{line:line,n:n,first:first,firstsol:firstsol,last:last,lastsol:lastsol})});
 //>>excludeEnd("ctx");
 }; }),
 $globals.StratFirstCutSpace);
@@ -6590,7 +6878,7 @@ selector: "isFirstForced:on:",
 protocol: "as yet unclassified",
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["hint", "firstcells"],
-source: "isFirstForced: hint on: firstcells\x0a\x09\x22check if only first number forced to be inside first cells\x22\x0a\x09\x22 hint contains at least one element, and cells one cell\x22\x0a\x09| firstbox |\x0a\x09firstbox := firstcells firstBox.\x0a\x09\x22check if one box min in first cells\x22\x0a\x09(firstbox at: #pos) > 0 ifFalse: [ ^ false ].\x0a\x0a\x09\x22check if only first number forced to be inside first cells\x22\x0a\x0a\x09\x22check for 2 or more hints\x22\x0a\x09hint size >= 2 ifTrue: [\x0a\x09\x09(hint at: 1) + (hint at: 2) + 1 > firstcells size\x0a\x09\x09\x09ifTrue: [ ^ true ]\x0a\x09\x09].\x0a\x09\x22check for 1 or more hints not work all case\x22\x0a\x09\x22 only one is already done by firstXXX or lastXXX stratgies\x22\x0a\x0a\x09\x22no good case, could not be sure that first hint is inside cells\x22\x0a\x09^ false",
+source: "isFirstForced: hint on: firstcells\x0a\x09\x22check if only first number forced to be inside first cells\x22\x0a\x09\x22 hint contains at least one element, and cells one cell\x22\x0a\x09| firstbox |\x0a\x09firstbox := firstcells firstBox.\x0a\x09\x22check if one box min in first cells\x22\x0a\x09(firstbox at: #pos) > 0 ifFalse: [ ^ false ].\x0a\x0a\x09\x22check if only first number forced to be inside first cells\x22\x0a\x0a\x09\x22check for 2 or more hints\x22\x0a\x09hint size >= 2 ifTrue: [\x0a\x09\x09(hint at: 1) + (hint at: 2) + 1 > firstcells size\x0a\x09\x09\x09ifTrue: [ ^ true ]\x0a\x09\x09].\x0a\x09\x22check for 1 or more hints not work all case\x22\x0a\x09\x22 only one is already done by firstXXX or lastXXX strategies\x22\x0a\x0a\x09\x22no good case, could not be sure that first hint is inside cells\x22\x0a\x09^ false",
 referencedClasses: [],
 //>>excludeEnd("ide");
 pragmas: [],
@@ -6633,46 +6921,6 @@ return true;
 return false;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"isFirstForced:on:",{hint:hint,firstcells:firstcells,firstbox:firstbox})});
-//>>excludeEnd("ctx");
-}; }),
-$globals.StratFirstCutSpace);
-
-$core.addMethod(
-$core.method({
-selector: "testStrategies:",
-protocol: "as yet unclassified",
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["line"],
-source: "testStrategies: line\x0a\x09Strategies instance do: [ :strategy | | res |\x0a\x09\x09res := strategy analyse: line.\x0a\x22Transcript show: ' - test strat: ', strategy printString, ' => ', res printString; cr.\x22\x0a\x09\x09res isEmpty ifFalse: [ ^ res] ].\x0a\x09^ self none",
-referencedClasses: ["Strategies"],
-//>>excludeEnd("ide");
-pragmas: [],
-messageSends: ["do:", "instance", "analyse:", "ifFalse:", "isEmpty", "none"]
-}, function ($methodClass){ return function (line){
-var self=this,$self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $early={};
-try {
-$recv($recv($globals.Strategies)._instance())._do_((function(strategy){
-var res;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-res=$recv(strategy)._analyse_(line);
-if(!$core.assert($recv(res)._isEmpty())){
-throw $early=[res];
-}
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({strategy:strategy,res:res},$ctx1,1)});
-//>>excludeEnd("ctx");
-}));
-return $self._none();
-}
-catch(e) {if(e===$early)return e[0]; throw e}
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"testStrategies:",{line:line})});
 //>>excludeEnd("ctx");
 }; }),
 $globals.StratFirstCutSpace);
@@ -7328,6 +7576,33 @@ return self;
 //>>excludeEnd("ctx");
 }; }),
 $globals.StratLastCover);
+
+
+
+$core.addClass("StratLastCutHint", $globals.StratReverted, "Logimage");
+$core.addMethod(
+$core.method({
+selector: "initialize",
+protocol: "as yet unclassified",
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "initialize\x0a\x09strategy := StratFirstCutHint new",
+referencedClasses: ["StratFirstCutHint"],
+//>>excludeEnd("ide");
+pragmas: [],
+messageSends: ["new"]
+}, function ($methodClass){ return function (){
+var self=this,$self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$self.strategy=$recv($globals.StratFirstCutHint)._new();
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"initialize",{})});
+//>>excludeEnd("ctx");
+}; }),
+$globals.StratLastCutHint);
 
 
 

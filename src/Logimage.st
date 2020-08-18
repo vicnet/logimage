@@ -391,6 +391,7 @@ asNew
 !
 
 at: index
+    "I return cell value at index. pos is not used"
 	^ cells at: index
 !
 
@@ -476,7 +477,7 @@ firstNotSpace
 !
 
 firstSpace
-	"Returns position of first space, 0 if no spaces"
+	"I return the position of first space, 0 if no spaces"
 	cells withIndexDo: [ :c :i |
 		c isSpace ifTrue: [ ^ i ]
 		].
@@ -900,6 +901,9 @@ hint
 hint: anObject
 	anObject isString ifTrue: [
 		hint := Hint new: anObject.
+		^ self ].
+	anObject isNumber ifTrue: [
+		hint := Hint new: { anObject }.
 		^ self ].
 	hint := anObject
 !
@@ -1604,6 +1608,8 @@ initialize
 		#lastones -> StratLastOnes.
 		#firstspacesifnotfit -> StratFirstSpacesIfNotFit.
 		#lastspacesifnotfit -> StratLastSpacesIfNotFit.
+		#firstcuthint -> StratFirstCutHint.
+		#lastcuthint -> StratLastCutHint.
 		}
 		collect: [ :strat | strat new ]
 !
@@ -1895,7 +1901,7 @@ I add a space after first boxes done (corresponding to first hint).!
 !StratFirstDone methodsFor: 'as yet unclassified'!
 
 analyse: line
-	| first |
+	| first size |
 	first := self firstBox: line.
 	first ifNil: [ ^ self none ].
 	"check that it is the first place"
@@ -1903,9 +1909,11 @@ analyse: line
 	"test if first hint is same as box"
 	line hint first = (first at: #size) ifFalse: [ ^ self none ].
 	"get solution, without space"
+	size := first at: #size.
 	^ Cells new
-		addBoxes: (first at: #size);
-		addSpaces: 1
+		addBoxes: size;
+		addSpaces: 1;
+		size: (line cells size min: size+1)
 ! !
 
 StratFirstBox subclass: #StratFirstMore
@@ -1937,7 +1945,114 @@ analyse: line
 		addBoxes: pos+size-first
 ! !
 
-Strategy subclass: #StratFirstCutSpace
+Strategy subclass: #StratFirstCut
+	slots: {}
+	package: 'Logimage'!
+!StratFirstCut commentStamp!
+I am a base class for strategies that test ifa line could be cut in two part. If I test strategies on the last part.!
+
+!StratFirstCut methodsFor: 'as yet unclassified'!
+
+adjust: sol for: n
+	"I adjust sol cells, adding n unknowns if needed"
+	n<=0 ifTrue: [ ^ sol ].
+	^ Cells new
+			addUnknowns: n;
+			addAll: sol
+!
+
+firstCut: line at: pos
+	"I cut line until #pos, without cell at #pos, ignoring line cells pos (trim)
+	 and I return fist part.
+	'Example: 2 3|.. X-XX ' cut at 3 => '2|.. X'"
+	^ Line
+		hint: line hint first
+		cells: (line cells copyFrom: 1 to: (pos-1))
+!
+
+lastCut: line at: pos
+	"I cut line until pos, without cell at pos, ignoring line pos (trim)
+	and I return last part.
+	'Example: 2 3|.. X-XX ' cut at 3 => '3|....-XX '"
+	^ Line
+		hint: (line hint firstRemoved: 1)
+		cells: (line cells copyFrom: pos)
+!
+
+test: strategy on: line
+	| trim sol |
+	trim := line trim.
+	sol := strategy analyse: trim.
+"Transcript show: ' - test strat: ', strategy asString, ' => ', sol asString; cr."
+	sol isEmpty ifTrue: [ ^ self none ].
+	"adjust sol if needed"
+	sol := self adjust: sol for: (trim cells pos) - (line cells pos).
+	"returns sol only if bring something new"
+	(line cells isBetter: sol) ifTrue: [ ^ sol ].
+	^ self none
+!
+
+testStrategies: line
+	Strategies instance do: [ :strategy | | sol |
+		sol := self test: strategy on: line.
+		sol isEmpty ifFalse: [ ^ sol ]
+		].
+	^ self none
+! !
+
+StratFirstCut subclass: #StratFirstCutHint
+	slots: {}
+	package: 'Logimage'!
+!StratFirstCutHint commentStamp!
+I test if first hint has to match the first box, if so cut the line in 2 and test strategies on the last part.!
+
+!StratFirstCutHint methodsFor: 'as yet unclassified'!
+
+analyse: line
+	| first n newline sol |
+	"check min hint size"
+	line hint isEmpty ifTrue: [ ^ self none ].
+	
+	"get first box and test if match first hint"
+	first := self firstBox: line.
+	first ifNil: [ ^ self none ].
+	"cut line in two"
+	n := line hint first.
+	newline := self lastCut: line at: n+2. "+1 for space, +1 for cut"
+	"test if this part contains box under n-2
+	if so, box could belong to the first part or last part so ambiguous"
+	first := newline cells firstBox at: #pos.
+	(first~=0 and: (first<=(n-2))) ifTrue: [ ^ self none ].
+
+	"test strategies on this part"
+"Transcript show: 'CutHint: Test strats on ', newline asString; cr."
+	sol := self testStrategies: newline.
+	sol isEmpty ifTrue: [ ^ self none ].
+	1 to: (n-2) do: [ :i |
+		(sol at: i) isSpace ifTrue: [
+			sol at: i put: Cell unknown
+			]
+		].
+	"adjust sol and return it"
+	^ self adjust: sol for: n+1
+!
+
+firstBox: line
+	"I analyse a line to detect if a box is inside the first hint.
+	I return nil if no match, tupplet with pos and size if not"
+	| first |
+	"check if one hint min"
+	line hint isEmpty ifTrue: [ ^ nil ].
+	"get first box"
+	first := line cells firstBox.
+	"no box, no sol"
+	(first at: #pos) > 0 ifFalse: [ ^ nil ].
+	"test hint over first box"
+	line hint first >= (first at: #pos) ifFalse: [ ^ nil ].
+	^ first
+! !
+
+StratFirstCut subclass: #StratFirstCutSpace
 	slots: {}
 	package: 'Logimage'!
 !StratFirstCutSpace commentStamp!
@@ -1947,38 +2062,41 @@ If so, try strategies on this part with first hint.!
 !StratFirstCutSpace methodsFor: 'as yet unclassified'!
 
 analyse: line
-	| firstcells firstline othercells otherline firstres otherres |
+	| n first firstsol last lastsol |
 	"check min hint size"
 	line hint isEmpty ifTrue: [ ^ self none ].
 
-	"get first cells and check some rules"
-	firstcells := line cells firstNotSpace.
-	"if no space, already done by other firstXXX"
-	firstcells isEmpty ifTrue: [ ^ self none ].
-	firstcells size = line cells size ifTrue: [ ^ self none ].
+	"get first space pos and check some rules"
+	n := line cells firstSpace.
+	"if no space, nothing to do"
+	n=0 ifTrue: [ ^ self none ].
+	"space at end, already done by other firstXXX"
+	n = line cells size ifTrue: [ ^ self none ].
+
+	"cut line in two"
+	first := self firstCut: line at: n.
 
 	"check if only first number forced to be inside first cells"
-	(self isFirstForced: line hint on: firstcells)
+	(self isFirstForced: line hint on: first cells)
 		ifFalse: [ ^ self none ].
 
-	"analyse first cells"
-	firstline := Line
-		hint: (Hint new: { line hint first })
-		cells: firstcells.
-	firstres := self testStrategies: firstline.
-"Transcript show: 'first line:', firstline printString, ' first res', firstres printString; cr."
-	" complete first res if needed to the first cells size"
-	firstres addUnknowns: (firstcells size - firstres size).
+	"test strategies on this part"
+"Transcript show: 'CutSpace: Test strats on first ', first asString; cr."
+	firstsol := self testStrategies: first.
+"Transcript show: ' => first sol', firstsol asString; cr."
 
-	othercells := (line cells copyFrom: firstcells size + 1) trimFirst.
-	otherline := Line
-		hint: (line hint firstRemoved: 1)
-		cells: othercells.
-	otherres := self testStrategies: otherline.
-	firstres addSpaces: (othercells pos - firstcells size - 1).
-	firstres addAll: otherres.
+	last := self lastCut: line at: n.
+"Transcript show: 'CutSpace: Test strats on last ', last asString; cr."
+	lastsol := self testStrategies: last.
+"Transcript show: ' => last sol', lastsol asString; cr."
 
-	^ firstres
+"lastsol := self adjust: lastsol for: (last cells pos - 1)."
+	lastsol isEmpty	ifTrue: [ ^ firstsol ].
+	
+	firstsol size: n-1.
+	^ Cells new
+		addAll: firstsol;
+	    addAll: lastsol
 !
 
 isBidirectional
@@ -2001,18 +2119,10 @@ isFirstForced: hint on: firstcells
 			ifTrue: [ ^ true ]
 		].
 	"check for 1 or more hints not work all case"
-	" only one is already done by firstXXX or lastXXX stratgies"
+	" only one is already done by firstXXX or lastXXX strategies"
 
 	"no good case, could not be sure that first hint is inside cells"
 	^ false
-!
-
-testStrategies: line
-	Strategies instance do: [ :strategy | | res |
-		res := strategy analyse: line.
-"Transcript show: ' - test strat: ', strategy printString, ' => ', res printString; cr."
-		res isEmpty ifFalse: [ ^ res] ].
-	^ self none
 ! !
 
 Strategy subclass: #StratFirstNotReachedMore
@@ -2223,6 +2333,16 @@ Same as first cover but by other side (invert).!
 
 initialize
 	strategy := StratFirstCover new
+! !
+
+StratReverted subclass: #StratLastCutHint
+	slots: {}
+	package: 'Logimage'!
+
+!StratLastCutHint methodsFor: 'as yet unclassified'!
+
+initialize
+	strategy := StratFirstCutHint new
 ! !
 
 StratReverted subclass: #StratLastCutSpace

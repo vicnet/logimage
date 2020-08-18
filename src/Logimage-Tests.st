@@ -48,6 +48,40 @@ testCellsAccesses
 	self assert: (Cells new: ' - X') firstSpace equals: 2.
 ! !
 
+TestCase subclass: #LogimageStratTests
+	slots: {}
+	package: 'Logimage-Tests'!
+
+!LogimageStratTests methodsFor: 'tests'!
+
+testStratFirstCut
+	| l |
+	l := Line new: '2 3|-- X-XX '. l:=l trimFirst.
+	self assert: (StratFirstCut new firstCut: l at: 3)
+		 equals: (Line new: '3| X').
+	
+	l := Line new: '2 3 1|-- X-XX  '. l:=l trimFirst.
+	self assert: (StratFirstCut new lastCut: l at: 3)
+		 equals: (Line new: '3 1|-XX  ')
+!
+
+testStratXDone
+	| l |
+	l := Line new
+		hint: (Hint new: {1. 2});
+		cells: (Cells new b;u;b;b).
+	self assert: (StratFirstDone new analyse: l) 
+		 equals: (Cells new b;s).
+	self assert: (StratLastDone new analyse: l)
+		 equals: (Cells new u;s;b;b).
+	self assert: (StratFirstDone analyse: '2|XX')
+		 equals: (Cells new: 'XX').
+	self assert: (StratFirstDone analyse: '2|XX ')
+		 equals: (Cells new: 'XX-').
+	self assert: (StratFirstDone analyse: '2|XX  ')
+		 equals: (Cells new: 'XX-').
+! !
+
 TestCase subclass: #LogimageTest
 	slots: {#logimage}
 	package: 'Logimage-Tests'!
@@ -117,17 +151,6 @@ testStratXCover
 		 equals: (Cells new: '').
 	self assert: (StratFirstCover new analyse: (Line new: '3|   X'))
 		 equals: (Cells new: '').
-!
-
-testStratXDone
-	| l |
-	l := Line new
-		hint: (Hint new: {1. 2});
-		cells: (Cells new b;u;b;b).
-	self assert: (StratFirstDone new analyse: l) 
-		 equals: (Cells new b;s).
-	self assert: (StratLastDone new analyse: l)
-		 equals: (Cells new u;s;b;b)
 !
 
 testStratXMore
